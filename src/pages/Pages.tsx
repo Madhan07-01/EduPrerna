@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import CoursesEnhanced from './CoursesEnhanced'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 export function SectionCard({ title, children }: { title: string; children?: ReactNode }) {
   return (
@@ -128,7 +128,7 @@ export function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="font-medium">{t('settings.darkMode')}</div>
-            <div className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Switch between light and dark themes</div>
+            <div className="text-xs text-gray-600 dark:text-slate-400">Switch between light and dark themes</div>
           </div>
           <button
             aria-label={t('settings.darkMode')}
@@ -149,7 +149,7 @@ export function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="font-medium">{t('settings.appLanguage')}</div>
-            <div className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Choose your preferred language</div>
+            <div className="text-xs text-gray-600 dark:text-slate-400">Choose your preferred language</div>
           </div>
           <select
             aria-label={t('settings.appLanguage')}

@@ -1,5 +1,5 @@
 import type React from 'react'
-import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { createContext, useEffect, useState, useCallback } from 'react'
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
@@ -16,7 +16,7 @@ type AuthContextType = {
   profile: { name?: string | null; email?: string | null; role?: string; uid?: string } | null
   loading: boolean
   signUpEmail: (email: string, password: string, name?: string, role?: string) => Promise<FirebaseUser>
-  signInEmail: (email: string, password: string) => Promise<any>
+  signInEmail: (email: string, password: string) => Promise<unknown>
   signOutUser: () => Promise<void>
 }
 
@@ -107,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = () => useContext(AuthContext)
+// Export the context for useAuth hook
+export { AuthContext }
 
 

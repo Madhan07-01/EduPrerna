@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 import { isDemoConfig } from '../services/firebase'
 
 export default function AuthPage() {
@@ -15,13 +15,13 @@ export default function AuthPage() {
       <div className="text-2xl font-semibold text-gray-900 dark:text-white">{mode === 'login' ? 'Sign In' : 'Create Account'}</div>
       <div className="flex gap-2 text-xs">
         <button
-          className={`px-2 py-1 rounded ${role === 'student' ? 'bg-sky-600 text-white' : 'bg-slate-800 text-slate-200 dark:bg-slate-800 dark:text-slate-200 bg-gray-200 text-gray-800'}`}
+          className={`px-2 py-1 rounded ${role === 'student' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-800 dark:bg-slate-800 dark:text-slate-200'}`}
           onClick={() => setRole('student')}
         >
           Student
         </button>
         <button
-          className={`px-2 py-1 rounded ${role === 'teacher' ? 'bg-sky-600 text-white' : 'bg-slate-800 text-slate-200 dark:bg-slate-800 dark:text-slate-200 bg-gray-200 text-gray-800'}`}
+          className={`px-2 py-1 rounded ${role === 'teacher' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-800 dark:bg-slate-800 dark:text-slate-200'}`}
           onClick={() => setRole('teacher')}
         >
           Teacher

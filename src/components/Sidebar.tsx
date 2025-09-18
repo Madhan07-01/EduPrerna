@@ -1,5 +1,5 @@
 import { useLanguage } from '../contexts/LanguageContext'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
 export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download'
@@ -102,7 +102,7 @@ export function Sidebar({ active }: SidebarProps) {
           )
         })}
       </nav>
-      <div className="px-2 text-xs text-slate-500 dark:text-slate-500 text-gray-500">{t('footer.motto')}</div>
+      <div className="px-2 text-xs text-gray-500 dark:text-slate-500">{t('footer.motto')}</div>
     </aside>
   )
 }
