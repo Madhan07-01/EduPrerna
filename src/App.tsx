@@ -2,7 +2,8 @@ import './index.css'
 import { SWUpdatePrompt } from './sw-update'
 import Sidebar, { type NavKey } from './components/Sidebar'
 import { useState } from 'react'
-import { AchievementsPage, CoursesPage, DashboardPage, ProfilePage, SettingsPage, TeacherPage } from './pages/Pages'
+import { AchievementsPage, CoursesPage, DashboardPage, ProfilePage, SettingsPage } from './pages/Pages'
+import TeacherDashboard from './pages/TeacherDashboard'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -33,11 +34,12 @@ function AppContent() {
               <AuthPage />
             ) : (
             <>
-            {active === 'dashboard' && <DashboardPage />}
+            {active === 'dashboard' && user.role !== 'teacher' && <DashboardPage />}
+            {active === 'dashboard' && user.role === 'teacher' && <TeacherDashboard />}
             {active === 'courses' && <CoursesPage />}
             {active === 'achievements' && <AchievementsPage />}
             {active === 'profile' && <ProfilePage />}
-            {active === 'teacher' && user.role === 'teacher' && <TeacherPage />}
+            {active === 'teacher' && user.role === 'teacher' && <TeacherDashboard />}
             {active === 'teacher' && user.role !== 'teacher' && <div className="text-sm text-slate-400">Teacher access only.</div>}
             {active === 'quiz' && <QuickQuizPage />}
             {active === 'challenge' && <DailyChallengePage />}

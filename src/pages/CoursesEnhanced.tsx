@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initCourses, setGrade, setProgressFilter, setQuery, setSubject } from '../store/coursesSlice'
 import type { RootState } from '../store'

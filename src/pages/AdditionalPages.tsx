@@ -1,4 +1,3 @@
-import React from 'react'
 import { SectionCard } from './Pages'
 
 export function QuickQuizPage() {

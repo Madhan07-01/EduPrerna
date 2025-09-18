@@ -108,21 +108,7 @@ export function ProfilePage() {
   )
 }
 
-export function TeacherPage() {
-  const { t } = useLanguage()
-  
-  return (
-    <div className="space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{t('teacher.title')}</div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {['Total Students', 'Active Today', 'Lessons Completed', 'Avg Quiz Score'].map((m, i) => (
-          <SectionCard key={m} title={m}>{i === 3 ? '0%' : '0'}</SectionCard>
-        ))}
-      </div>
-      <SectionCard title="Student Overview">No data yet</SectionCard>
-    </div>
-  )
-}
+// Teacher page moved to dedicated TeacherDashboard component
 
 export function SettingsPage() {
   const { t, language, setLanguage } = useLanguage()

@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Course } from '../store/types'
 
 type Props = { course: Course; onBack: () => void }

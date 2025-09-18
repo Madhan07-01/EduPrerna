@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { auth, db, googleProvider } from '../services/firebase'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { onAuthStateChanged, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
 
 export type UserProfile = {
   uid: string
@@ -19,7 +19,8 @@ type AuthContextType = {
   loading: boolean
   signInGoogle: () => Promise<void>
   signInEmail: (email: string, password: string) => Promise<void>
-  signUpEmail: (email: string, password: string, displayName: string) => Promise<void>
+  signUpEmail: (email: string, password: string, displayName: string, role?: 'student' | 'teacher', username?: string) => Promise<void>
+  signInTeacherUsername: (username: string, password: string) => Promise<void>
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
   signOutUser: () => Promise<void>
 }
@@ -87,9 +88,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password)
   }
 
-  const signUpEmail = async (email: string, password: string, displayName: string) => {
+  const signUpEmail = async (email: string, password: string, displayName: string, role: 'student' | 'teacher' = 'student', username?: string) => {
     if (demo) {
-      const demoUser: UserProfile = { uid: 'demo-'+Date.now(), email, displayName, role: 'student' }
+      const demoUser: UserProfile = { uid: 'demo-'+Date.now(), email, displayName, role, username }
       setUser(demoUser)
       localStorage.setItem('demoUser', JSON.stringify(demoUser))
       return
@@ -97,9 +98,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const cred = await createUserWithEmailAndPassword(auth, email, password)
     if (auth.currentUser) await updateProfile(auth.currentUser, { displayName })
     const ref = doc(db, 'users', cred.user.uid)
-    const profile: UserProfile = { uid: cred.user.uid, email, displayName, role: 'student' }
+    const profile: UserProfile = { uid: cred.user.uid, email, displayName, role, username }
     await setDoc(ref, profile)
     setUser(profile)
+  }
+
+  const signInTeacherUsername = async (username: string, password: string) => {
+    if (demo) {
+      const isTeacher = username.toLowerCase() === 'teacher' && password === 'Teacher123!'
+      if (!isTeacher) throw new Error('Invalid demo credentials')
+      const demoUser: UserProfile = {
+        uid: 'demo-teacher',
+        email: 'teacher@school.com',
+        displayName: 'Demo Teacher',
+        role: 'teacher',
+        username,
+      }
+      setUser(demoUser)
+      localStorage.setItem('demoUser', JSON.stringify(demoUser))
+      return
+    }
+    // Lookup teacher by username and role, then sign in using the associated email
+    const usersRef = collection(db, 'users')
+    const q = query(usersRef, where('username', '==', username), where('role', '==', 'teacher'))
+    const snap = await getDocs(q)
+    if (snap.empty) throw new Error('Teacher not found')
+    const teacher = snap.docs[0].data() as UserProfile
+    if (!teacher.email) throw new Error('Teacher record has no email')
+    await signInWithEmailAndPassword(auth, teacher.email, password)
   }
 
   const updateUserProfile = async (updates: Partial<UserProfile>) => {
@@ -124,7 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signOut(auth)
   }
 
-  const value = useMemo<AuthContextType>(() => ({ user, loading, signInGoogle, signInEmail, signUpEmail, updateUserProfile, signOutUser }), [user, loading])
+  const value = useMemo<AuthContextType>(() => ({ user, loading, signInGoogle, signInEmail, signUpEmail, signInTeacherUsername, updateUserProfile, signOutUser }), [user, loading])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
