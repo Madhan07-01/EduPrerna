@@ -1,4 +1,5 @@
 import { useLanguage } from '../contexts/LanguageContext'
+import { useAuth } from '../contexts/AuthContext'
 
 export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download'
 
@@ -22,7 +23,23 @@ const navItems: Array<{ key: NavKey; labelKey: string; icon: string }> = [
 
 export function Sidebar({ active, onNavigate }: SidebarProps) {
   const { t } = useLanguage()
-  
+  const { user } = useAuth()
+
+  const isTeacher = user?.role === 'teacher'
+
+  const visibleItems = navItems.filter((item) => {
+    if (!user) {
+      // Not signed in: hide teacher nav
+      return item.key !== 'teacher'
+    }
+    if (isTeacher) {
+      // Teachers: only show teacher and settings
+      return item.key === 'teacher' || item.key === 'settings'
+    }
+    // Students: hide teacher nav
+    return item.key !== 'teacher'
+  })
+
   return (
     <aside className="hidden md:flex md:flex-col w-64 border-r border-gray-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/90 text-gray-900 dark:text-slate-100 p-4 gap-4">
       <div className="flex items-center gap-2 px-2 py-1">
@@ -33,7 +50,7 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
         </div>
       </div>
       <nav className="flex-1 space-y-1">
-        {navItems.map((n) => (
+        {visibleItems.map((n) => (
           <button
             key={n.key}
             onClick={() => onNavigate(n.key)}

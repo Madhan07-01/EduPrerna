@@ -2,6 +2,10 @@ import type { ReactNode } from 'react'
 import CoursesEnhanced from './CoursesEnhanced'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { useAuth } from '../contexts/AuthContext'
+import { useEffect, useState } from 'react'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../firebase/firebaseConfig'
 
 export function SectionCard({ title, children }: { title: string; children?: ReactNode }) {
   return (
@@ -14,9 +18,27 @@ export function SectionCard({ title, children }: { title: string; children?: Rea
 
 export function DashboardPage() {
   const { t } = useLanguage()
+  const { user } = useAuth()
+  const [username, setUsername] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (!user?.uid) return
+      try {
+        const ref = doc(db, 'users', user.uid)
+        const snap = await getDoc(ref)
+        const data = snap.data() as { username?: string } | undefined
+        setUsername(data?.username ?? null)
+      } catch {
+        setUsername(null)
+      }
+    }
+    fetchUsername()
+  }, [user?.uid])
   
   return (
     <div className="space-y-4">
+      <h2 className="text-lg font-bold">Welcome, {username ? username : 'Learner'} 👋</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 p-6 text-white">
           <div className="text-xl font-bold">{t('welcome.title')}</div>
@@ -108,24 +130,11 @@ export function ProfilePage() {
   )
 }
 
-export function TeacherPage() {
-  const { t } = useLanguage()
-  
-  return (
-    <div className="space-y-4">
-      <div className="text-2xl font-semibold text-gray-900 dark:text-white">{t('teacher.title')}</div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {['Total Students', 'Active Today', 'Lessons Completed', 'Avg Quiz Score'].map((m, i) => (
-          <SectionCard key={m} title={m}>{i === 3 ? '0%' : '0'}</SectionCard>
-        ))}
-      </div>
-      <SectionCard title="Student Overview">No data yet</SectionCard>
-    </div>
-  )
-}
+// Teacher page moved to dedicated TeacherDashboard component
 
 export function SettingsPage() {
   const { t, language, setLanguage } = useLanguage()
+  const { signOutUser } = useAuth()
   const { theme, toggleTheme } = useTheme()
   
   return (
@@ -177,7 +186,7 @@ export function SettingsPage() {
         </div>
       </SectionCard>
       <SectionCard title={t('settings.account')}>
-        <button className="rounded-md bg-rose-600 text-white px-3 py-2 text-sm">{t('settings.signOut')}</button>
+        <button onClick={signOutUser} className="rounded-md bg-rose-600 text-white px-3 py-2 text-sm">{t('settings.signOut')}</button>
       </SectionCard>
     </div>
   )

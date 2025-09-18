@@ -1,7 +1,7 @@
 import type React from 'react'
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
-import { onAuthStateChanged, updateProfile } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { onAuthStateChanged, updateProfile, signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { auth, db } from '../firebase/firebaseConfig'
 import { signIn as fbSignIn, signOutUser as fbSignOut, signUp as fbSignUp } from '../firebase/auth'
 import { useGoogleSignIn } from './useFirebaseAuth'
@@ -27,6 +27,7 @@ type AuthContextType = {
   // Aliases for convenience in UI pages
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, displayName: string) => Promise<void>
+  signInTeacherUsername: (username: string, password: string) => Promise<void>
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
   signOutUser: () => Promise<void>
 }
@@ -90,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUpEmail = useCallback(async (email: string, password: string, displayName: string) => {
     const u = await fbSignUp(email, password, displayName)
     const ref = doc(db, 'users', u.uid)
-    const profile: UserProfile = { uid: u.uid, email: u.email, displayName: u.displayName, role: 'student' }
+    const profile: UserProfile = { uid: u.uid, email: u.email, displayName: u.displayName, username: displayName, role: 'student' }
     await setDoc(ref, profile, { merge: true })
     setUser(profile)
   }, [])
@@ -112,6 +113,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await fbSignOut()
   }, [])
 
+  const signInTeacherUsername = useCallback(async (username: string, password: string) => {
+    // Find teacher by username then sign in using their email
+    const usersRef = collection(db, 'users')
+    const q = query(usersRef, where('username', '==', username), where('role', '==', 'teacher'))
+    const snap = await getDocs(q)
+    if (snap.empty) throw new Error('Teacher not found')
+    const teacher = snap.docs[0].data() as UserProfile
+    if (!teacher.email) throw new Error('Teacher record has no email')
+    await signInWithEmailAndPassword(auth, teacher.email, password)
+  }, [])
+
   const value = useMemo<AuthContextType>(
     () => ({
       user,
@@ -122,10 +134,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signUpEmail,
       signIn: signInEmail,
       signUp: signUpEmail,
+      signInTeacherUsername,
       updateUserProfile,
       signOutUser,
     }),
-    [user, loading, signInGoogle, signInWithGoogle, signInEmail, signUpEmail, updateUserProfile, signOutUser]
+    [user, loading, signInGoogle, signInWithGoogle, signInEmail, signUpEmail, signInTeacherUsername, updateUserProfile, signOutUser]
   )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
