@@ -7,7 +7,10 @@ import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } f
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
-import AuthPage from './pages/AuthPage'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import PrivateRoute from './components/PrivateRoute'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
 
 function AppContent() {
   const [active, setActive] = useState<NavKey>('dashboard')
@@ -29,23 +32,21 @@ function AppContent() {
             </div>
           </header>
           <main className="max-w-6xl mx-auto px-4 py-6">
-            {!user ? (
-              <AuthPage />
-            ) : (
-            <>
-            {active === 'dashboard' && <DashboardPage />}
-            {active === 'courses' && <CoursesPage />}
-            {active === 'achievements' && <AchievementsPage />}
-            {active === 'profile' && <ProfilePage />}
-            {active === 'teacher' && user.role === 'teacher' && <TeacherPage />}
-            {active === 'teacher' && user.role !== 'teacher' && <div className="text-sm text-slate-400">Teacher access only.</div>}
-            {active === 'quiz' && <QuickQuizPage />}
-            {active === 'challenge' && <DailyChallengePage />}
-            {active === 'games' && <MiniGamesPage />}
-            {active === 'download' && <DownloadGradePage />}
-            {active === 'settings' && <SettingsPage />}
-            </>
-            )}
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+              <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
+              <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
+              <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/teacher" element={<PrivateRoute>{user?.role === 'teacher' ? <TeacherPage /> : <div className="text-sm text-slate-400">Teacher access only.</div>}</PrivateRoute>} />
+              <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
+              <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
+              <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
+              <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
+            </Routes>
           </main>
         </div>
       </div>
@@ -59,7 +60,9 @@ function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
-          <AppContent />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
         </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>

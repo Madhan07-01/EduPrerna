@@ -1,4 +1,4 @@
-import React from 'react'
+// using automatic JSX runtime; no React default import needed
 import { SectionCard } from './Pages'
 
 export function QuickQuizPage() {

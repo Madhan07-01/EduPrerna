@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+
 import { useAuth } from '../contexts/AuthContext'
 import { isDemoConfig } from '../services/firebase'
 
@@ -11,17 +12,17 @@ export default function AuthPage() {
 
   return (
     <div className="max-w-md mx-auto space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{mode === 'login' ? 'Sign In' : 'Create Account'}</div>
+      <div className="text-2xl font-semibold text-gray-900 dark:text-white">{mode === 'login' ? 'Sign In' : 'Create Account'}</div>
       {isDemoConfig && (
         <div className="text-xs text-slate-400">
           Demo credentials: Student demo@student.com / Demo123! • Teacher teacher@school.com / Teacher123!
         </div>
       )}
       {mode === 'signup' && (
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
+        <input aria-label="Full name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
       )}
-      <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
+      <input aria-label="Email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
+      <input aria-label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
       {mode === 'login' ? (
         <button className="w-full rounded-md bg-sky-600 text-white px-3 py-2" disabled={loading} onClick={() => signInEmail(email, password)}>Sign In</button>
       ) : (

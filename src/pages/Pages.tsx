@@ -1,13 +1,13 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import CoursesEnhanced from './CoursesEnhanced'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
 
-export function SectionCard({ title, children }: { title: string; children?: React.ReactNode }) {
+export function SectionCard({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-800 dark:border-slate-800 border-gray-200 bg-slate-900/60 dark:bg-slate-900/60 bg-white/80 p-4">
-      <div className="text-slate-100 dark:text-slate-100 text-gray-900 font-semibold mb-2">{title}</div>
-      <div className="text-slate-300 dark:text-slate-300 text-gray-700 text-sm">{children}</div>
+    <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-4">
+      <div className="text-gray-900 dark:text-slate-100 font-semibold mb-2">{title}</div>
+      <div className="text-gray-700 dark:text-slate-300 text-sm">{children}</div>
     </div>
   )
 }
@@ -35,20 +35,20 @@ export function DashboardPage() {
           { labelKey: 'stats.streak', value: '1' },
         ].map((s) => (
           <SectionCard key={s.labelKey} title={t(s.labelKey)}>
-            <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{s.value}</div>
+            <div className="text-2xl font-semibold text-gray-900 dark:text-white">{s.value}</div>
           </SectionCard>
         ))}
       </div>
       <div>
-        <div className="text-slate-200 dark:text-slate-200 text-gray-800 font-semibold mb-2">{t('courses.title')}</div>
+        <div className="text-gray-800 dark:text-slate-200 font-semibold mb-2">{t('courses.title')}</div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {['Mathematics', 'Physics', 'Chemistry', 'Biology'].map((c) => (
-            <div key={c} className="rounded-xl border border-slate-800 dark:border-slate-800 border-gray-200 bg-slate-900/60 dark:bg-slate-900/60 bg-white/80 p-4">
+            <div key={c} className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-4">
               <div className="flex items-center justify-between">
-                <div className="text-white dark:text-white text-gray-900 font-semibold">{c}</div>
-                <button className="rounded-md bg-sky-600 text-white text-sm px-3 py-1">Open</button>
+                <div className="text-gray-900 dark:text-white font-semibold">{c}</div>
+            <button className="rounded-md bg-sky-600 text-white text-sm px-3 py-1" aria-label={`Open ${c} course`}>Open</button>
               </div>
-              <div className="h-2 bg-slate-800 dark:bg-slate-800 bg-gray-200 rounded mt-3">
+              <div className="h-2 bg-gray-200 dark:bg-slate-800 rounded mt-3">
                 <div className="h-2 w-2/3 bg-sky-500 rounded"></div>
               </div>
             </div>
@@ -68,7 +68,7 @@ export function AchievementsPage() {
   
   return (
     <div className="space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{t('achievements.title')}</div>
+      <div className="text-2xl font-semibold text-gray-900 dark:text-white">{t('achievements.title')}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {['First Steps', 'Week Warrior', 'Math Master', 'Physics Pro', 'Chemistry Champion', 'Biology Boss', 'Quiz Champion', 'Knowledge Seeker'].map(
           (b) => (
@@ -99,7 +99,7 @@ export function ProfilePage() {
           { labelKey: 'stats.courses', value: '0' },
         ].map((s) => (
           <SectionCard key={s.labelKey} title={t(s.labelKey)}>
-            <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{s.value}</div>
+            <div className="text-2xl font-semibold text-gray-900 dark:text-white">{s.value}</div>
           </SectionCard>
         ))}
       </div>
@@ -113,7 +113,7 @@ export function TeacherPage() {
   
   return (
     <div className="space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{t('teacher.title')}</div>
+      <div className="text-2xl font-semibold text-gray-900 dark:text-white">{t('teacher.title')}</div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {['Total Students', 'Active Today', 'Lessons Completed', 'Avg Quiz Score'].map((m, i) => (
           <SectionCard key={m} title={m}>{i === 3 ? '0%' : '0'}</SectionCard>
@@ -130,7 +130,7 @@ export function SettingsPage() {
   
   return (
     <div className="space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">{t('settings.title')}</div>
+      <div className="text-2xl font-semibold text-gray-900 dark:text-white">{t('settings.title')}</div>
       <SectionCard title={t('settings.appearance')}>
         <div className="flex items-center justify-between">
           <div>
@@ -138,6 +138,7 @@ export function SettingsPage() {
             <div className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Switch between light and dark themes</div>
           </div>
           <button
+            aria-label={t('settings.darkMode')}
             onClick={toggleTheme}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
               theme === 'dark' ? 'bg-blue-600' : 'bg-gray-200'
@@ -158,6 +159,7 @@ export function SettingsPage() {
             <div className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Choose your preferred language</div>
           </div>
           <select
+            aria-label={t('settings.appLanguage')}
             value={language}
             onChange={(e) => setLanguage(e.target.value as 'en' | 'hi' | 'or')}
             className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1 text-sm"
@@ -170,8 +172,8 @@ export function SettingsPage() {
       </SectionCard>
       <SectionCard title={t('settings.offline')}>
         <div className="font-medium">{t('settings.enableOffline')}</div>
-        <div className="h-2 bg-slate-800 dark:bg-slate-800 bg-gray-200 rounded mt-3 w-full">
-          <div className="h-2 w-4/5 bg-indigo-500 rounded"></div>
+        <div className="h-2 bg-gray-200 dark:bg-slate-800 rounded mt-3 w-full">
+          <div className="h-2 bg-indigo-500 rounded w-4/5"></div>
         </div>
       </SectionCard>
       <SectionCard title={t('settings.account')}>

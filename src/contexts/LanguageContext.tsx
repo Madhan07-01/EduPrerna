@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import type React from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 type Language = 'en' | 'hi' | 'or'
 
@@ -151,6 +152,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useLanguage() {
   const context = useContext(LanguageContext)
   if (context === undefined) {

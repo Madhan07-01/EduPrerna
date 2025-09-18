@@ -4,8 +4,13 @@ export function SWUpdatePrompt() {
   // In React, needRefresh is a boolean state value returned by the hook.
   // Some builds may expose it as an object with a `value` property; support both.
   const reg = useRegisterSW()
-  const needRefresh = (reg as any).needRefresh?.value ?? (reg as any).needRefresh ?? false
-  const updateServiceWorker = (reg as any).updateServiceWorker as (reload?: boolean) => void
+  // vite-plugin-pwa types do not currently expose the full React hook shape.
+  // Support both boolean and signal-like shapes without using any.
+  const needRefresh: boolean =
+    (reg as unknown as { needRefresh?: { value?: boolean } | boolean }).needRefresh instanceof Object
+      ? Boolean((reg as unknown as { needRefresh?: { value?: boolean } }).needRefresh?.value)
+      : Boolean((reg as unknown as { needRefresh?: boolean }).needRefresh)
+  const updateServiceWorker = (reg as unknown as { updateServiceWorker?: (reload?: boolean) => void }).updateServiceWorker
 
   if (!needRefresh) return null
   return (

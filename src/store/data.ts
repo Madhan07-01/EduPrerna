@@ -17,7 +17,7 @@ function randomDesc(subject: Subject, title: string) {
 export function generateCourses(): Course[] {
   const courses: Course[] = []
   for (const subject of subjects) {
-    for (let grade = 6 as 6 | 7 | 8 | 9 | 10 | 11 | 12; grade <= 12; grade = (grade + 1) as any) {
+    for (let grade: 6 | 7 | 8 | 9 | 10 | 11 | 12 = 6; grade <= 12; grade = (grade + 1) as 6 | 7 | 8 | 9 | 10 | 11 | 12) {
       const titles = baseTitles[subject]
       for (let i = 0; i < 10; i++) {
         const base = titles[i % titles.length]

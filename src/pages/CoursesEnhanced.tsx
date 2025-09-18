@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initCourses, setGrade, setProgressFilter, setQuery, setSubject } from '../store/coursesSlice'
 import type { RootState } from '../store'
+import type { AppDispatch } from '../store'
 import type { Subject, Course } from '../store/types'
 import CourseCard from '../components/CourseCard'
 import CourseDetail from './CourseDetail'
@@ -9,13 +10,13 @@ import CourseDetail from './CourseDetail'
 const subjects: Subject[] = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science']
 
 export default function CoursesEnhanced() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const { filtered, filters, status } = useSelector((s: RootState) => s.courses)
   const [selected, setSelected] = useState<Course | null>(null)
   const [queryLocal, setQueryLocal] = useState(filters.query)
 
   useEffect(() => {
-    if (status === 'idle') dispatch(initCourses() as any)
+    if (status === 'idle') dispatch(initCourses())
   }, [status, dispatch])
 
   useEffect(() => {
@@ -35,9 +36,9 @@ export default function CoursesEnhanced() {
 
   return (
     <div className="space-y-4">
-      <div className="text-2xl font-semibold text-white dark:text-white text-gray-900">Explore STEM Courses</div>
+      <div className="text-2xl font-semibold text-gray-900 dark:text-white">Explore STEM Courses</div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <input
           value={queryLocal}
           onChange={(e) => setQueryLocal(e.target.value)}
@@ -47,24 +48,30 @@ export default function CoursesEnhanced() {
 
         <div className="flex flex-wrap gap-2">
           <select
+            aria-label="Filter by grade"
             value={filters.grade}
-            onChange={(e) => dispatch(setGrade(e.target.value === 'all' ? 'all' : Number(e.target.value) as any))}
+            onChange={(e) => {
+              const value = e.target.value
+              dispatch(setGrade(value === 'all' ? 'all' : Number(value)))
+            }}
             className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
           >
             <option value="all">All Grades</option>
             {[6,7,8,9,10,11,12].map((g) => <option key={g} value={g}>Grade {g}</option>)}
           </select>
           <select
+            aria-label="Filter by subject"
             value={filters.subject}
-            onChange={(e) => dispatch(setSubject(e.target.value as any))}
+            onChange={(e) => dispatch(setSubject(e.target.value as Subject | 'all'))}
             className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
           >
             <option value="all">All Subjects</option>
             {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
           <select
+            aria-label="Filter by progress"
             value={filters.progress}
-            onChange={(e) => dispatch(setProgressFilter(e.target.value as any))}
+            onChange={(e) => dispatch(setProgressFilter(e.target.value as 'all' | 'not' | 'in' | 'done'))}
             className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
           >
             <option value="all">Any Progress</option>
@@ -79,7 +86,7 @@ export default function CoursesEnhanced() {
         <div className="text-sm text-slate-400">Loading courses...</div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {filtered.map((c) => (
+          {filtered.map((c: Course) => (
             <CourseCard key={c.courseId} course={c} onOpen={setSelected} highlight={highlight} />
           ))}
         </div>

@@ -1,7 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { auth, db, googleProvider } from '../services/firebase'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import type React from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
+import { onAuthStateChanged, updateProfile } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { auth, db } from '../firebase/firebaseConfig'
+import { signIn as fbSignIn, signOutUser as fbSignOut, signUp as fbSignUp } from '../firebase/auth'
+import { useGoogleSignIn } from './useFirebaseAuth'
 
 export type UserProfile = {
   uid: string
@@ -18,8 +21,12 @@ type AuthContextType = {
   user: UserProfile | null
   loading: boolean
   signInGoogle: () => Promise<void>
+  signInWithGoogle: () => Promise<void>
   signInEmail: (email: string, password: string) => Promise<void>
   signUpEmail: (email: string, password: string, displayName: string) => Promise<void>
+  // Aliases for convenience in UI pages
+  signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, displayName: string) => Promise<void>
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
   signOutUser: () => Promise<void>
 }
@@ -30,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const demo = (import.meta as any).env?.VITE_AUTH_DEMO === 'true'
+  const demo = false
 
   useEffect(() => {
     if (demo) {
@@ -45,64 +52,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false)
         return
       }
-      const ref = doc(db, 'users', u.uid)
-      const snap = await getDoc(ref)
-      if (snap.exists()) {
-        setUser(snap.data() as UserProfile)
-      } else {
-        const profile: UserProfile = { uid: u.uid, email: u.email, displayName: u.displayName, role: 'student' }
-        await setDoc(ref, profile)
-        setUser(profile)
+      try {
+        const ref = doc(db, 'users', u.uid)
+        const snap = await getDoc(ref)
+        if (snap.exists()) {
+          setUser(snap.data() as UserProfile)
+        } else {
+          const profile: UserProfile = { uid: u.uid, email: u.email, displayName: u.displayName, role: 'student' }
+          await setDoc(ref, profile)
+          setUser(profile)
+        }
+      } catch (err: unknown) {
+        const maybe = err as { code?: string; message?: string }
+        if (maybe?.code === 'unavailable' || maybe?.message?.includes('offline')) {
+          console.warn('Firestore unavailable/offline. Using auth user as fallback; profile will sync later.')
+          // Fallback: allow the app to proceed with minimal auth user info.
+          setUser({ uid: u.uid, email: u.email, displayName: u.displayName ?? null, role: 'student' })
+        } else {
+          console.error('Failed to fetch user profile:', err)
+        }
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     })
     return () => unsub()
   }, [demo])
 
-  const signInGoogle = async () => {
-    if (demo) {
-      const demoUser: UserProfile = { uid: 'demo-google', email: 'demo@student.com', displayName: 'Demo Student', role: 'student' }
-      setUser(demoUser)
-      localStorage.setItem('demoUser', JSON.stringify(demoUser))
-      return
-    }
-    await signInWithPopup(auth, googleProvider)
-  }
+  const { signInWithGoogle } = useGoogleSignIn()
+  const signInGoogle = useCallback(async () => {
+    await signInWithGoogle()
+  }, [signInWithGoogle])
 
-  const signInEmail = async (email: string, password: string) => {
-    if (demo) {
-      const isTeacher = email.toLowerCase() === 'teacher@school.com' && password === 'Teacher123!'
-      const isStudent = email.toLowerCase() === 'demo@student.com' && password === 'Demo123!'
-      if (!isTeacher && !isStudent) throw new Error('Invalid demo credentials')
-      const demoUser: UserProfile = {
-        uid: isTeacher ? 'demo-teacher' : 'demo-student',
-        email,
-        displayName: isTeacher ? 'Demo Teacher' : 'Demo Student',
-        role: isTeacher ? 'teacher' : 'student',
-      }
-      setUser(demoUser)
-      localStorage.setItem('demoUser', JSON.stringify(demoUser))
-      return
-    }
-    await signInWithEmailAndPassword(auth, email, password)
-  }
+  const signInEmail = useCallback(async (email: string, password: string) => {
+    await fbSignIn(email, password)
+  }, [])
 
-  const signUpEmail = async (email: string, password: string, displayName: string) => {
-    if (demo) {
-      const demoUser: UserProfile = { uid: 'demo-'+Date.now(), email, displayName, role: 'student' }
-      setUser(demoUser)
-      localStorage.setItem('demoUser', JSON.stringify(demoUser))
-      return
-    }
-    const cred = await createUserWithEmailAndPassword(auth, email, password)
-    if (auth.currentUser) await updateProfile(auth.currentUser, { displayName })
-    const ref = doc(db, 'users', cred.user.uid)
-    const profile: UserProfile = { uid: cred.user.uid, email, displayName, role: 'student' }
-    await setDoc(ref, profile)
+  const signUpEmail = useCallback(async (email: string, password: string, displayName: string) => {
+    const u = await fbSignUp(email, password, displayName)
+    const ref = doc(db, 'users', u.uid)
+    const profile: UserProfile = { uid: u.uid, email: u.email, displayName: u.displayName, role: 'student' }
+    await setDoc(ref, profile, { merge: true })
     setUser(profile)
-  }
+  }, [])
 
-  const updateUserProfile = async (updates: Partial<UserProfile>) => {
+  const updateUserProfile = useCallback(async (updates: Partial<UserProfile>) => {
     if (!user) return
     const newProfile = { ...user, ...updates }
     setUser(newProfile)
@@ -113,21 +106,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const ref = doc(db, 'users', user.uid)
     await setDoc(ref, newProfile, { merge: true })
     if (updates.displayName && auth.currentUser) await updateProfile(auth.currentUser, { displayName: updates.displayName })
-  }
+  }, [demo, user])
 
-  const signOutUser = async () => {
-    if (demo) {
-      localStorage.removeItem('demoUser')
-      setUser(null)
-      return
-    }
-    await signOut(auth)
-  }
+  const signOutUser = useCallback(async () => {
+    await fbSignOut()
+  }, [])
 
-  const value = useMemo<AuthContextType>(() => ({ user, loading, signInGoogle, signInEmail, signUpEmail, updateUserProfile, signOutUser }), [user, loading])
+  const value = useMemo<AuthContextType>(
+    () => ({
+      user,
+      loading,
+      signInGoogle,
+      signInWithGoogle,
+      signInEmail,
+      signUpEmail,
+      signIn: signInEmail,
+      signUp: signUpEmail,
+      updateUserProfile,
+      signOutUser,
+    }),
+    [user, loading, signInGoogle, signInWithGoogle, signInEmail, signUpEmail, updateUserProfile, signOutUser]
+  )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used inside AuthProvider')

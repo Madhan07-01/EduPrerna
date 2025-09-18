@@ -16,5 +16,6 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
 export const db = getFirestore(app)
-export const isDemoConfig = (import.meta as any).env?.VITE_AUTH_DEMO === 'true' || firebaseConfig.apiKey === 'demo-api-key'
+type ViteEnv = { VITE_AUTH_DEMO?: string }
+export const isDemoConfig = ((import.meta as unknown as { env?: ViteEnv }).env?.VITE_AUTH_DEMO === 'true') || firebaseConfig.apiKey === 'demo-api-key'
 
