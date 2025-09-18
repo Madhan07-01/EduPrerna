@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { isDemoConfig } from '../services/firebase'
 
 export default function AuthPage() {
-  const { signInGoogle, signInEmail, signUpEmail, signInTeacherUsername, loading } = useAuth()
+  const { signInEmail, signUpEmail, loading } = useAuth()
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -41,17 +41,14 @@ export default function AuthPage() {
         <button
           className="w-full rounded-md bg-sky-600 text-white px-3 py-2"
           disabled={loading}
-          onClick={() => (role === 'teacher' ? signInTeacherUsername(email, password) : signInEmail(email, password))}
+          onClick={() => signInEmail(email, password)}
         >
           Sign In
         </button>
       ) : (
-        <button className="w-full rounded-md bg-sky-600 text-white px-3 py-2" disabled={loading} onClick={() => signUpEmail(email, password, name)}>
+        <button className="w-full rounded-md bg-sky-600 text-white px-3 py-2" disabled={loading} onClick={() => signUpEmail(email, password, name, role)}>
           Create Account
         </button>
-      )}
-      {role === 'student' && (
-        <button className="w-full rounded-md bg-red-600 text-white px-3 py-2" disabled={loading} onClick={() => signInGoogle()}>Continue with Google</button>
       )}
       {role === 'student' && (
         <button className="text-xs text-sky-400" onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}>

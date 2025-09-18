@@ -24,13 +24,13 @@ const navItems: Array<{ key: NavKey; labelKey: string; icon: string }> = [
 
 export function Sidebar({ active }: SidebarProps) {
   const { t } = useLanguage()
-  const { user, signOutUser } = useAuth()
+  const { currentUser, profile, signOutUser } = useAuth()
   const navigate = useNavigate()
 
-  const isTeacher = user?.role === 'teacher'
+  const isTeacher = profile?.role === 'teacher'
 
   const visibleItems = navItems.filter((item) => {
-    if (!user) {
+    if (!currentUser) {
       // Not signed in: hide teacher nav
       return item.key !== 'teacher'
     }

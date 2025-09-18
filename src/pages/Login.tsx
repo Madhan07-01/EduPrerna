@@ -5,7 +5,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
 
 export default function Login() {
-  const { signIn, signInGoogle, loading } = useAuth()
+  const { signInEmail, loading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState<string>('')
@@ -17,22 +17,10 @@ export default function Login() {
     try {
       setError('')
       setMessage('')
-      await signIn(email, password)
+      await signInEmail(email, password)
       navigate('/dashboard')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Login failed'
-      setError(msg)
-    }
-  }
-
-  const onGoogle = async () => {
-    try {
-      setError('')
-      setMessage('')
-      await signInGoogle()
-      navigate('/dashboard')
-    } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || 'Google sign-in failed'
       setError(msg)
     }
   }
@@ -64,7 +52,6 @@ export default function Login() {
         <button disabled={loading} className="w-full rounded-md bg-sky-600 px-3 py-2 text-white disabled:opacity-60">Sign In</button>
       </form>
       <div className="mt-3 grid gap-2">
-        <button onClick={onGoogle} className="w-full rounded-md bg-white text-gray-900 px-3 py-2 text-sm ring-1 ring-gray-300 hover:bg-gray-50 dark:bg-gray-100">Sign in with Google</button>
         <button onClick={onReset} className="text-sm text-sky-500 hover:underline w-fit">Forgot password?</button>
         <div className="text-sm text-gray-600 dark:text-slate-400">
           New here? <Link className="text-sky-500 hover:underline" to="/signup">Create account</Link>

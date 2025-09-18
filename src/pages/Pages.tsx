@@ -3,9 +3,6 @@ import CoursesEnhanced from './CoursesEnhanced'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAuth } from '../contexts/AuthContext'
-import { useEffect, useState } from 'react'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../firebase/firebaseConfig'
 
 export function SectionCard({ title, children }: { title: string; children?: ReactNode }) {
   return (
@@ -18,27 +15,12 @@ export function SectionCard({ title, children }: { title: string; children?: Rea
 
 export function DashboardPage() {
   const { t } = useLanguage()
-  const { user } = useAuth()
-  const [username, setUsername] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchUsername = async () => {
-      if (!user?.uid) return
-      try {
-        const ref = doc(db, 'users', user.uid)
-        const snap = await getDoc(ref)
-        const data = snap.data() as { username?: string } | undefined
-        setUsername(data?.username ?? null)
-      } catch {
-        setUsername(null)
-      }
-    }
-    fetchUsername()
-  }, [user?.uid])
+  const { currentUser, profile } = useAuth()
+  const name = profile?.name ?? currentUser?.displayName ?? currentUser?.email ?? 'Learner'
   
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold">Welcome, {username ? username : 'Learner'} 👋</h2>
+      <h2 className="text-lg font-bold">Welcome, {name} 👋</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 p-6 text-white">
           <div className="text-xl font-bold">{t('welcome.title')}</div>
@@ -106,11 +88,13 @@ export function AchievementsPage() {
 
 export function ProfilePage() {
   const { t } = useLanguage()
+  const { currentUser, profile } = useAuth()
+  const name = profile?.name ?? currentUser?.displayName ?? currentUser?.email ?? 'User'
   
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-fuchsia-600 p-6 text-white">
-        <div className="text-xl font-bold">MADHAN V. M</div>
+        <div className="text-xl font-bold">{name}</div>
         <div className="text-sm">Grade 6 • English</div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

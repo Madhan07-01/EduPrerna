@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 export default function SignUp() {
-  const { signUp, loading } = useAuth() as any
+  const { signUpEmail, loading } = useAuth()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -13,7 +13,7 @@ export default function SignUp() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await signUp(email, password, name)
+      await signUpEmail(email, password, name, 'student')
       navigate('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Sign up failed')

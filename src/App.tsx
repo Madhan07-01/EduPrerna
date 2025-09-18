@@ -14,7 +14,7 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 
 function AppContent() {
-  const { user } = useAuth()
+  const { currentUser, profile } = useAuth()
   const location = useLocation()
   const active: NavKey = useMemo(() => {
     const seg = location.pathname.split('/')[1] || 'dashboard'
@@ -30,7 +30,7 @@ function AppContent() {
           <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70 dark:bg-slate-950/70 bg-white/70 border-b border-slate-800 dark:border-slate-800 border-gray-200">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
               <div className="font-semibold text-white dark:text-white text-gray-900">{active.charAt(0).toUpperCase() + active.slice(1)}</div>
-              {!user && <span className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Offline-first • PWA</span>}
+              {!currentUser && <span className="text-xs text-slate-400 dark:text-slate-400 text-gray-600">Offline-first • PWA</span>}
             </div>
           </header>
           <main className="max-w-6xl mx-auto px-4 py-6">
@@ -42,7 +42,7 @@ function AppContent() {
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-              <Route path="/teacher" element={<PrivateRoute>{user?.role === 'teacher' ? <TeacherDashboard /> : <div className="text-sm text-slate-400">Teacher access only.</div>}</PrivateRoute>} />
+              <Route path="/teacher" element={<PrivateRoute>{profile?.role === 'teacher' ? <TeacherDashboard /> : <div className="text-sm text-slate-400">Teacher access only.</div>}</PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
