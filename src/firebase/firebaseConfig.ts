@@ -39,3 +39,5 @@ console.log("Firebase config check", {
   projectId: firebaseConfig.projectId,
   storageBucket: firebaseConfig.storageBucket,
 })
+
+export default firebaseConfig

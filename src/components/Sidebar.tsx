@@ -1,5 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download'
 
@@ -21,9 +22,10 @@ const navItems: Array<{ key: NavKey; labelKey: string; icon: string }> = [
   { key: 'settings', labelKey: 'nav.settings', icon: '⚙️' },
 ]
 
-export function Sidebar({ active, onNavigate }: SidebarProps) {
+export function Sidebar({ active }: SidebarProps) {
   const { t } = useLanguage()
-  const { user } = useAuth()
+  const { user, signOutUser } = useAuth()
+  const navigate = useNavigate()
 
   const isTeacher = user?.role === 'teacher'
 
@@ -50,21 +52,55 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
         </div>
       </div>
       <nav className="flex-1 space-y-1">
-        {visibleItems.map((n) => (
-          <button
-            key={n.key}
-            onClick={() => onNavigate(n.key)}
-            className={
-              'w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ' +
-              (active === n.key
-                ? 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
-                : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900')
-            }
-          >
-            <span className="text-lg">{n.icon}</span>
-            <span className="text-sm">{t(n.labelKey)}</span>
-          </button>
-        ))}
+        {visibleItems.map((n) => {
+          const isSettings = n.key === 'settings'
+          if (isSettings) {
+            return (
+              <div key={n.key}>
+                <button
+                  onClick={() => navigate(`/${n.key}`)}
+                  className={
+                    'w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ' +
+                    (active === n.key
+                      ? 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
+                      : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900')
+                  }
+                >
+                  <span className="text-lg">{n.icon}</span>
+                  <span className="text-sm">{t(n.labelKey)}</span>
+                </button>
+                <ul className="ml-9 mt-1 list-none">
+                  <li>
+                    <button
+                      onClick={async () => {
+                        await signOutUser()
+                        navigate('/login')
+                      }}
+                      className="mt-2 w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
+                    >
+                      {t('settings.signOut')}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )
+          }
+          return (
+            <button
+              key={n.key}
+              onClick={() => navigate(`/${n.key}`)}
+              className={
+                'w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ' +
+                (active === n.key
+                  ? 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
+                  : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900')
+              }
+            >
+              <span className="text-lg">{n.icon}</span>
+              <span className="text-sm">{t(n.labelKey)}</span>
+            </button>
+          )
+        })}
       </nav>
       <div className="px-2 text-xs text-slate-500 dark:text-slate-500 text-gray-500">{t('footer.motto')}</div>
     </aside>
