@@ -6,6 +6,8 @@ import {
   onAuthStateChanged, 
   updateProfile, 
   signOut, 
+  GoogleAuthProvider,
+  signInWithPopup,
   type User as FirebaseUser 
 } from 'firebase/auth'
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
@@ -17,6 +19,7 @@ type AuthContextType = {
   loading: boolean
   signUpEmail: (email: string, password: string, name?: string, role?: string) => Promise<FirebaseUser>
   signInEmail: (email: string, password: string) => Promise<unknown>
+  signInWithGoogle: () => Promise<void>
   signOutUser: () => Promise<void>
 }
 
@@ -91,6 +94,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const signInWithGoogle = useCallback(async () => {
+    setLoading(true)
+    try {
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+
+      // Check if user document exists in Firestore
+      const userDoc = await getDoc(doc(db, 'users', user.uid))
+      
+      if (!userDoc.exists()) {
+        // Create user document if it doesn't exist
+        await setDoc(doc(db, 'users', user.uid), {
+          uid: user.uid,
+          name: user.displayName ?? null,
+          email: user.email,
+          role: 'student', // Default role for Google sign-in
+          createdAt: serverTimestamp(),
+        })
+      }
+
+      console.log('User signed in with Google:', user)
+    } catch (error) {
+      console.error('Error during Google sign-in:', error)
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   const signOutUser = useCallback(async () => {
     await signOut(auth)
   }, [])
@@ -101,6 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     signUpEmail,
     signInEmail,
+    signInWithGoogle,
     signOutUser,
   }
 
