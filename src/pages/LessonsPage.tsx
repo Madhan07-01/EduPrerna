@@ -13,7 +13,11 @@ export function LessonsPage() {
   // Get lessons for this subject and grade
   const lessons = getLessonsForSubjectAndGrade(subjectParam, gradeParam)
   
+<<<<<<< HEAD
   const handleLessonClick = (lessonIndex: number) => {
+=======
+  const handleLessonClick = (lessonName: string, lessonIndex: number) => {
+>>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
     navigate(`/lesson/${subjectParam}/${gradeParam}/${lessonIndex + 1}`)
   }
 
@@ -82,7 +86,11 @@ export function LessonsPage() {
               <div
                 key={index}
                 className="group cursor-pointer transform transition-all duration-200 hover:scale-[1.02]" 
+<<<<<<< HEAD
                 onClick={() => handleLessonClick(index)}
+=======
+                onClick={() => handleLessonClick(lesson, index)}
+>>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
               >
                 <SectionCard title={`${index + 1}. ${lesson}`}>
                   <div className="space-y-4">

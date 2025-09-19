@@ -1,9 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSubjects, getGrades, type Subject, type Grade } from '../data/lessonsData'
+<<<<<<< HEAD
 
 export function CoursesPage() {
   const navigate = useNavigate()
+=======
+import { useLanguage } from '../contexts/LanguageContext'
+
+export function CoursesPage() {
+  const navigate = useNavigate()
+  const { t } = useLanguage()
+>>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
   const [selectedGrade, setSelectedGrade] = useState<Grade>(6)
 
@@ -123,6 +131,7 @@ export function CoursesPage() {
         </button>
       </div>
 
+<<<<<<< HEAD
       {/* Firebase-Powered Lessons Section */}
       <div className="max-w-6xl mx-auto mt-16">
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
@@ -225,6 +234,9 @@ export function CoursesPage() {
       </div>
 
       {/* Original Subject Selection */}
+=======
+      {/* Subject Stats */}
+>>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
       {selectedSubject && (
         <div className="max-w-4xl mx-auto">
           <div className={`p-6 rounded-2xl bg-gradient-to-r ${getSubjectColor(selectedSubject)} text-white`}>
