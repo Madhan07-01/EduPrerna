@@ -21,7 +21,7 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 
 function AppContent() {
-  const { currentUser, profile } = useAuth()
+  const { currentUser } = useAuth()
   const location = useLocation()
   const active: NavKey = useMemo(() => {
     const pathname = location.pathname

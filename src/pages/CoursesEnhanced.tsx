@@ -5,7 +5,6 @@ import type { RootState } from '../store'
 import type { AppDispatch } from '../store'
 import type { Subject, Course } from '../store/types'
 import CourseCard from '../components/CourseCard'
-import { useNavigate } from 'react-router-dom'
 import CourseDetail from './CourseDetail'
 
 const subjects: Subject[] = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science']
