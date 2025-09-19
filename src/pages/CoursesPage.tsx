@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSubjects, getGrades, type Subject, type Grade } from '../data/lessonsData'
-import { useLanguage } from '../contexts/LanguageContext'
 
 export function CoursesPage() {
   const navigate = useNavigate()
-  const { t } = useLanguage()
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
   const [selectedGrade, setSelectedGrade] = useState<Grade>(6)
 

@@ -13,7 +13,7 @@ export function LessonsPage() {
   // Get lessons for this subject and grade
   const lessons = getLessonsForSubjectAndGrade(subjectParam, gradeParam)
   
-  const handleLessonClick = (lessonName: string, lessonIndex: number) => {
+  const handleLessonClick = (lessonIndex: number) => {
     navigate(`/lesson/${subjectParam}/${gradeParam}/${lessonIndex + 1}`)
   }
 
@@ -82,7 +82,7 @@ export function LessonsPage() {
               <div
                 key={index}
                 className="group cursor-pointer transform transition-all duration-200 hover:scale-[1.02]" 
-                onClick={() => handleLessonClick(lesson, index)}
+                onClick={() => handleLessonClick(index)}
               >
                 <SectionCard title={`${index + 1}. ${lesson}`}>
                   <div className="space-y-4">
