@@ -1,4 +1,5 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getLessonsForSubjectAndGrade, type Subject, type Grade } from '../data/lessonsData'
 import { SectionCard } from '../components/SectionCard'
 
@@ -13,11 +14,7 @@ export function LessonsPage() {
   // Get lessons for this subject and grade
   const lessons = getLessonsForSubjectAndGrade(subjectParam, gradeParam)
   
-<<<<<<< HEAD
   const handleLessonClick = (lessonIndex: number) => {
-=======
-  const handleLessonClick = (lessonName: string, lessonIndex: number) => {
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
     navigate(`/lesson/${subjectParam}/${gradeParam}/${lessonIndex + 1}`)
   }
 
@@ -86,11 +83,7 @@ export function LessonsPage() {
               <div
                 key={index}
                 className="group cursor-pointer transform transition-all duration-200 hover:scale-[1.02]" 
-<<<<<<< HEAD
                 onClick={() => handleLessonClick(index)}
-=======
-                onClick={() => handleLessonClick(lesson, index)}
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
               >
                 <SectionCard title={`${index + 1}. ${lesson}`}>
                   <div className="space-y-4">
@@ -134,55 +127,6 @@ export function LessonsPage() {
             </Link>
           </div>
         )}
-      </div>
-
-      {/* Progress Info */}
-      {lessons.length > 0 && (
-        <div className="mt-8">
-          <div className={`p-6 rounded-2xl bg-gradient-to-r ${getSubjectColor(subjectParam)} text-white`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <span className="text-3xl">🎓</span>
-                <div>
-                  <h3 className="text-xl font-bold">Your Learning Path</h3>
-                  <p className="opacity-90">
-                    Complete all {lessons.length} lessons to master {formatSubjectName(subjectParam)} Grade {grade}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold">{lessons.length}</div>
-                <div className="text-sm opacity-90">Total Lessons</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Learning Tips */}
-      <div className="mt-8 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
-        <div className="flex items-center space-x-3 mb-3">
-          <span className="text-2xl">💡</span>
-          <h3 className="font-semibold text-yellow-800 dark:text-yellow-300">Learning Tips</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-yellow-700 dark:text-yellow-400">
-          <div className="flex items-start space-x-2">
-            <span className="text-yellow-600 dark:text-yellow-400 mt-0.5">✓</span>
-            <span>Take lessons in order for best understanding</span>
-          </div>
-          <div className="flex items-start space-x-2">
-            <span className="text-yellow-600 dark:text-yellow-400 mt-0.5">✓</span>
-            <span>Practice MCQs after each lesson</span>
-          </div>
-          <div className="flex items-start space-x-2">
-            <span className="text-yellow-600 dark:text-yellow-400 mt-0.5">✓</span>
-            <span>Review study materials for better retention</span>
-          </div>
-          <div className="flex items-start space-x-2">
-            <span className="text-yellow-600 dark:text-yellow-400 mt-0.5">✓</span>
-            <span>Take breaks between lessons to absorb concepts</span>
-          </div>
-        </div>
       </div>
     </div>
   )

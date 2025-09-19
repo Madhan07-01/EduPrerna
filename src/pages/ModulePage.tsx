@@ -1,17 +1,13 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { getLessonById } from '../data/courseData'
 import { SectionCard } from '../components/SectionCard'
-<<<<<<< HEAD
 import { motion } from 'framer-motion'
 import { seedNumberSystemLesson } from '../data/numberSystemSeed'
 import { useState } from 'react'
-=======
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
 
 export function ModulePage() {
   const { lessonId } = useParams<{ lessonId: string }>()
   const navigate = useNavigate()
-<<<<<<< HEAD
   const [seedLoading, setSeedLoading] = useState(false)
   const [seedResult, setSeedResult] = useState<string | null>(null)
   
@@ -36,11 +32,6 @@ export function ModulePage() {
     }
   }
   
-=======
-  
-  const lesson = lessonId ? getLessonById(lessonId) : null
-  
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
   if (!lesson) {
     return (
       <div className="text-center py-12">
@@ -165,7 +156,6 @@ export function ModulePage() {
         </div>
       </div>
 
-<<<<<<< HEAD
       {/* Firebase Learning Demo */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -324,8 +314,6 @@ export function ModulePage() {
         </div>
       </motion.div>
 
-=======
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
       {/* Learning Tips */}
       <div className="max-w-2xl mx-auto mt-8">
         <div className="p-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
@@ -334,13 +322,8 @@ export function ModulePage() {
             <h3 className="font-semibold text-yellow-800 dark:text-yellow-300">Learning Tip</h3>
           </div>
           <p className="text-yellow-700 dark:text-yellow-400 text-sm">
-<<<<<<< HEAD
             Try both lessons to see the difference between Grade 6 (3-option MCQs) and Grade 7 (4-option MCQs). 
             Both lessons feature interactive content and real-time progress tracking!
-=======
-            For best results, start with the study materials to understand the concepts, 
-            then test your knowledge with MCQs. Take breaks and review topics you find challenging.
->>>>>>> 7275711c722e7246f51f9bd470512336de41ecbc
           </p>
         </div>
       </div>
