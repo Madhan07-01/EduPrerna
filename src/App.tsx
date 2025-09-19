@@ -16,12 +16,13 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
 import { useAuth } from './hooks/useAuth'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import RoleSelector from './pages/RoleSelector'
 import TeacherLogin from './pages/TeacherLogin'
+import TeacherSignUp from './pages/TeacherSignUp'
 
 function AppContent() {
   const { currentUser } = useAuth()
@@ -57,6 +58,7 @@ function AppContent() {
               <Route path="/login" element={<Login />} />
               <Route path="/teacher-login" element={<TeacherLogin />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/teacher-signup" element={<TeacherSignUp />} />
               <Route path="/" element={<RoleSelector />} />
               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />

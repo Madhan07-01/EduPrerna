@@ -17,7 +17,7 @@ export default function Login() {
     try {
       setError('')
       setMessage('')
-      await signInEmail(email, password)
+      await signInEmail(email, password, 'student')
       navigate('/dashboard')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Login failed'
@@ -45,7 +45,7 @@ export default function Login() {
     try {
       setError('')
       setMessage('')
-      await signInWithGoogle()
+      await signInWithGoogle('student')
       navigate('/dashboard')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Google sign-in failed'
