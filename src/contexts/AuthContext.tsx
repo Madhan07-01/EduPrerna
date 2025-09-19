@@ -100,6 +100,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await signOut(auth)
             throw new Error(`This account is not authorized to log in as a ${expectedRole === 'teacher' ? 'Teacher' : 'Student'}`)
           }
+          
+          // Update streak for student accounts only
+          if (expectedRole === 'student') {
+            try {
+              const studentRef = doc(db, 'students', user.uid)
+              const studentDoc = await getDoc(studentRef)
+              
+              const today = new Date()
+              today.setHours(0, 0, 0, 0) // Normalize to start of day
+              
+              const todayTimestamp = today.getTime()
+              let streakCount = 1 // Default for first login
+              
+              if (studentDoc.exists()) {
+                const studentData = studentDoc.data()
+                const lastLoginDate = studentData.lastLoginDate?.toDate() || new Date(0)
+                lastLoginDate.setHours(0, 0, 0, 0) // Normalize to start of day
+                
+                const lastLoginTimestamp = lastLoginDate.getTime()
+                const oneDayMs = 24 * 60 * 60 * 1000
+                const dayDifference = Math.floor((todayTimestamp - lastLoginTimestamp) / oneDayMs)
+                
+                if (dayDifference === 0) {
+                  // Same day login, keep streak
+                  streakCount = studentData.streakCount || 1
+                } else if (dayDifference === 1) {
+                  // Consecutive day login, increment streak
+                  streakCount = (studentData.streakCount || 0) + 1
+                } else if (dayDifference > 1) {
+                  // Streak broken, reset to 1
+                  streakCount = 1
+                }
+              }
+              
+              // Update streak data
+              await setDoc(studentRef, {
+                lastLoginDate: today,
+                streakCount
+              }, { merge: true })
+            } catch (error) {
+              console.error('Error updating streak:', error)
+              // Don't break login flow on streak update failure
+            }
+          }
         }
       }
       
@@ -135,6 +179,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (userData.role !== expectedRole) {
           await signOut(auth)
           throw new Error(`This account is not authorized to log in as a ${expectedRole === 'teacher' ? 'Teacher' : 'Student'}`)
+        }
+      }
+
+      // Update streak for student accounts only
+      if (expectedRole === 'student') {
+        try {
+          const studentRef = doc(db, 'students', user.uid)
+          const studentDoc = await getDoc(studentRef)
+          
+          const today = new Date()
+          today.setHours(0, 0, 0, 0) // Normalize to start of day
+          
+          const todayTimestamp = today.getTime()
+          let streakCount = 1 // Default for first login
+          
+          if (studentDoc.exists()) {
+            const studentData = studentDoc.data()
+            const lastLoginDate = studentData.lastLoginDate?.toDate() || new Date(0)
+            lastLoginDate.setHours(0, 0, 0, 0) // Normalize to start of day
+            
+            const lastLoginTimestamp = lastLoginDate.getTime()
+            const oneDayMs = 24 * 60 * 60 * 1000
+            const dayDifference = Math.floor((todayTimestamp - lastLoginTimestamp) / oneDayMs)
+            
+            if (dayDifference === 0) {
+              // Same day login, keep streak
+              streakCount = studentData.streakCount || 1
+            } else if (dayDifference === 1) {
+              // Consecutive day login, increment streak
+              streakCount = (studentData.streakCount || 0) + 1
+            } else if (dayDifference > 1) {
+              // Streak broken, reset to 1
+              streakCount = 1
+            }
+          }
+          
+          // Update streak data
+          await setDoc(studentRef, {
+            lastLoginDate: today,
+            streakCount
+          }, { merge: true })
+        } catch (error) {
+          console.error('Error updating streak:', error)
+          // Don't break login flow on streak update failure
         }
       }
 

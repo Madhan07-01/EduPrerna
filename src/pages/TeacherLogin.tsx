@@ -17,7 +17,7 @@ export default function TeacherLogin() {
     try {
       setError('')
       setMessage('')
-      await signInEmail(email, password, 'teacher')
+      await signInEmail(email, password)
       navigate('/teacher')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Login failed'
@@ -45,7 +45,7 @@ export default function TeacherLogin() {
     try {
       setError('')
       setMessage('')
-      await signInWithGoogle('teacher')
+      await signInWithGoogle()
       navigate('/teacher')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Google sign-in failed'
@@ -65,9 +65,6 @@ export default function TeacherLogin() {
       </form>
       <div className="mt-3 grid gap-2">
         <button onClick={onReset} className="text-sm text-emerald-500 hover:underline w-fit">Forgot password?</button>
-        <div className="text-sm text-gray-600 dark:text-slate-400">
-          New teacher? <Link className="text-emerald-500 hover:underline" to="/teacher-signup">Create teacher account</Link>
-        </div>
         <div className="text-sm text-gray-600 dark:text-slate-400">
           <Link className="text-emerald-500 hover:underline" to="/">Back to role selection</Link>
         </div>
