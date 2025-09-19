@@ -2,8 +2,14 @@ import './index.css'
 import { SWUpdatePrompt } from './sw-update'
 import Sidebar, { type NavKey } from './components/Sidebar'
 import { useMemo } from 'react'
-import { AchievementsPage, CoursesPage, DashboardPage, ProfilePage, SettingsPage } from './pages/Pages'
-import TeacherDashboard from './pages/TeacherDashboard'
+import DashboardPage from './pages/DashboardPage'
+import CoursesPage from './pages/CoursesPage'
+import AchievementsPage from './pages/AchievementsPage'
+import ProfilePage from './pages/ProfilePage'
+import TeacherPage from './pages/TeacherPage'
+import LessonsPage from './pages/LessonsPage'
+import LessonDetailPage from './pages/LessonDetailPage'
+import SettingsPage from './pages/SettingsPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -18,7 +24,11 @@ function AppContent() {
   const { currentUser, profile } = useAuth()
   const location = useLocation()
   const active: NavKey = useMemo(() => {
-    const seg = location.pathname.split('/')[1] || 'dashboard'
+    const pathname = location.pathname
+    if (pathname.startsWith('/courses/') || pathname.startsWith('/lesson/')) {
+      return 'courses'
+    }
+    const seg = pathname.split('/')[1] || 'dashboard'
     const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','games','download','settings']
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
@@ -43,7 +53,9 @@ function AppContent() {
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-              <Route path="/teacher" element={<PrivateRoute>{profile?.role === 'teacher' ? <TeacherDashboard /> : <div className="text-sm text-slate-400">Teacher access only.</div>}</PrivateRoute>} />
+              <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
+              <Route path="/courses/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
+              <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
