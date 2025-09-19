@@ -9,6 +9,8 @@ import AchievementsPage from './pages/AchievementsPage'
 import ProfilePage from './pages/ProfilePage'
 import TeacherPage from './pages/TeacherPage'
 import TeacherResourcesPage from './pages/TeacherResourcesPage'
+import TeacherAssignmentsPage from './pages/TeacherAssignmentsPage'
+import TeacherAnalyticsPage from './pages/TeacherAnalyticsPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
@@ -27,6 +29,7 @@ import SignUp from './pages/SignUp'
 import RoleSelector from './pages/RoleSelector'
 import TeacherLogin from './pages/TeacherLogin'
 import TeacherSignUp from './pages/TeacherSignUp'
+import TeacherCommunicationPage from './pages/TeacherCommunicationPage'
 
 function AppContent() {
   const { currentUser } = useAuth()
@@ -76,10 +79,9 @@ function AppContent() {
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/teacher/resources" element={<PrivateRoute><TeacherResourcesPage /></PrivateRoute>} />
-              <Route path="/teacher/assignments" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
-              <Route path="/teacher/exams" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
-              <Route path="/teacher/communication" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
-              <Route path="/teacher/analytics" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
+              <Route path="/teacher/assignments" element={<PrivateRoute><TeacherAssignmentsPage /></PrivateRoute>} />
+              <Route path="/teacher/communication" element={<PrivateRoute><TeacherCommunicationPage /></PrivateRoute>} />
+              <Route path="/teacher/analytics" element={<PrivateRoute><TeacherAnalyticsPage /></PrivateRoute>} />
               <Route path="/teacher/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />

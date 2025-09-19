@@ -11,7 +11,6 @@ export default function TeacherSidebar() {
   const navItems = [
     { path: '/teacher', icon: '📊', label: 'Dashboard' },
     { path: '/teacher/assignments', icon: '📝', label: 'Assignments' },
-    { path: '/teacher/exams', icon: '📋', label: 'Exams/Quizzes' },
     { path: '/teacher/resources', icon: '📚', label: 'Resources 📚' },
     { path: '/teacher/communication', icon: '💬', label: 'Communication' },
     { path: '/teacher/analytics', icon: '📈', label: 'Analytics & Reports' },
