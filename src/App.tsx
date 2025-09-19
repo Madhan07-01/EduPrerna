@@ -11,6 +11,9 @@ import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
+import ModulePage from './pages/ModulePage'
+import MCQPage from './pages/MCQPage'
+import MaterialsPage from './pages/MaterialsPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -29,7 +32,10 @@ function AppContent() {
   const location = useLocation()
   const active: NavKey = useMemo(() => {
     const pathname = location.pathname
-    if (pathname.startsWith('/courses/') || pathname.startsWith('/lesson/')) {
+    if (pathname.startsWith('/courses') || pathname.startsWith('/lessons') || pathname.startsWith('/lesson/')) {
+      return 'courses'
+    }
+    if (pathname.startsWith('/module/') || pathname.startsWith('/mcq/') || pathname.startsWith('/materials/')) {
       return 'courses'
     }
     const seg = pathname.split('/')[1] || 'dashboard'
@@ -65,8 +71,11 @@ function AppContent() {
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
-              <Route path="/courses/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
+              <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
+              <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />
+              <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />
+              <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
