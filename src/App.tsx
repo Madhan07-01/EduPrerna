@@ -1,6 +1,7 @@
 import './index.css'
 import { SWUpdatePrompt } from './sw-update'
 import Sidebar, { type NavKey } from './components/Sidebar'
+import TeacherSidebar from './components/TeacherSidebar'
 import { useMemo } from 'react'
 import DashboardPage from './pages/DashboardPage'
 import CoursesPage from './pages/CoursesPage'
@@ -19,6 +20,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import PrivateRoute from './components/PrivateRoute'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
+import RoleSelector from './pages/RoleSelector'
+import TeacherLogin from './pages/TeacherLogin'
 
 function AppContent() {
   const { currentUser } = useAuth()
@@ -33,10 +36,15 @@ function AppContent() {
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
+  const isTeacherPage = location.pathname.startsWith('/teacher')
+  const showStudentSidebar = currentUser && !isTeacherPage
+  const showTeacherSidebar = currentUser && isTeacherPage
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
       <div className="flex">
-        <Sidebar active={active} onNavigate={() => {}} />
+        {showStudentSidebar && <Sidebar active={active} onNavigate={() => {}} />}
+        {showTeacherSidebar && <TeacherSidebar />}
         <div className="flex-1 min-h-screen">
           <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70 dark:bg-slate-950/70 bg-white/70 border-b border-gray-200 dark:border-slate-800">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -47,8 +55,9 @@ function AppContent() {
           <main className="max-w-6xl mx-auto px-4 py-6">
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/teacher-login" element={<TeacherLogin />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/" element={<RoleSelector />} />
               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />

@@ -74,7 +74,7 @@ export function Sidebar({ active }: SidebarProps) {
                     <button
                       onClick={async () => {
                         await signOutUser()
-                        navigate('/login')
+                        navigate('/')
                       }}
                       className="mt-2 w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
                     >
