@@ -30,4 +30,14 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    cors: true,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'require-corp'
+    }
+  },
+  preview: {
+    cors: true
+  }
 })

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics'
 
@@ -17,6 +17,16 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
+export const googleProvider = new GoogleAuthProvider()
+
+// Configure Google Auth provider with better popup handling
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+})
+
+// Set additional configuration for better popup handling
+googleProvider.addScope('email')
+googleProvider.addScope('profile')
 
 export let analytics: Analytics | undefined
 if (typeof window !== 'undefined') {

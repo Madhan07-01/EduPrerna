@@ -10,10 +10,13 @@ import ProfilePage from './pages/ProfilePage'
 import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
+import LearningPage from './pages/LearningPage'
 import SettingsPage from './pages/SettingsPage'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
+import NumberSystemLesson from './pages/NumberSystemLesson'
+import IntegersLesson from './pages/IntegersLesson'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -73,6 +76,10 @@ function AppContent() {
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
+              <Route path="/lesson-detail/:courseId/:lessonId" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
+              <Route path="/lesson-detail/mathematics/number-system" element={<PrivateRoute><NumberSystemLesson /></PrivateRoute>} />
+              <Route path="/lesson-detail/mathematics/integers" element={<PrivateRoute><IntegersLesson /></PrivateRoute>} />
+              <Route path="/learning/:courseId/:lessonId" element={<PrivateRoute><LearningPage /></PrivateRoute>} />
               <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />
               <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />
               <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />
@@ -95,7 +102,7 @@ function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AppContent />
           </BrowserRouter>
         </AuthProvider>

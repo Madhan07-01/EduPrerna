@@ -35,12 +35,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (u) {
         setCurrentUser(u)
         try {
-          const snap = await getDoc(doc(db, 'users', u.uid))
-          if (snap.exists()) {
-            setProfile(snap.data())
-          } else {
-            setProfile({ name: u.displayName ?? null, email: u.email })
+          // Add timeout and retry logic for Firestore operations
+          const fetchUserData = async (retries = 3): Promise<void> => {
+            try {
+              const snap = await getDoc(doc(db, 'users', u.uid))
+              if (snap.exists()) {
+                setProfile(snap.data())
+              } else {
+                setProfile({ name: u.displayName ?? null, email: u.email })
+              }
+            } catch (err: any) {
+              if (retries > 0 && (err?.code === 'unavailable' || err?.code === 'deadline-exceeded')) {
+                console.warn(`Firestore connection failed, retrying... (${retries} attempts left)`, err)
+                setTimeout(() => fetchUserData(retries - 1), 1000)
+              } else {
+                console.warn('Failed to fetch user doc, using fallback profile', err)
+                setProfile({ name: u.displayName ?? null, email: u.email })
+              }
+            }
           }
+          
+          await fetchUserData()
         } catch (err) {
           console.warn('Failed to fetch user doc', err)
           setProfile({ name: u.displayName ?? null, email: u.email })
@@ -113,11 +128,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     try {
       const provider = new GoogleAuthProvider()
+      
+      // Configure provider to avoid popup issues
+      provider.addScope('email')
+      provider.addScope('profile')
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      })
+      
       const result = await signInWithPopup(auth, provider)
       const user = result.user
 
-      // Check if user document exists in Firestore
-      const userDoc = await getDoc(doc(db, 'users', user.uid))
+      // Check if user document exists in Firestore with retry logic
+      const checkUserDoc = async (retries = 3): Promise<any> => {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid))
+          return userDoc
+        } catch (err: any) {
+          if (retries > 0 && (err?.code === 'unavailable' || err?.code === 'deadline-exceeded')) {
+            console.warn(`Firestore check failed, retrying... (${retries} attempts left)`, err)
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            return checkUserDoc(retries - 1)
+          }
+          throw err
+        }
+      }
+      
+      const userDoc = await checkUserDoc()
       
       if (!userDoc.exists()) {
         // Create user document if it doesn't exist
@@ -139,8 +176,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       console.log('User signed in with Google:', user)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during Google sign-in:', error)
+      
+      // Handle specific popup-related errors
+      if (error?.code === 'auth/popup-closed-by-user') {
+        throw new Error('Sign-in was cancelled. Please try again.')
+      } else if (error?.code === 'auth/popup-blocked') {
+        throw new Error('Popup was blocked by your browser. Please allow popups and try again.')
+      }
+      
       throw error
     } finally {
       setLoading(false)

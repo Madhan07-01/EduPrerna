@@ -123,7 +123,108 @@ export function CoursesPage() {
         </button>
       </div>
 
-      {/* Subject Stats */}
+      {/* Firebase-Powered Lessons Section */}
+      <div className="max-w-6xl mx-auto mt-16">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 flex items-center justify-center gap-3">
+              🔥 New: Interactive Firebase Lessons
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Experience our enhanced learning system with real-time progress tracking
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Number System Lesson Card */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <span className="text-3xl text-white">🔢</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Number System</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Grade 6 Mathematics • Interactive</p>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-500">✓</span>
+                  <span className="text-gray-700 dark:text-gray-300">8 Comprehensive Sections</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-500">✓</span>
+                  <span className="text-gray-700 dark:text-gray-300">10 Interactive MCQs</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-500">✓</span>
+                  <span className="text-gray-700 dark:text-gray-300">Real-time Progress Tracking</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-500">✓</span>
+                  <span className="text-gray-700 dark:text-gray-300">Confetti Animations</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-500">✓</span>
+                  <span className="text-gray-700 dark:text-gray-300">Rich HTML Content</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate('/lesson-detail/mathematics/grade6_number_system')}
+                className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              >
+                <span className="text-xl">🚀</span>
+                Start Number System Lesson
+              </button>
+            </div>
+
+            {/* Instructions Card */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                🌱 Setup Instructions
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Follow these steps to experience the full Firebase-powered learning system:
+              </p>
+              
+              <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex items-start gap-2">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                  <div>
+                    <strong>Go to Module Page:</strong> Navigate to any module page in the sidebar
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                  <div>
+                    <strong>Seed Database:</strong> Click "🌱 Seed Data" to populate Firestore
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                  <div>
+                    <strong>Start Learning:</strong> Click the button above to begin!
+                  </div>
+                </li>
+              </ol>
+
+              <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-yellow-600 dark:text-yellow-400">⚠️</span>
+                  <span className="font-semibold text-yellow-800 dark:text-yellow-300">First Time?</span>
+                </div>
+                <p className="text-xs text-yellow-700 dark:text-yellow-400">
+                  Make sure to seed the database first, or you'll see "Lesson not found" error.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Original Subject Selection */}
       {selectedSubject && (
         <div className="max-w-4xl mx-auto">
           <div className={`p-6 rounded-2xl bg-gradient-to-r ${getSubjectColor(selectedSubject)} text-white`}>
