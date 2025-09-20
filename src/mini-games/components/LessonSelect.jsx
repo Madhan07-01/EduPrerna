@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getLessonsForSubjectAndGrade, formatSubjectName } from '../data/subjects.js'
 
 const LessonSelect = () => {
-  const { subject, game, grade } = useParams()
+  const { subject, grade } = useParams()
   const navigate = useNavigate()
 
   // Get lessons for this subject and grade
@@ -16,18 +16,15 @@ const LessonSelect = () => {
       .replace(/--+/g, '-')
       .replace(/^-+|-+$/g, '')
     
-    // Navigate to game play route
-    navigate(`/mini/${subject}/${game}/${grade}/${lessonSlug}/play`)
+    // Navigate to game selection route
+    navigate(`/mini/${subject}/${grade}/${lessonSlug}/games`)
   }
 
   const handleBack = () => {
-    navigate(`/mini/${subject}/${game}/grades`)
+    navigate(`/mini/${subject}/grades`)
   }
 
   const formattedSubject = formatSubjectName(subject)
-  const formattedGame = game?.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ')
   const formattedGrade = grade?.replace('grade-', 'Grade ')
 
   // Show error if no lessons found
@@ -69,7 +66,7 @@ const LessonSelect = () => {
         <div className="text-center">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">Select Lesson</div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {formattedGame} • {formattedSubject} • {formattedGrade}
+            {formattedSubject} • {formattedGrade}
           </div>
         </div>
         
@@ -108,7 +105,7 @@ const LessonSelect = () => {
                   className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                   aria-label={`Start ${formattedGame} for ${lesson}`}
                 >
-                  {formattedGame === 'Math Runner' ? '🏃‍♂️ Start Math Runner' : '🎮 Start Game'}
+                  {formattedSubject === 'Mathematics' ? '🏃‍♂️ Start Game' : '🎮 Start Game'}
                 </button>
               </div>
               

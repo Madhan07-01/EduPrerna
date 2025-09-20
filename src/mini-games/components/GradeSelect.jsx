@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { formatSubjectName } from '../data/subjects.js'
 
 const GradeSelect = () => {
-  const { subject, game } = useParams()
+  const { subject } = useParams()
   const navigate = useNavigate()
 
   // Grade options with colors
@@ -17,17 +17,14 @@ const GradeSelect = () => {
   ]
 
   const handleGradeClick = (gradeId) => {
-    navigate(`/mini/${subject}/${game}/${gradeId}/lessons`)
+    navigate(`/mini/${subject}/${gradeId}/lessons`)
   }
 
   const handleBack = () => {
-    navigate(`/mini/${subject}/games`)
+    navigate('/games')
   }
 
   const formattedSubject = formatSubjectName(subject)
-  const formattedGame = game?.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ')
 
   return (
     <div className="space-y-6">
@@ -40,14 +37,14 @@ const GradeSelect = () => {
             aria-label="Back to games"
           >
             <span className="text-xl">←</span>
-            <span className="font-medium">Back to Games</span>
+            <span className="font-medium">Back to Subjects</span>
           </button>
         </div>
         
         <div className="text-center">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">Select Grade</div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {formattedGame} • {formattedSubject}
+            {formattedSubject}
           </div>
         </div>
         

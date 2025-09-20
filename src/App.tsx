@@ -19,6 +19,8 @@ import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage, Mi
 import GradeSelect from './mini-games/components/GradeSelect'
 // @ts-ignore
 import LessonSelect from './mini-games/components/LessonSelect'
+// @ts-ignore
+import GameSelect from './mini-games/components/GameSelect'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -84,10 +86,10 @@ function AppContent() {
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
-              <Route path="/mini/:subject/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
-              <Route path="/mini/:subject/:game/grades" element={<PrivateRoute><GradeSelect /></PrivateRoute>} />
-              <Route path="/mini/:subject/:game/:grade/lessons" element={<PrivateRoute><LessonSelect /></PrivateRoute>} />
-              <Route path="/mini/:subject/:game/:grade/:lesson/play" element={<PrivateRoute><MiniGamePlayPage /></PrivateRoute>} />
+              <Route path="/mini/:subject/grades" element={<PrivateRoute><GradeSelect /></PrivateRoute>} />
+              <Route path="/mini/:subject/:grade/lessons" element={<PrivateRoute><LessonSelect /></PrivateRoute>} />
+              <Route path="/mini/:subject/:grade/:lesson/games" element={<PrivateRoute><GameSelect /></PrivateRoute>} />
+              <Route path="/mini/:subject/:grade/:lesson/:game/play" element={<PrivateRoute><MiniGamePlayPage /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
             </Routes>
