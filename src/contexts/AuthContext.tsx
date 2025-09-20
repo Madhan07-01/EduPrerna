@@ -144,6 +144,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               // Don't break login flow on streak update failure
             }
           }
+        } else {
+          // If user document doesn't exist, create it with the expected role
+          await setDoc(doc(db, 'users', user.uid), {
+            uid: user.uid,
+            name: user.displayName ?? null,
+            email: user.email,
+            role: expectedRole,
+            createdAt: serverTimestamp(),
+          })
         }
       }
       
@@ -254,5 +263,3 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 // Export the context for useAuth hook
 export { AuthContext }
-
-

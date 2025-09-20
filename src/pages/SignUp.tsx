@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function SignUp() {
   const { signUpEmail, signInWithGoogle, loading } = useAuth()
@@ -10,9 +10,32 @@ export default function SignUp() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters long'
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter'
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter'
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number'
+    }
+    return null
+  }
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      // Validate password
+      const passwordError = validatePassword(password)
+      if (passwordError) {
+        setError(passwordError)
+        return
+      }
+      
       await signUpEmail(email, password, name, 'student')
       navigate('/dashboard')
     } catch (err: unknown) {
@@ -32,17 +55,63 @@ export default function SignUp() {
 
   return (
     <div className="mx-auto max-w-md p-6">
-      <h1 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Create account</h1>
+      <h1 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Create Student Account</h1>
       {error && <div className="mb-3 rounded-md bg-rose-50 p-3 text-rose-700 dark:bg-rose-900/20 dark:text-rose-300">{error}</div>}
-      <form onSubmit={onSubmit} className="space-y-3">
-        <input aria-label="Full name" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" />
-        <input aria-label="Email" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input aria-label="Password" type="password" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        <button disabled={loading} className="w-full rounded-md bg-sky-600 px-3 py-2 text-white disabled:opacity-60">Create Account</button>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+          <input 
+            id="name"
+            aria-label="Full name" 
+            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-sky-500 focus:border-sky-500" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            placeholder="Enter your full name" 
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+          <input 
+            id="email"
+            type="email"
+            aria-label="Email" 
+            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-sky-500 focus:border-sky-500" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            placeholder="Enter your email" 
+          />
+        </div>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+          <input 
+            id="password"
+            aria-label="Password" 
+            type="password" 
+            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-sky-500 focus:border-sky-500" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            placeholder="Create a password" 
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Password must be at least 6 characters and include uppercase, lowercase, and number
+          </p>
+        </div>
+        <button 
+          disabled={loading} 
+          className="w-full rounded-md bg-gradient-to-r from-sky-600 to-indigo-600 px-3 py-2 text-white font-medium shadow-md hover:from-sky-700 hover:to-indigo-700 disabled:opacity-60 transition-all duration-200"
+        >
+          Create Student Account
+        </button>
       </form>
       
+      <div className="mt-4 text-center">
+        <Link to="/login" className="text-sm text-sky-600 hover:underline dark:text-sky-400">
+          Already have an account? Sign in
+        </Link>
+      </div>
+      
       {/* Google Sign In Button */}
-      <div className="mt-4">
+      <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300 dark:border-gray-600" />
@@ -55,7 +124,7 @@ export default function SignUp() {
         <button
           onClick={onGoogleSignIn}
           disabled={loading}
-          className="mt-3 w-full flex items-center justify-center gap-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="mt-3 w-full flex items-center justify-center gap-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 shadow-sm transition-all duration-200"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path
@@ -75,11 +144,9 @@ export default function SignUp() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          Sign in with Google
+          Sign up with Google
         </button>
       </div>
     </div>
   )
 }
-
-
