@@ -16,6 +16,23 @@ export function CoursesPage() {
     }
   }
 
+  // Map course subject to STEM umbrella for Supabase challenges
+  const mapToStemSubject = (subject: Subject | null): 'Mathematics' | 'Science' | 'Technology' | null => {
+    if (!subject) return null
+    if (subject === 'Mathematics') return 'Mathematics'
+    if (subject === 'ComputerScience') return 'Technology'
+    // Physics, Chemistry, Biology -> Science
+    if (subject === 'Physics' || subject === 'Chemistry' || subject === 'Biology') return 'Science'
+    return null
+  }
+
+  const handlePlayStem = () => {
+    const stem = mapToStemSubject(selectedSubject)
+    if (stem) {
+      navigate(`/stem/${stem}/${selectedGrade}`)
+    }
+  }
+
   const getSubjectIcon = (subject: Subject) => {
     const icons = {
       Mathematics: '🧮',
@@ -107,20 +124,34 @@ export function CoursesPage() {
 
       {/* Start Learning Button */}
       <div className="text-center">
-        <button
-          onClick={handleStartLearning}
-          disabled={!selectedSubject}
-          className={`px-12 py-4 rounded-2xl text-xl font-bold transition-all duration-300 transform ${
-            selectedSubject
-              ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl hover:scale-105'
-              : 'bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed'
-          }`}
-        >
-          {selectedSubject 
-            ? `🚀 Start Learning ${formatSubjectName(selectedSubject)} - Grade ${selectedGrade}` 
-            : '👆 Select a Subject to Continue'
-          }
-        </button>
+        <div className="flex flex-col items-center gap-4">
+          <button
+            onClick={handleStartLearning}
+            disabled={!selectedSubject}
+            className={`px-12 py-4 rounded-2xl text-xl font-bold transition-all duration-300 transform ${
+              selectedSubject
+                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl hover:scale-105'
+                : 'bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed'
+            }`}
+          >
+            {selectedSubject 
+              ? `🚀 Start Learning ${formatSubjectName(selectedSubject)} - Grade ${selectedGrade}` 
+              : '👆 Select a Subject to Continue'
+            }
+          </button>
+
+          <button
+            onClick={handlePlayStem}
+            disabled={!mapToStemSubject(selectedSubject)}
+            className={`px-8 py-3 rounded-xl text-base font-semibold transition-all duration-300 transform ${
+              mapToStemSubject(selectedSubject)
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow hover:shadow-lg hover:scale-105'
+                : 'bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed'
+            }`}
+          >
+            🎮 Play STEM Daily Challenge
+          </button>
+        </div>
       </div>
 
       {/* Subject Stats */}

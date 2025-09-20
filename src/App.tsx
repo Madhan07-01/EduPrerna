@@ -11,6 +11,7 @@ import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
+import DailyStemChallenge from './pages/DailyStemChallenge'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
@@ -26,6 +27,10 @@ import SignUp from './pages/SignUp'
 import RoleSelector from './pages/RoleSelector'
 import TeacherLogin from './pages/TeacherLogin'
 import TeacherSignUp from './pages/TeacherSignUp'
+import StemHub from './pages/StemHub'
+import StemLeaderboard from './pages/StemLeaderboard'
+import MyProgress from './pages/MyProgress'
+import DailyChallengeSelector from './pages/DailyChallengeSelector'
 
 function AppContent() {
   const { currentUser } = useAuth()
@@ -78,8 +83,13 @@ function AppContent() {
               <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />
               <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
-              <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
+              <Route path="/challenge" element={<PrivateRoute><DailyChallengeSelector /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/stem-hub" element={<PrivateRoute><StemHub /></PrivateRoute>} />
+              <Route path="/stem-leaderboard" element={<PrivateRoute><StemLeaderboard /></PrivateRoute>} />
+              <Route path="/my-progress" element={<PrivateRoute><MyProgress /></PrivateRoute>} />
+              {/* STEM daily challenge route (Supabase-backed, Firebase auth intact) */}
+              <Route path="/stem/:subject/:grade" element={<PrivateRoute><DailyStemChallenge /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
             </Routes>

@@ -2,6 +2,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAuth } from '../hooks/useAuth'
 import { SectionCard } from '../components/SectionCard'
+import SupabaseDatasetsDemo from '../components/SupabaseDatasetsDemo'
 
 export function SettingsPage() {
   const { t, language, setLanguage } = useLanguage()
@@ -58,6 +59,10 @@ export function SettingsPage() {
       </SectionCard>
       <SectionCard title={t('settings.account')}>
         <button onClick={signOutUser} className="rounded-md bg-rose-600 text-white px-3 py-2 text-sm">{t('settings.signOut')}</button>
+      </SectionCard>
+      {/* Supabase demo section: uses Supabase for NEW datasets only; Firebase auth remains the same */}
+      <SectionCard title="Supabase (New Data Storage)">
+        <SupabaseDatasetsDemo />
       </SectionCard>
     </div>
   )
