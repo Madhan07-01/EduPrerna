@@ -2,7 +2,7 @@ import './index.css'
 import { SWUpdatePrompt } from './sw-update'
 import Sidebar, { type NavKey } from './components/Sidebar'
 import TeacherSidebar from './components/TeacherSidebar'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import DashboardPage from './pages/DashboardPage'
 import CoursesPage from './pages/CoursesPage'
 import AchievementsPage from './pages/AchievementsPage'
@@ -30,6 +30,8 @@ import TeacherSignUp from './pages/TeacherSignUp'
 function AppContent() {
   const { currentUser } = useAuth()
   const location = useLocation()
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+  
   const active: NavKey = useMemo(() => {
     const pathname = location.pathname
     if (pathname.startsWith('/courses') || pathname.startsWith('/lessons') || pathname.startsWith('/lesson/')) {
@@ -47,10 +49,14 @@ function AppContent() {
   const showStudentSidebar = currentUser && !isTeacherPage
   const showTeacherSidebar = currentUser && isTeacherPage
 
+  const handleSidebarToggle = () => {
+    setSidebarCollapsed(!sidebarCollapsed)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
       <div className="flex">
-        {showStudentSidebar && <Sidebar active={active} onNavigate={() => {}} />}
+        {showStudentSidebar && <Sidebar active={active} onNavigate={() => {}} isCollapsed={sidebarCollapsed} onToggle={handleSidebarToggle} />}
         {showTeacherSidebar && <TeacherSidebar />}
         <div className="flex-1 min-h-screen">
           <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70 dark:bg-slate-950/70 bg-white/70 border-b border-gray-200 dark:border-slate-800">

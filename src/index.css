@@ -46,3 +46,24 @@ html, body, #root {
 .animate-shake {
   animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
+
+/* Badge flip animation */
+@keyframes flip {
+  0% { transform: perspective(400px) rotateY(0); }
+  50% { transform: perspective(400px) rotateY(180deg); }
+  100% { transform: perspective(400px) rotateY(360deg); }
+}
+
+.animate-flip {
+  animation: flip 1s ease-in-out;
+}
+
+/* Bounce animation */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
