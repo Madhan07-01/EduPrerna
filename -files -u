@@ -1,0 +1,137 @@
+[1mdiff --git a/src/App.tsx b/src/App.tsx[m
+[1mindex 295d793..4f4f9a1 100644[m
+[1m--- a/src/App.tsx[m
+[1m+++ b/src/App.tsx[m
+[36m@@ -1,6 +1,7 @@[m
+ import './index.css'[m
+ import { SWUpdatePrompt } from './sw-update'[m
+ import Sidebar, { type NavKey } from './components/Sidebar'[m
+[32m+[m[32mimport TeacherSidebar from './components/TeacherSidebar'[m
+ import { useMemo } from 'react'[m
+ import DashboardPage from './pages/DashboardPage'[m
+ import CoursesPage from './pages/CoursesPage'[m
+[36m@@ -11,22 +12,31 @@[m [mimport LessonsPage from './pages/LessonsPage'[m
+ import LessonDetailPage from './pages/LessonDetailPage'[m
+ import SettingsPage from './pages/SettingsPage'[m
+ import OneNightStudyPage from './pages/OneNightStudyPage'[m
+[32m+[m[32mimport ModulePage from './pages/ModulePage'[m
+[32m+[m[32mimport MCQPage from './pages/MCQPage'[m
+[32m+[m[32mimport MaterialsPage from './pages/MaterialsPage'[m
+ import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'[m
+ import { ThemeProvider } from './contexts/ThemeContext'[m
+ import { LanguageProvider } from './contexts/LanguageContext'[m
+ import { AuthProvider } from './contexts/AuthContext'[m
+ import { useAuth } from './hooks/useAuth'[m
+[31m-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'[m
+[32m+[m[32mimport { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'[m
+ import PrivateRoute from './components/PrivateRoute'[m
+ import Login from './pages/Login'[m
+ import SignUp from './pages/SignUp'[m
+[32m+[m[32mimport RoleSelector from './pages/RoleSelector'[m
+[32m+[m[32mimport TeacherLogin from './pages/TeacherLogin'[m
+[32m+[m[32mimport TeacherSignUp from './pages/TeacherSignUp'[m
+ [m
+ function AppContent() {[m
+   const { currentUser } = useAuth()[m
+   const location = useLocation()[m
+   const active: NavKey = useMemo(() => {[m
+     const pathname = location.pathname[m
+[31m-    if (pathname.startsWith('/courses/') || pathname.startsWith('/lesson/')) {[m
+[32m+[m[32m    if (pathname.startsWith('/courses') || pathname.startsWith('/lessons') || pathname.startsWith('/lesson/')) {[m
+[32m+[m[32m      return 'courses'[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (pathname.startsWith('/module/') || pathname.startsWith('/mcq/') || pathname.startsWith('/materials/')) {[m
+       return 'courses'[m
+     }[m
+     const seg = pathname.split('/')[1] || 'dashboard'[m
+[36m@@ -34,10 +44,15 @@[m [mfunction AppContent() {[m
+     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')[m
+   }, [location.pathname])[m
+ [m
+[32m+[m[32m  const isTeacherPage = location.pathname.startsWith('/teacher')[m
+[32m+[m[32m  const showStudentSidebar = currentUser && !isTeacherPage[m
+[32m+[m[32m  const showTeacherSidebar = currentUser && isTeacherPage[m
+[32m+[m
+   return ([m
+     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">[m
+       <div className="flex">[m
+[31m-        <Sidebar active={active} onNavigate={() => {}} />[m
+[32m+[m[32m        {showStudentSidebar && <Sidebar active={active} onNavigate={() => {}} />}[m
+[32m+[m[32m        {showTeacherSidebar && <TeacherSidebar />}[m
+         <div className="flex-1 min-h-screen">[m
+           <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70 dark:bg-slate-950/70 bg-white/70 border-b border-gray-200 dark:border-slate-800">[m
+             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">[m
+[36m@@ -48,16 +63,21 @@[m [mfunction AppContent() {[m
+           <main className="max-w-6xl mx-auto px-4 py-6">[m
+             <Routes>[m
+               <Route path="/login" element={<Login />} />[m
+[32m+[m[32m              <Route path="/teacher-login" element={<TeacherLogin />} />[m
+               <Route path="/signup" element={<SignUp />} />[m
+[31m-              <Route path="/" element={<Navigate to="/dashboard" replace />} />[m
+[32m+[m[32m              <Route path="/teacher-signup" element={<TeacherSignUp />} />[m
+[32m+[m[32m              <Route path="/" element={<RoleSelector />} />[m
+               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />[m
+               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />[m
+               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />[m
+               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />[m
+               <Route path="/onestudy" element={<PrivateRoute><OneNightStudyPage /></PrivateRoute>} />[m
+               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />[m
+[31m-              <Route path="/courses/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />[m
+[32m+[m[32m              <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />[m
+               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />[m
+[32m+[m[32m              <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />[m
+[32m+[m[32m              <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />[m
+[32m+[m[32m              <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />[m
+               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />[m
+               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />[m
+               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />[m
+[1mdiff --git a/src/components/GoogleSignInButton.tsx b/src/components/GoogleSignInButton.tsx[m
+[1mindex 037e271..bdb216d 100644[m
+[1m--- a/src/components/GoogleSignInButton.tsx[m
+[1m+++ b/src/components/GoogleSignInButton.tsx[m
+[36m@@ -9,8 +9,9 @@[m [mexport default function GoogleSignInButton() {[m
+     try {[m
+       await signInWithGoogle()[m
+       navigate('/dashboard')[m
+[31m-    } catch (e: any) {[m
+[31m-      alert(e?.message || 'Google sign-in failed')[m
+[32m+[m[32m    } catch (e: unknown) {[m
+[32m+[m[32m      const errorMessage = e instanceof Error ? e.message : 'Google sign-in failed'[m
+[32m+[m[32m      alert(errorMessage)[m
+     }[m
+   }[m
+ [m
+[1mdiff --git a/src/components/SectionCard.tsx b/src/components/SectionCard.tsx[m
+[1mindex 839bdd8..ac3439f 100644[m
+[1m--- a/src/components/SectionCard.tsx[m
+[1m+++ b/src/components/SectionCard.tsx[m
+[36m@@ -9,4 +9,4 @@[m [mexport function SectionCard({ title, children }: { title: string; children?: Rea[m
+   )[m
+ }[m
+ [m
+[31m-export default SectionCard[m
+\ No newline at end of file[m
+[32m+[m[32mexport default SectionCard[m[41m [m
+\ No newline at end of file[m
+[1mdiff --git a/src/components/Sidebar.tsx b/src/components/Sidebar.tsx[m
+[1mindex c8be94e..2e2fe75 100644[m
+[1m--- a/src/components/Sidebar.tsx[m
+[1m+++ b/src/components/Sidebar.tsx[m
+[36m@@ -75,7 +75,7 @@[m [mexport function Sidebar({ active }: SidebarProps) {[m
+                     <button[m
+                       onClick={async () => {[m
+                         await signOutUser()[m
+[31m-                        navigate('/login')[m
+[32m+[m[32m                        navigate('/')[m
+                       }}[m
+                       className="mt-2 w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"[m
+                     >[m
+[1mdiff --git a/src/components/TeacherSidebar.tsx b/src/components/TeacherSidebar.tsx[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a8e3e71[m
+[1m--- /dev/null[m
+[1m+++ b/src/components/TeacherSidebar.tsx[m
+[36m@@ -0,0 +1,53 @@[m
+[32m+[m[32mimport { useLanguage } from '../contexts/LanguageContext'[m
+[32m+[m[32mimport { useAuth } from '../hooks/useAuth'[m
+[32m+[m[32mimport { useNa

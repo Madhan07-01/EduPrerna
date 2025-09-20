@@ -1,7 +1,6 @@
 import './index.css'
 import { SWUpdatePrompt } from './sw-update'
 import Sidebar, { type NavKey } from './components/Sidebar'
-import TeacherSidebar from './components/TeacherSidebar'
 import { useMemo } from 'react'
 import DashboardPage from './pages/DashboardPage'
 import CoursesPage from './pages/CoursesPage'
@@ -12,31 +11,22 @@ import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import OneNightStudyPage from './pages/OneNightStudyPage'
-import ModulePage from './pages/ModulePage'
-import MCQPage from './pages/MCQPage'
-import MaterialsPage from './pages/MaterialsPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
 import { useAuth } from './hooks/useAuth'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
-import RoleSelector from './pages/RoleSelector'
-import TeacherLogin from './pages/TeacherLogin'
-import TeacherSignUp from './pages/TeacherSignUp'
 
 function AppContent() {
   const { currentUser } = useAuth()
   const location = useLocation()
   const active: NavKey = useMemo(() => {
     const pathname = location.pathname
-    if (pathname.startsWith('/courses') || pathname.startsWith('/lessons') || pathname.startsWith('/lesson/')) {
-      return 'courses'
-    }
-    if (pathname.startsWith('/module/') || pathname.startsWith('/mcq/') || pathname.startsWith('/materials/')) {
+    if (pathname.startsWith('/courses/') || pathname.startsWith('/lesson/')) {
       return 'courses'
     }
     const seg = pathname.split('/')[1] || 'dashboard'
@@ -44,15 +34,10 @@ function AppContent() {
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
-  const isTeacherPage = location.pathname.startsWith('/teacher')
-  const showStudentSidebar = currentUser && !isTeacherPage
-  const showTeacherSidebar = currentUser && isTeacherPage
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
       <div className="flex">
-        {showStudentSidebar && <Sidebar active={active} onNavigate={() => {}} />}
-        {showTeacherSidebar && <TeacherSidebar />}
+        <Sidebar active={active} onNavigate={() => {}} />
         <div className="flex-1 min-h-screen">
           <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70 dark:bg-slate-950/70 bg-white/70 border-b border-gray-200 dark:border-slate-800">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -63,21 +48,16 @@ function AppContent() {
           <main className="max-w-6xl mx-auto px-4 py-6">
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route path="/teacher-login" element={<TeacherLogin />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/teacher-signup" element={<TeacherSignUp />} />
-              <Route path="/" element={<RoleSelector />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/onestudy" element={<PrivateRoute><OneNightStudyPage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
-              <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
+              <Route path="/courses/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
-              <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />
-              <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />
-              <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />

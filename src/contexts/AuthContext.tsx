@@ -18,8 +18,8 @@ type AuthContextType = {
   profile: { name?: string | null; email?: string | null; role?: string; uid?: string } | null
   loading: boolean
   signUpEmail: (email: string, password: string, name?: string, role?: string) => Promise<FirebaseUser>
-  signInEmail: (email: string, password: string) => Promise<unknown>
-  signInWithGoogle: () => Promise<void>
+  signInEmail: (email: string, password: string, expectedRole?: string) => Promise<unknown>
+  signInWithGoogle: (expectedRole?: string) => Promise<void>
   signOutUser: () => Promise<void>
 }
 
@@ -85,16 +85,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     []
   )
 
-  const signInEmail = useCallback(async (email: string, password: string) => {
+  const signInEmail = useCallback(async (email: string, password: string, expectedRole?: string) => {
     setLoading(true)
     try {
-      return await signInWithEmailAndPassword(auth, email, password)
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      const user = result.user
+      
+      // If role validation is required
+      if (expectedRole) {
+        const userDoc = await getDoc(doc(db, 'users', user.uid))
+        if (userDoc.exists()) {
+          const userData = userDoc.data()
+          if (userData.role !== expectedRole) {
+            await signOut(auth)
+            throw new Error(`This account is not authorized to log in as a ${expectedRole === 'teacher' ? 'Teacher' : 'Student'}`)
+          }
+        }
+      }
+      
+      return result
     } finally {
       setLoading(false)
     }
   }, [])
 
-  const signInWithGoogle = useCallback(async () => {
+  const signInWithGoogle = useCallback(async (expectedRole?: string) => {
     setLoading(true)
     try {
       const provider = new GoogleAuthProvider()
@@ -106,13 +121,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (!userDoc.exists()) {
         // Create user document if it doesn't exist
+        const role = expectedRole || 'student'
         await setDoc(doc(db, 'users', user.uid), {
           uid: user.uid,
           name: user.displayName ?? null,
           email: user.email,
-          role: 'student', // Default role for Google sign-in
+          role: role, // Use expected role or default to student
           createdAt: serverTimestamp(),
         })
+      } else if (expectedRole) {
+        // If role validation is required for existing user
+        const userData = userDoc.data()
+        if (userData.role !== expectedRole) {
+          await signOut(auth)
+          throw new Error(`This account is not authorized to log in as a ${expectedRole === 'teacher' ? 'Teacher' : 'Student'}`)
+        }
       }
 
       console.log('User signed in with Google:', user)

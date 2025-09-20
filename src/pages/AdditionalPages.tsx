@@ -1,5 +1,5 @@
 // using automatic JSX runtime; no React default import needed
-import { SectionCard } from './Pages'
+import { SectionCard } from '../components/SectionCard'
 
 export function QuickQuizPage() {
   return (

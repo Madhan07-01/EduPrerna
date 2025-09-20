@@ -1,45 +1,77 @@
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { sendPasswordResetEmail } from 'firebase/auth'
+import { auth } from '../firebase/firebaseConfig'
 
-export default function SignUp() {
-  const { signUpEmail, signInWithGoogle, loading } = useAuth()
-  const [name, setName] = useState('')
+export default function TeacherLogin() {
+  const { signInEmail, signInWithGoogle, loading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [message, setMessage] = useState<string>('')
+  const [error, setError] = useState<string>('')
   const navigate = useNavigate()
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await signUpEmail(email, password, name, 'student')
-      navigate('/dashboard')
+      setError('')
+      setMessage('')
+      await signInEmail(email, password, 'teacher')
+      navigate('/teacher')
     } catch (err: unknown) {
-      setError((err as Error)?.message || 'Sign up failed')
+      const msg = (err as { message?: string })?.message || 'Login failed'
+      setError(msg)
+    }
+  }
+
+  const onReset = async () => {
+    try {
+      setError('')
+      setMessage('')
+      if (!email) {
+        setError('Enter your email to reset your password')
+        return
+      }
+      await sendPasswordResetEmail(auth, email)
+      setMessage('Password reset email sent. Check your inbox.')
+    } catch (err: unknown) {
+      const msg = (err as { message?: string })?.message || 'Failed to send reset email'
+      setError(msg)
     }
   }
 
   const onGoogleSignIn = async () => {
     try {
       setError('')
-      await signInWithGoogle('student')
-      navigate('/dashboard')
+      setMessage('')
+      await signInWithGoogle('teacher')
+      navigate('/teacher')
     } catch (err: unknown) {
-      setError((err as Error)?.message || 'Google sign-in failed')
+      const msg = (err as { message?: string })?.message || 'Google sign-in failed'
+      setError(msg)
     }
   }
 
   return (
     <div className="mx-auto max-w-md p-6">
-      <h1 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Create account</h1>
+      <h1 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Teacher Login</h1>
       {error && <div className="mb-3 rounded-md bg-rose-50 p-3 text-rose-700 dark:bg-rose-900/20 dark:text-rose-300">{error}</div>}
+      {message && <div className="mb-3 rounded-md bg-emerald-50 p-3 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">{message}</div>}
       <form onSubmit={onSubmit} className="space-y-3">
-        <input aria-label="Full name" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" />
         <input aria-label="Email" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
         <input aria-label="Password" type="password" className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        <button disabled={loading} className="w-full rounded-md bg-sky-600 px-3 py-2 text-white disabled:opacity-60">Create Account</button>
+        <button disabled={loading} className="w-full rounded-md bg-emerald-600 px-3 py-2 text-white disabled:opacity-60">Sign In</button>
       </form>
+      <div className="mt-3 grid gap-2">
+        <button onClick={onReset} className="text-sm text-emerald-500 hover:underline w-fit">Forgot password?</button>
+        <div className="text-sm text-gray-600 dark:text-slate-400">
+          New teacher? <Link className="text-emerald-500 hover:underline" to="/teacher-signup">Create teacher account</Link>
+        </div>
+        <div className="text-sm text-gray-600 dark:text-slate-400">
+          <Link className="text-emerald-500 hover:underline" to="/">Back to role selection</Link>
+        </div>
+      </div>
       
       {/* Google Sign In Button */}
       <div className="mt-4">
@@ -74,12 +106,11 @@ export default function SignUp() {
               fill="currentColor"
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
+            <path fill="none" d="M1 1h22v22H1z" />
           </svg>
-          Sign in with Google
+          Google
         </button>
       </div>
     </div>
   )
 }
-
-

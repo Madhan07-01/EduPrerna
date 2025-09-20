@@ -9,8 +9,9 @@ export default function GoogleSignInButton() {
     try {
       await signInWithGoogle()
       navigate('/dashboard')
-    } catch (e: any) {
-      alert(e?.message || 'Google sign-in failed')
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Google sign-in failed'
+      alert(errorMessage)
     }
   }
 

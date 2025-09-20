@@ -9,4 +9,4 @@ export function SectionCard({ title, children }: { title: string; children?: Rea
   )
 }
 
-export default SectionCard
+export default SectionCard 
