@@ -2,7 +2,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
-export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download'
+export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download' | 'onestudy'
 
 type SidebarProps = {
   active: NavKey
@@ -13,6 +13,7 @@ const navItems: Array<{ key: NavKey; labelKey: string; icon: string }> = [
   { key: 'dashboard', labelKey: 'nav.dashboard', icon: '🏠' },
   { key: 'courses', labelKey: 'nav.courses', icon: '📚' },
   { key: 'achievements', labelKey: 'nav.achievements', icon: '🏆' },
+  { key: 'onestudy', labelKey: 'nav.onestudy', icon: '⏱️' },
   { key: 'profile', labelKey: 'nav.profile', icon: '👤' },
   { key: 'teacher', labelKey: 'nav.teacher', icon: '📊' },
   { key: 'quiz', labelKey: 'nav.quiz', icon: '❓' },

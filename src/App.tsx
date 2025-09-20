@@ -10,6 +10,7 @@ import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
+import OneNightStudyPage from './pages/OneNightStudyPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -29,7 +30,7 @@ function AppContent() {
       return 'courses'
     }
     const seg = pathname.split('/')[1] || 'dashboard'
-    const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','games','download','settings']
+    const known: Array<NavKey> = ['dashboard','courses','achievements','onestudy','profile','teacher','quiz','challenge','games','download','settings']
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
@@ -53,6 +54,7 @@ function AppContent() {
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/onestudy" element={<PrivateRoute><OneNightStudyPage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/courses/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
