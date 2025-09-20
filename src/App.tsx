@@ -11,7 +11,7 @@ import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
-import OneNightStudyPage from './pages/OneNightStudyPage'
+import OneNightStudyPage from './pages/OneNightStudy'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
@@ -71,7 +71,7 @@ function AppContent() {
               <Route path="/courses" element={<PrivateRoute><CoursesPage /></PrivateRoute>} />
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-              <Route path="/onestudy" element={<PrivateRoute><OneNightStudyPage /></PrivateRoute>} />
+              <Route path="/onestudy/*" element={<PrivateRoute><OneNightStudyPage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
