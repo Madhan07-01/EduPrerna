@@ -103,7 +103,7 @@ const LessonSelect = () => {
               <div className="mt-auto pt-4">
                 <button 
                   className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                  aria-label={`Start ${formattedGame} for ${lesson}`}
+                  aria-label={`Start game for ${lesson}`}
                 >
                   {formattedSubject === 'Mathematics' ? '🏃‍♂️ Start Game' : '🎮 Start Game'}
                 </button>
