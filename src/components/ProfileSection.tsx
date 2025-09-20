@@ -3,7 +3,6 @@ import { useLanguage } from '../contexts/LanguageContext'
 
 // Basic Information Component
 const BasicInformation = () => {
-  const { t } = useLanguage()
   
   // Sample teacher data - in a real app, this would come from authentication context or API
   const teacherData = {
@@ -84,7 +83,6 @@ const BasicInformation = () => {
 
 // Account & Security Component
 const AccountSecurity = () => {
-  const { t } = useLanguage()
   
   // Change Password Form State
   const [passwordForm, setPasswordForm] = useState({
@@ -277,7 +275,6 @@ const AccountSecurity = () => {
 
 // Main Profile Section Component
 const ProfileSection = () => {
-  const { t } = useLanguage()
 
   return (
     <div className="space-y-6">

@@ -56,7 +56,6 @@ export default function AssignmentsSection() {
     }
   ])
 
-  const [showCreateForm, setShowCreateForm] = useState(false)
   const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null)
   const [viewingSubmissions, setViewingSubmissions] = useState<Assignment | null>(null)
   const [currentView, setCurrentView] = useState<'list' | 'create' | 'submissions'>('list')
@@ -69,7 +68,6 @@ export default function AssignmentsSection() {
     }
     
     setAssignments([newAssignment, ...assignments])
-    setShowCreateForm(false)
     setCurrentView('list')
     
     // Simulate sending reminder if requested
@@ -107,7 +105,6 @@ export default function AssignmentsSection() {
 
   const handleEditClick = (assignment: Assignment) => {
     setEditingAssignment(assignment)
-    setShowCreateForm(true)
     setCurrentView('create')
   }
 
@@ -126,12 +123,10 @@ export default function AssignmentsSection() {
 
   const handleCreateNew = () => {
     setEditingAssignment(null)
-    setShowCreateForm(true)
     setCurrentView('create')
   }
 
   const handleCancel = () => {
-    setShowCreateForm(false)
     setEditingAssignment(null)
     setCurrentView('list')
   }

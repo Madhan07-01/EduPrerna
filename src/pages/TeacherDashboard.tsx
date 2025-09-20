@@ -9,7 +9,7 @@ import GeneralSettings from '../components/GeneralSettings'
 import ContextualUploadForm from '../components/ContextualUploadForm'
 import ResourceListTable from '../components/ResourceListTable'
 import ResourceFilter from '../components/ResourceFilter'
-import { useNavigate, Routes, Route, Navigate, Link } from 'react-router-dom'
+import { useNavigate, Routes, Route } from 'react-router-dom'
 import { Doughnut } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -308,7 +308,6 @@ const DashboardSection = () => {
 
 // Settings Section Component
 const SettingsSection = () => {
-  const { t } = useLanguage()
   
   return (
     <div className="space-y-6">

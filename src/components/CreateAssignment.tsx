@@ -44,17 +44,6 @@ export default function CreateAssignment({ onSubmit, onCancel, editingAssignment
     }
   }
 
-  const getFileIcon = (fileName: string) => {
-    const extension = fileName.split('.').pop()?.toLowerCase()
-    switch(extension) {
-      case 'pdf': return '📄'
-      case 'doc': case 'docx': return '📝'
-      case 'jpg': case 'jpeg': case 'png': return '🖼️'
-      case 'txt': return '📋'
-      default: return '📎'
-    }
-  }
-
   const removeFile = (index: number) => {
     setAttachments(attachments.filter((_, i) => i !== index))
   }

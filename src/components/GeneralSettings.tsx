@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const GeneralSettings = () => {
-  const { t } = useLanguage()
   
   // Theme state - get from localStorage or default to 'dark'
   const [theme, setTheme] = useState(() => {
