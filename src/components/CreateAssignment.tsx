@@ -1,262 +1,271 @@
 import { useState } from 'react'
 
-type Class = {
-  id: string
-  name: string
-}
-
-type Assignment = {
-  id: string
+interface Assignment {
+  id: number
   title: string
   description: string
   subject: string
   grade: string
   dueDate: string
   classes: string[]
-  fileUrl?: string
+  attachments: File[]
   status: 'Active' | 'Closed'
   sendReminder: boolean
 }
 
-type CreateAssignmentProps = {
-  onAssignmentCreate: (assignment: Assignment) => void
+interface CreateAssignmentProps {
+  onSubmit: (assignment: Omit<Assignment, 'id' | 'status'>) => void
+  onCancel: () => void
+  editingAssignment?: Assignment | null
 }
 
-export default function CreateAssignment({ onAssignmentCreate }: CreateAssignmentProps) {
-  const [assignment, setAssignment] = useState<Omit<Assignment, 'id' | 'status'>>({
-    title: '',
-    description: '',
-    subject: '',
-    grade: '',
-    dueDate: '',
-    classes: [],
-    fileUrl: '',
-    sendReminder: false
+export default function CreateAssignment({ onSubmit, onCancel, editingAssignment }: CreateAssignmentProps) {
+  const [formData, setFormData] = useState({
+    title: editingAssignment?.title || '',
+    description: editingAssignment?.description || '',
+    subject: editingAssignment?.subject || '',
+    grade: editingAssignment?.grade || '',
+    dueDate: editingAssignment?.dueDate || '',
+    classes: editingAssignment?.classes || [],
+    sendReminder: editingAssignment?.sendReminder || false
   })
   
-  const [file, setFile] = useState<File | null>(null)
-  
-  // Mock classes data
-  const classes: Class[] = [
-    { id: '1', name: 'Class 10-A' },
-    { id: '2', name: 'Class 10-B' },
-    { id: '3', name: 'Class 9-A' },
-    { id: '4', name: 'Class 9-B' },
-    { id: '5', name: 'Class 8-A' }
-  ]
-  
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setAssignment(prev => ({ ...prev, [name]: value }))
-  }
-  
-  const handleClassToggle = (classId: string) => {
-    setAssignment(prev => {
-      const isSelected = prev.classes.includes(classId)
-      return {
-        ...prev,
-        classes: isSelected 
-          ? prev.classes.filter(id => id !== classId)
-          : [...prev.classes, classId]
-      }
-    })
-  }
-  
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
+  const [attachments, setAttachments] = useState<File[]>([])
+  const [selectedClasses, setSelectedClasses] = useState<string[]>(editingAssignment?.classes || [])
+
+  const subjects = ['Mathematics', 'Science', 'English', 'History', 'Physics', 'Chemistry', 'Biology', 'Computer Science']
+  const grades = ['6', '7', '8', '9', '10', '11', '12']
+  const availableClasses = ['6A', '6B', '7A', '7B', '8A', '8B', '9A', '9B', '10A', '10B', '11A', '11B', '12A', '12B']
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files)
+      setAttachments(prev => [...prev, ...newFiles])
     }
   }
-  
+
+  const getFileIcon = (fileName: string) => {
+    const extension = fileName.split('.').pop()?.toLowerCase()
+    switch(extension) {
+      case 'pdf': return '📄'
+      case 'doc': case 'docx': return '📝'
+      case 'jpg': case 'jpeg': case 'png': return '🖼️'
+      case 'txt': return '📋'
+      default: return '📎'
+    }
+  }
+
+  const removeFile = (index: number) => {
+    setAttachments(attachments.filter((_, i) => i !== index))
+  }
+
+  const handleClassToggle = (className: string) => {
+    setSelectedClasses(prev => 
+      prev.includes(className) 
+        ? prev.filter(c => c !== className)
+        : [...prev, className]
+    )
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // In a real app, you would upload the file to storage and get a URL
-    // For this demo, we'll just use the file name as a placeholder
-    const fileUrl = file ? URL.createObjectURL(file) : undefined
-    
-    const newAssignment: Assignment = {
-      id: Date.now().toString(),
-      ...assignment,
-      fileUrl,
-      status: 'Active'
+    if (selectedClasses.length === 0) {
+      alert('Please select at least one class')
+      return
     }
-    
-    onAssignmentCreate(newAssignment)
-    
-    // Reset form
-    setAssignment({
-      title: '',
-      description: '',
-      subject: '',
-      grade: '',
-      dueDate: '',
-      classes: [],
-      fileUrl: '',
-      sendReminder: false
+
+    onSubmit({
+      ...formData,
+      classes: selectedClasses,
+      attachments
     })
-    setFile(null)
   }
-  
+
   return (
-    <div className="bg-white/80 dark:bg-slate-900/60 rounded-xl border border-gray-200 dark:border-slate-800 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Create New Assignment</h2>
+    <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-6">
+        {editingAssignment ? 'Edit Assignment' : 'Create New Assignment'}
+      </h3>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Title and Subject Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Assignment Title*
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Assignment Title *
             </label>
             <input
               type="text"
-              id="title"
-              name="title"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              placeholder="Enter assignment title..."
               required
-              value={assignment.title}
-              onChange={handleInputChange}
-              className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white"
             />
           </div>
           
           <div>
-            <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Subject*
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Subject *
             </label>
             <select
-              id="subject"
-              name="subject"
+              value={formData.subject}
+              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               required
-              value={assignment.subject}
-              onChange={handleInputChange}
-              className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white"
             >
               <option value="">Select Subject</option>
-              <option value="Mathematics">Mathematics</option>
-              <option value="Science">Science</option>
-              <option value="English">English</option>
-              <option value="History">History</option>
-              <option value="Geography">Geography</option>
+              {subjects.map(subject => (
+                <option key={subject} value={subject}>{subject}</option>
+              ))}
             </select>
           </div>
-          
+        </div>
+
+        {/* Grade and Due Date Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="grade" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Grade*
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Grade *
             </label>
             <select
-              id="grade"
-              name="grade"
+              value={formData.grade}
+              onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               required
-              value={assignment.grade}
-              onChange={handleInputChange}
-              className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white"
             >
               <option value="">Select Grade</option>
-              <option value="8">Grade 8</option>
-              <option value="9">Grade 9</option>
-              <option value="10">Grade 10</option>
-              <option value="11">Grade 11</option>
-              <option value="12">Grade 12</option>
+              {grades.map(grade => (
+                <option key={grade} value={grade}>Grade {grade}</option>
+              ))}
             </select>
           </div>
           
           <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Due Date*
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Due Date *
             </label>
             <input
-              type="date"
-              id="dueDate"
-              name="dueDate"
+              type="datetime-local"
+              value={formData.dueDate}
+              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               required
-              value={assignment.dueDate}
-              onChange={handleInputChange}
-              className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white"
             />
           </div>
         </div>
-        
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Description*
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            required
-            rows={4}
-            value={assignment.description}
-            onChange={handleInputChange}
-            className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white"
-          />
-        </div>
-        
+
+        {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Assign to Classes*
+            Description *
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {classes.map(cls => (
-              <div key={cls.id} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={`class-${cls.id}`}
-                  checked={assignment.classes.includes(cls.id)}
-                  onChange={() => handleClassToggle(cls.id)}
-                  className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
-                />
-                <label htmlFor={`class-${cls.id}`} className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  {cls.name}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Upload File (PDF, Doc, Images)
-          </label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            onChange={handleFileChange}
-            className="w-full text-sm text-gray-500 dark:text-gray-400
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded-md file:border-0
-                      file:text-sm file:font-medium
-                      file:bg-emerald-50 file:text-emerald-700
-                      dark:file:bg-emerald-900 dark:file:text-emerald-300
-                      hover:file:bg-emerald-100 dark:hover:file:bg-emerald-800"
+          <textarea
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            placeholder="Enter assignment description..."
+            rows={4}
+            required
           />
-          {file && (
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Selected file: {file.name}
-            </p>
+        </div>
+
+        {/* File Upload */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Attachments
+          </label>
+          <div className="flex items-center gap-4">
+            <label className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 py-2 px-4 rounded cursor-pointer transition-colors">
+              📎 Upload Files
+              <input
+                type="file"
+                className="hidden"
+                multiple
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+                onChange={handleFileUpload}
+              />
+            </label>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              Supported: PDF, DOC, Images
+            </span>
+          </div>
+          
+          {attachments.length > 0 && (
+            <div className="mt-3 space-y-2">
+              {attachments.map((file, index) => (
+                <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 p-2 rounded">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">📄</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{file.name}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
           )}
         </div>
-        
-        <div className="flex items-center">
+
+        {/* Class Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Assign to Classes *
+          </label>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {availableClasses.map(className => (
+              <label key={className} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedClasses.includes(className)}
+                  onChange={() => handleClassToggle(className)}
+                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">{className}</span>
+              </label>
+            ))}
+          </div>
+          {selectedClasses.length > 0 && (
+            <div className="mt-2 text-sm text-emerald-600 dark:text-emerald-400">
+              Selected: {selectedClasses.join(', ')}
+            </div>
+          )}
+        </div>
+
+        {/* Send Reminder */}
+        <div className="flex items-center space-x-2">
           <input
             type="checkbox"
             id="sendReminder"
-            name="sendReminder"
-            checked={assignment.sendReminder}
-            onChange={(e) => setAssignment(prev => ({ ...prev, sendReminder: e.target.checked }))}
-            className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+            checked={formData.sendReminder}
+            onChange={(e) => setFormData({ ...formData, sendReminder: e.target.checked })}
+            className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
           />
-          <label htmlFor="sendReminder" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <label htmlFor="sendReminder" className="text-sm text-gray-700 dark:text-gray-300">
             Send notification reminder to students
           </label>
         </div>
-        
-        <div className="flex justify-end">
+
+        {/* Form Actions */}
+        <div className="flex gap-3 pt-4">
           <button
             type="submit"
-            className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-6 rounded-md transition-colors"
           >
-            Create Assignment
+            {editingAssignment ? 'Update' : 'Create'} Assignment
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-md transition-colors"
+          >
+            Cancel
           </button>
         </div>
       </form>

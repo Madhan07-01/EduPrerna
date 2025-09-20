@@ -1,199 +1,180 @@
-import { useState } from 'react'
-
-type Assignment = {
-  id: string
+interface Assignment {
+  id: number
   title: string
   description: string
   subject: string
   grade: string
   dueDate: string
   classes: string[]
-  fileUrl?: string
+  attachments: File[]
   status: 'Active' | 'Closed'
   sendReminder: boolean
 }
 
-type AssignmentListProps = {
+interface AssignmentListProps {
   assignments: Assignment[]
-  onViewSubmissions: (assignmentId: string) => void
-  onEditAssignment: (assignment: Assignment) => void
-  onDeleteAssignment: (assignmentId: string) => void
-  onStatusChange: (assignmentId: string, status: 'Active' | 'Closed') => void
+  onEdit: (assignment: Assignment) => void
+  onDelete: (id: number) => void
+  onView: (assignment: Assignment) => void
+  onToggleStatus: (id: number) => void
 }
 
-export default function AssignmentList({
-  assignments,
-  onViewSubmissions,
-  onEditAssignment,
-  onDeleteAssignment,
-  onStatusChange
-}: AssignmentListProps) {
-  const [sortField, setSortField] = useState<keyof Assignment>('dueDate')
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-
-  const handleSort = (field: keyof Assignment) => {
-    if (field === sortField) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-    } else {
-      setSortField(field)
-      setSortDirection('asc')
-    }
-  }
-
-  const sortedAssignments = [...assignments].sort((a, b) => {
-    if (sortField === 'dueDate') {
-      return sortDirection === 'asc'
-        ? new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-        : new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
-    }
-    
-    const aValue = a[sortField] as string;
-    const bValue = b[sortField] as string;
-    
-    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
-    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
-    return 0
-  })
-
+export default function AssignmentList({ assignments, onEdit, onDelete, onView, onToggleStatus }: AssignmentListProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     })
   }
 
+  const isOverdue = (dueDate: string, status: string) => {
+    return new Date(dueDate) < new Date() && status === 'Active'
+  }
+
+  const getStatusBadge = (assignment: Assignment) => {
+    const isOverdueAssignment = isOverdue(assignment.dueDate, assignment.status)
+    
+    if (isOverdueAssignment) {
+      return (
+        <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+          Overdue
+        </span>
+      )
+    }
+    
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+        assignment.status === 'Active'
+          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+          : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+      }`}>
+        {assignment.status}
+      </span>
+    )
+  }
+
+  if (assignments.length === 0) {
+    return (
+      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
+        <div className="text-gray-500 dark:text-gray-400 mb-4">
+          <span className="text-4xl">📝</span>
+        </div>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          No assignments yet
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400">
+          Create your first assignment to get started!
+        </p>
+      </div>
+    )
+  }
+
   return (
-    <div className="bg-white/80 dark:bg-slate-900/60 rounded-xl border border-gray-200 dark:border-slate-800 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Assignment List</h2>
-      
-      {assignments.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">No assignments created yet.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
-              <tr>
-                <th 
-                  scope="col" 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('title')}
-                >
-                  <div className="flex items-center">
-                    Title
-                    {sortField === 'title' && (
-                      <span className="ml-1">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
-                      </span>
+    <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-slate-800">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Assignment
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Subject/Grade
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Due Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Classes
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-gray-700">
+            {assignments.map((assignment) => (
+              <tr key={assignment.id} className="hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                <td className="px-6 py-4">
+                  <div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                      {assignment.title}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                      {assignment.description}
+                    </div>
+                    {assignment.attachments.length > 0 && (
+                      <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        📎 {assignment.attachments.length} attachment(s)
+                      </div>
                     )}
                   </div>
-                </th>
-                <th 
-                  scope="col" 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('subject')}
-                >
-                  <div className="flex items-center">
-                    Subject/Grade
-                    {sortField === 'subject' && (
-                      <span className="ml-1">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-900 dark:text-white">
+                    {assignment.subject}
                   </div>
-                </th>
-                <th 
-                  scope="col" 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('dueDate')}
-                >
-                  <div className="flex items-center">
-                    Due Date
-                    {sortField === 'dueDate' && (
-                      <span className="ml-1">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Grade {assignment.grade}
                   </div>
-                </th>
-                <th 
-                  scope="col" 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('status')}
-                >
-                  <div className="flex items-center">
-                    Status
-                    {sortField === 'status' && (
-                      <span className="ml-1">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
+                </td>
+                <td className="px-6 py-4">
+                  <div className={`text-sm ${
+                    isOverdue(assignment.dueDate, assignment.status)
+                      ? 'text-red-600 dark:text-red-400 font-medium'
+                      : 'text-gray-900 dark:text-white'
+                  }`}>
+                    {formatDate(assignment.dueDate)}
                   </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-              {sortedAssignments.map((assignment) => (
-                <tr key={assignment.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">{assignment.title}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">{assignment.subject}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Grade {assignment.grade}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">{formatDate(assignment.dueDate)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span 
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                        ${assignment.status === 'Active' 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
-                          : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}`}
-                    >
-                      {assignment.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-900 dark:text-white">
+                    {assignment.classes.join(', ')}
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  {getStatusBadge(assignment)}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center space-x-3">
                     <button
-                      onClick={() => onViewSubmissions(assignment.id)}
-                      className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                      onClick={() => onView(assignment)}
+                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm transition-colors"
                     >
                       View
                     </button>
                     <button
-                      onClick={() => onEditAssignment(assignment)}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      onClick={() => onEdit(assignment)}
+                      className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 text-sm transition-colors"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => onDeleteAssignment(assignment.id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      onClick={() => onToggleStatus(assignment.id)}
+                      className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 text-sm transition-colors"
+                    >
+                      {assignment.status === 'Active' ? 'Close' : 'Reopen'}
+                    </button>
+                    <button
+                      onClick={() => onDelete(assignment.id)}
+                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm transition-colors"
                     >
                       Delete
                     </button>
-                    <button
-                      onClick={() => onStatusChange(
-                        assignment.id, 
-                        assignment.status === 'Active' ? 'Closed' : 'Active'
-                      )}
-                      className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300"
-                    >
-                      {assignment.status === 'Active' ? 'Close' : 'Activate'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

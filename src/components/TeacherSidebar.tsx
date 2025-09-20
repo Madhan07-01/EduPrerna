@@ -8,15 +8,11 @@ export default function TeacherSidebar() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const navItems = [
-    { path: '/teacher', icon: '📊', label: 'Dashboard' },
-    { path: '/teacher/assignments', icon: '📝', label: 'Assignments' },
-    { path: '/teacher/resources', icon: '📚', label: 'Resources 📚' },
-    { path: '/teacher/communication', icon: '💬', label: 'Communication' },
-    { path: '/teacher/analytics', icon: '📈', label: 'Analytics & Reports' },
-    { path: '/teacher/profile', icon: '👤', label: 'Profile' },
-    { path: '/settings', icon: '⚙️', label: 'Settings' }
-  ]
+  const isActive = (path: string) => {
+    return location.pathname === path
+      ? "bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
+      : "text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900"
+  }
 
   return (
     <aside className="flex flex-col w-64 border-r border-gray-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/90 text-gray-900 dark:text-slate-100 p-4 gap-4">
@@ -28,20 +24,69 @@ export default function TeacherSidebar() {
         </div>
       </div>
       <nav className="flex-1 space-y-1">
-        {navItems.map((item) => (
-          <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${
-              location.pathname === item.path
-                ? 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
-                : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900'
-            }`}
-          >
-            <span className="text-lg">{item.icon}</span>
-            <span className="text-sm">{item.label}</span>
-          </button>
-        ))}
+        <button
+          onClick={() => navigate('/teacher')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher')}`}
+        >
+          <span className="text-lg">📊</span>
+          <span className="text-sm">Dashboard</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/assignments')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/assignments')}`}
+        >
+          <span className="text-lg">📝</span>
+          <span className="text-sm">Assignments</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/exams')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/exams')}`}
+        >
+          <span className="text-lg">📋</span>
+          <span className="text-sm">Exams/Quizzes</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/resources')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/resources')}`}
+        >
+          <span className="text-lg">📚</span>
+          <span className="text-sm">Resources</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/communication')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/communication')}`}
+        >
+          <span className="text-lg">💬</span>
+          <span className="text-sm">Communication</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/analytics')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/analytics')}`}
+        >
+          <span className="text-lg">📈</span>
+          <span className="text-sm">Analytics & Reports</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/profile')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/profile')}`}
+        >
+          <span className="text-lg">👤</span>
+          <span className="text-sm">Profile</span>
+        </button>
+        
+        <button
+          onClick={() => navigate('/teacher/settings')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/settings')}`}
+        >
+          <span className="text-lg">⚙️</span>
+          <span className="text-sm">Settings</span>
+        </button>
         
         <div className="mt-4">
           <button
