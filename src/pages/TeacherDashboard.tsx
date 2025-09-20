@@ -5,6 +5,8 @@ import TeacherSidebar from '../components/TeacherSidebar'
 import CommunicationSection from '../components/CommunicationSection'
 import AssignmentsSection from '../components/AssignmentsSection'
 import AnalyticsSection from '../components/AnalyticsSection'
+import ProfileSection from '../components/ProfileSection'
+import GeneralSettings from '../components/GeneralSettings'
 import { useNavigate, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { Doughnut } from 'react-chartjs-2'
 import {
@@ -375,11 +377,29 @@ const DashboardSection = () => {
   )
 }
 
-// Placeholder components for other sections
-// AssignmentsSection is now imported from components
-// CommunicationSection is now imported from components
-// AnalyticsSection is now imported from components
-const SettingsSection = () => <div className="text-2xl font-semibold text-gray-900 dark:text-white">Settings Section</div>
+// Settings Section Component
+const SettingsSection = () => {
+  const { t } = useLanguage()
+  
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Settings</h1>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          Customize your dashboard preferences
+        </div>
+      </div>
+      
+      <GeneralSettings />
+      
+      {/* Future settings sections can be added here */}
+      <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">More Settings</h2>
+        <p className="text-gray-600 dark:text-gray-400">Additional settings will be available in future updates.</p>
+      </div>
+    </div>
+  )
+}
 
 export default function TeacherDashboard() {
   return (
@@ -392,6 +412,7 @@ export default function TeacherDashboard() {
           <Route path="resources" element={<ResourcesSection />} />
           <Route path="communication" element={<CommunicationSection />} />
           <Route path="analytics" element={<AnalyticsSection />} />
+          <Route path="profile" element={<ProfileSection />} />
           <Route path="settings" element={<SettingsSection />} />
         </Routes>
       </main>
