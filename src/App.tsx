@@ -12,6 +12,13 @@ import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
+import MathPuzzleGame from './games/MathPuzzle/MathPuzzleGame.tsx'
+import PhysicsSimulatorGame from './games/PhysicsSimulator/PhysicsSimulatorGame.tsx'
+import ChemistryLabGame from './games/ChemistryLab/ChemistryLabGame.tsx'
+import BiologyLabGame from './games/BiologyLab/BiologyLabGame.tsx'
+import CodeChallengeGame from './games/CodeChallenge/CodeChallengeGame.tsx'
+import BiologyLabSection from './components/BiologyLabSection'
+import CodeChallengeSection from './components/CodeChallengeSection'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -70,6 +77,13 @@ function AppContent() {
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/minigames/math-puzzle" element={<PrivateRoute><MathPuzzleGame /></PrivateRoute>} />
+              <Route path="/games/physics-simulator" element={<PrivateRoute><PhysicsSimulatorGame /></PrivateRoute>} />
+              <Route path="/games/chemistry-lab" element={<PrivateRoute><ChemistryLabGame /></PrivateRoute>} />
+              <Route path="/games/biology-lab" element={<PrivateRoute><BiologyLabGame /></PrivateRoute>} />
+              <Route path="/games/code-challenge" element={<PrivateRoute><CodeChallengeGame /></PrivateRoute>} />
+              <Route path="/biology-lab-section" element={<PrivateRoute><BiologyLabSection /></PrivateRoute>} />
+              <Route path="/code-challenge-section" element={<PrivateRoute><CodeChallengeSection /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
             </Routes>

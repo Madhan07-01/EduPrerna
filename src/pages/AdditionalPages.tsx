@@ -1,5 +1,6 @@
 // using automatic JSX runtime; no React default import needed
 import { SectionCard } from './Pages'
+import { Link } from 'react-router-dom'
 
 export function QuickQuizPage() {
   return (
@@ -44,27 +45,153 @@ export function DailyChallengePage() {
 
 export function MiniGamesPage() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="text-2xl font-semibold text-gray-900 dark:text-white">Mini-Games</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[
-          { name: 'Math Puzzle', description: 'Solve equations to advance', icon: '🧩' },
-          { name: 'Physics Simulator', description: 'Experiment with physics laws', icon: '⚡' },
-          { name: 'Chemistry Lab', description: 'Mix elements and compounds', icon: '🧪' },
-          { name: 'Biology Explorer', description: 'Discover cellular structures', icon: '🔬' },
-          { name: 'Code Breaker', description: 'Decode programming patterns', icon: '💻' },
-          { name: 'Memory Match', description: 'Match scientific terms', icon: '🧠' },
-        ].map((game) => (
-          <SectionCard key={game.name} title={game.name}>
-            <div className="space-y-2">
-              <div className="text-4xl">{game.icon}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">{game.description}</div>
-              <button className="w-full rounded-md bg-green-600 text-white px-4 py-2 text-sm hover:bg-green-700">
-                Play Game
-              </button>
+      <p className="text-gray-600 dark:text-gray-300">
+        🎮 Interactive educational games to make learning fun! Choose from our collection of STEM mini-games.
+      </p>
+      
+
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Biology Lab Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-6 text-white">
+            <div className="text-2xl font-bold mb-2">🔬 Biology Lab Section</div>
+            <div className="text-sm opacity-90">Complete independent Biology section</div>
+          </div>
+          <div className="p-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              • All grades 6-12 available<br/>
+              • 30-second timed questions<br/>
+              • Isolated Firestore progress<br/>
+              • Enhanced animations & sounds
             </div>
-          </SectionCard>
-        ))}
+            <Link
+              to="/biology-lab-section"
+              className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 inline-block text-center"
+            >
+              Enter Biology Lab
+            </Link>
+          </div>
+        </div>
+
+        {/* Code Challenge Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white">
+            <div className="text-2xl font-bold mb-2">💻 Code Challenge Section</div>
+            <div className="text-sm opacity-90">Complete independent Coding section</div>
+          </div>
+          <div className="p-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              • All grades 6-12 available<br/>
+              • 30-second timed questions<br/>
+              • Isolated Firestore progress<br/>
+              • Enhanced animations & sounds
+            </div>
+            <Link
+              to="/code-challenge-section"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 inline-block text-center"
+            >
+              Start Code Challenge
+            </Link>
+          </div>
+        </div>
+
+        {/* Math Puzzle Game */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white">
+            <div className="text-2xl font-bold mb-2">🧮 Math Puzzle</div>
+            <div className="text-sm opacity-90">Interactive math questions for grades 6-12</div>
+          </div>
+          <div className="p-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              • Multiple-choice questions<br/>
+              • Grade-specific topics<br/>
+              • Instant feedback & animations<br/>
+              • Motivational rewards
+            </div>
+            <Link
+              to="/minigames/math-puzzle"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 inline-block text-center"
+            >
+              Play Math Puzzle
+            </Link>
+          </div>
+        </div>
+
+        {/* Physics Simulator */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-purple-500 to-pink-600 p-6 text-white">
+            <div className="text-2xl font-bold mb-2">🌟 Physics Simulator</div>
+            <div className="text-sm opacity-90">Interactive physics questions with animations</div>
+          </div>
+          <div className="p-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              • Forces, energy, and motion<br/>
+              • Real physics concepts<br/>
+              • Engaging visual effects<br/>
+              • Scientific explanations
+            </div>
+            <Link
+              to="/games/physics-simulator"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 inline-block text-center"
+            >
+              Launch Simulator
+            </Link>
+          </div>
+        </div>
+
+        {/* Chemistry Lab */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-6 text-white">
+            <div className="text-2xl font-bold mb-2">🧪 Chemistry Lab</div>
+            <div className="text-sm opacity-90">Build compounds with periodic elements</div>
+          </div>
+          <div className="p-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              • Periodic element selection<br/>
+              • Compound building game<br/>
+              • Progressive levels<br/>
+              • Chemistry formulas
+            </div>
+            <Link
+              to="/games/chemistry-lab"
+              className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 inline-block text-center"
+            >
+              Enter Lab
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Coming Soon Section */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">🚀 Available Games</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { name: '🔬 Biology Lab', desc: 'Interactive biology experiments', link: '/games/biology-lab' },
+            { name: '💻 Code Challenge', desc: 'Programming puzzles & concepts', link: '/games/code-challenge' },
+            { name: '🌍 Geography Quest', desc: 'World exploration game', link: null },
+            { name: '⚗️ Chemical Reactions', desc: 'Reaction simulations', link: null }
+          ].map((game) => (
+            <div key={game.name} className={`rounded-lg p-4 text-center ${game.link ? 'bg-white dark:bg-gray-700 hover:shadow-lg transition-shadow cursor-pointer' : 'bg-gray-100 dark:bg-gray-700 opacity-60'}`}>
+              {game.link ? (
+                <Link to={game.link} className="block">
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">{game.name}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">{game.desc}</div>
+                  <div className="mt-3 text-xs text-blue-600 dark:text-blue-400">Click to Play</div>
+                </Link>
+              ) : (
+                <>
+                  <div className="font-semibold text-gray-700 dark:text-gray-300">{game.name}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{game.desc}</div>
+                  <div className="mt-3 text-xs text-gray-400 dark:text-gray-500">Coming Soon</div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
