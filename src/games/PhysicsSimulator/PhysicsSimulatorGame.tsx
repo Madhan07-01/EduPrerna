@@ -246,8 +246,8 @@ const PhysicsSimulatorGame: React.FC = () => {
     if (containerRef.current && !gameRef.current && currentUser) {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: 400,
-        height: 450,
+        width: 600,
+        height: 500,
         parent: containerRef.current,
         backgroundColor: '#1e3a8a',
         scene: [PhysicsQuizMenuScene, PhysicsQuizGameScene],
@@ -276,7 +276,7 @@ const PhysicsSimulatorGame: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">⚡ Physics Simulator</h1>
           <p className="text-gray-600">Interactive Physics Quiz for Grades 6-12!</p>
@@ -300,8 +300,8 @@ const PhysicsSimulatorGame: React.FC = () => {
           ref={containerRef} 
           className="border-4 border-blue-200 rounded-xl overflow-hidden shadow-lg bg-blue-100"
           style={{ 
-            width: '400px', 
-            height: '450px', 
+            width: '600px', 
+            height: '500px', 
             margin: '0 auto', 
             maxWidth: '100%',
             backgroundColor: '#eaf6ff'

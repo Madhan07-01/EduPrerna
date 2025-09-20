@@ -265,13 +265,13 @@ class BiologyMainMenuScene extends Phaser.Scene {
       const gradeData = BIOLOGY_DATA[grade]
       const col = i % 4
       const row = Math.floor(i / 4)
-      const x = 60 + col * 80
-      const y = 120 + row * 80
+      const x = 70 + col * 90
+      const y = 120 + row * 90
       
       const topicId = gradeData.topic.toLowerCase().replace(/\s+/g, '-')
       const progress = await loadBiologyProgress(userId, grade, topicId)
       
-      const card = this.add.rectangle(x, y, 70, 70, 0x16a34a)
+      const card = this.add.rectangle(x, y, 80, 80, 0x16a34a)
         .setInteractive()
         .setStrokeStyle(2, progress.score > 0 ? 0x22c55e : 0x94a3b8)
       
@@ -290,17 +290,17 @@ class BiologyMainMenuScene extends Phaser.Scene {
       })
       
       this.add.text(x, y - 20, `Grade ${grade}`, {
-        fontSize: '12px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
+        fontSize: '16px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       
       this.add.text(x, y - 5, gradeData.topic, {
-        fontSize: '8px', color: '#d1fae5', fontFamily: 'Arial',
-        wordWrap: { width: 65 }, align: 'center'
+        fontSize: '10px', color: '#d1fae5', fontFamily: 'Arial',
+        wordWrap: { width: 75 }, align: 'center'
       }).setOrigin(0.5)
       
       const progressText = progress.score > 0 ? `${progress.score}/${gradeData.questions.length}` : 'Start'
       this.add.text(x, y + 15, progressText, {
-        fontSize: '8px', color: progress.score > 0 ? '#22c55e' : '#d1fae5', 
+        fontSize: '10px', color: progress.score > 0 ? '#22c55e' : '#d1fae5', 
         fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       
@@ -589,13 +589,13 @@ class CodeMainMenuScene extends Phaser.Scene {
       const gradeData = CODE_DATA[grade]
       const col = i % 4
       const row = Math.floor(i / 4)
-      const x = 60 + col * 80
-      const y = 120 + row * 80
+      const x = 70 + col * 90
+      const y = 120 + row * 90
       
       const topicId = gradeData.topic.toLowerCase().replace(/\s+/g, '-')
       const progress = await loadCodeProgress(userId, grade, topicId)
       
-      const card = this.add.rectangle(x, y, 70, 70, 0x7c3aed)
+      const card = this.add.rectangle(x, y, 80, 80, 0x7c3aed)
         .setInteractive()
         .setStrokeStyle(2, progress.score > 0 ? 0x8b5cf6 : 0x94a3b8)
       
@@ -614,17 +614,17 @@ class CodeMainMenuScene extends Phaser.Scene {
       })
       
       this.add.text(x, y - 20, `Grade ${grade}`, {
-        fontSize: '12px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
+        fontSize: '16px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       
       this.add.text(x, y - 5, gradeData.topic, {
-        fontSize: '8px', color: '#e9d5ff', fontFamily: 'Arial',
-        wordWrap: { width: 65 }, align: 'center'
+        fontSize: '10px', color: '#e9d5ff', fontFamily: 'Arial',
+        wordWrap: { width: 75 }, align: 'center'
       }).setOrigin(0.5)
       
       const progressText = progress.score > 0 ? `${progress.score}/${gradeData.questions.length}` : 'Start'
       this.add.text(x, y + 15, progressText, {
-        fontSize: '8px', color: progress.score > 0 ? '#8b5cf6' : '#e9d5ff',
+        fontSize: '10px', color: progress.score > 0 ? '#8b5cf6' : '#e9d5ff',
         fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       

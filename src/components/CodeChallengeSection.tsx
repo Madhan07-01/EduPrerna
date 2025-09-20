@@ -287,20 +287,20 @@ class CodeGameScene extends Phaser.Scene {
     
     // Header with grade-specific information
     this.add.text(width/2, 40, `💻 Code Challenge - Grade ${selectedGrade}`, {
-      fontSize: '14px', color: '#7c3aed', fontStyle: 'bold'
+      fontSize: '18px', color: '#7c3aed', fontStyle: 'bold'
     }).setOrigin(0.5)
     
-    this.add.text(width/2, 58, gradeData.topic, {
-      fontSize: '12px', color: '#7c3aed'
+    this.add.text(width/2, 60, gradeData.topic, {
+      fontSize: '14px', color: '#7c3aed'
     }).setOrigin(0.5)
     
     // Progress indicator specific to this grade
-    this.scoreText = this.add.text(width - 50, 40, `Score: ${this.score}/${this.questions.length}`, {
-      fontSize: '12px', color: '#7c3aed', fontStyle: 'bold'
+    this.scoreText = this.add.text(width - 80, 40, `Score: ${this.score}/${this.questions.length}`, {
+      fontSize: '16px', color: '#7c3aed', fontStyle: 'bold'
     }).setOrigin(0.5)
     
     this.timerText = this.add.text(width/2, 80, `Time: ${this.timer}s`, {
-      fontSize: '14px', color: '#dc2626', fontStyle: 'bold'
+      fontSize: '18px', color: '#dc2626', fontStyle: 'bold'
     }).setOrigin(0.5)
     
     this.input.keyboard?.on('keydown', this.handleKeyPress, this)
@@ -327,28 +327,28 @@ class CodeGameScene extends Phaser.Scene {
 
     // Question text
     const questionText = this.add.text(width/2, height * 0.3, question.question, {
-      fontSize: '12px', color: '#1f2937', fontStyle: 'bold',
-      wordWrap: { width: width - 40 }, align: 'center'
+      fontSize: '16px', color: '#1f2937', fontStyle: 'bold',
+      wordWrap: { width: width - 60 }, align: 'center'
     }).setOrigin(0.5)
     this.questionContainer.add(questionText)
 
     // Input area
     const inputLabel = this.add.text(width/2, height * 0.5, 'Type your answer:', {
-      fontSize: '10px', color: '#374151'
+      fontSize: '14px', color: '#374151'
     }).setOrigin(0.5)
     this.questionContainer.add(inputLabel)
 
-    const inputBox = this.add.rectangle(width/2, height * 0.6, 250, 30, 0xffffff)
-      .setStrokeStyle(2, 0x8b5cf6)
+    const inputBox = this.add.rectangle(width/2, height * 0.6, 350, 40, 0xffffff)
+      .setStrokeStyle(3, 0x8b5cf6)
     this.questionContainer.add(inputBox)
 
     this.inputText = this.add.text(width/2, height * 0.6, '|', {
-      fontSize: '12px', color: '#1f2937'
+      fontSize: '16px', color: '#1f2937'
     }).setOrigin(0.5)
     this.questionContainer.add(this.inputText)
 
     const enterHint = this.add.text(width/2, height * 0.7, 'Press ENTER to submit', {
-      fontSize: '10px', color: '#6b7280'
+      fontSize: '12px', color: '#6b7280'
     }).setOrigin(0.5)
     this.questionContainer.add(enterHint)
 
@@ -766,8 +766,8 @@ const CodeChallengeSection: React.FC = () => {
     if (containerRef.current && !gameRef.current && currentUser) {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: 350,
-        height: 400,
+        width: 600,
+        height: 500,
         parent: containerRef.current,
         backgroundColor: '#581c87',
         scene: [CodeMainMenuScene, CodeTopicScene, CodeGameScene],
@@ -788,7 +788,7 @@ const CodeChallengeSection: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">💻 Code Challenge</h1>
           <p className="text-gray-600">Master programming through interactive challenges!</p>
@@ -811,7 +811,7 @@ const CodeChallengeSection: React.FC = () => {
         <div 
           ref={containerRef} 
           className="border-4 border-purple-200 rounded-xl overflow-hidden shadow-lg bg-purple-100"
-          style={{ width: '350px', height: '400px', margin: '0 auto', maxWidth: '100%' }}
+          style={{ width: '600px', height: '500px', margin: '0 auto', maxWidth: '100%' }}
         />
         
         <div className="text-center mt-4 space-y-2">

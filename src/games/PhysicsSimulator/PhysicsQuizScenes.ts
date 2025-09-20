@@ -44,11 +44,11 @@ export class PhysicsQuizMenuScene extends Phaser.Scene {
     grades.forEach((grade, index) => {
       const col = index % 4
       const row = Math.floor(index / 4)
-      const x = 60 + col * 80
-      const y = 120 + row * 80
+      const x = 70 + col * 90
+      const y = 120 + row * 90
       
       // Grade card
-      const card = this.add.rectangle(x, y, 70, 70, 0x3b82f6)
+      const card = this.add.rectangle(x, y, 80, 80, 0x3b82f6)
         .setInteractive()
         .setStrokeStyle(2, 0x60a5fa)
       
@@ -79,16 +79,16 @@ export class PhysicsQuizMenuScene extends Phaser.Scene {
       
       // Grade text
       this.add.text(x, y - 15, `Grade ${grade}`, {
-        fontSize: '12px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
+        fontSize: '16px', color: '#ffffff', fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       
       // Question count
       this.add.text(x, y + 5, '3 Questions', {
-        fontSize: '8px', color: '#dbeafe', fontFamily: 'Arial'
+        fontSize: '10px', color: '#dbeafe', fontFamily: 'Arial'
       }).setOrigin(0.5)
       
       this.add.text(x, y + 15, 'Start', {
-        fontSize: '8px', color: '#dbeafe', fontFamily: 'Arial', fontStyle: 'bold'
+        fontSize: '10px', color: '#dbeafe', fontFamily: 'Arial', fontStyle: 'bold'
       }).setOrigin(0.5)
       
       card.on('pointerdown', () => {
@@ -167,16 +167,16 @@ export class PhysicsQuizGameScene extends Phaser.Scene {
     
     // Header
     this.add.text(width/2, 40, `⚡ Physics Quiz - Grade ${this.currentGrade}`, {
-      fontSize: '14px', color: '#1e40af', fontStyle: 'bold'
+      fontSize: '18px', color: '#1e40af', fontStyle: 'bold'
     }).setOrigin(0.5)
     
     // Progress indicator
-    this.scoreText = this.add.text(width - 50, 40, `Score: ${this.score}/${this.questions.length}`, {
-      fontSize: '12px', color: '#1e40af', fontStyle: 'bold'
+    this.scoreText = this.add.text(width - 80, 40, `Score: ${this.score}/${this.questions.length}`, {
+      fontSize: '16px', color: '#1e40af', fontStyle: 'bold'
     }).setOrigin(0.5)
     
     this.timerText = this.add.text(width/2, 70, `Time: ${this.timer}s`, {
-      fontSize: '14px', color: '#dc2626', fontStyle: 'bold'
+      fontSize: '18px', color: '#dc2626', fontStyle: 'bold'
     }).setOrigin(0.5)
     
     this.input.keyboard?.on('keydown', this.handleKeyPress, this)
@@ -206,8 +206,8 @@ export class PhysicsQuizGameScene extends Phaser.Scene {
 
     // Question text
     const questionText = this.add.text(width/2, height * 0.25, question.question, {
-      fontSize: '12px', color: '#1f2937', fontStyle: 'bold',
-      wordWrap: { width: width - 40 }, align: 'center'
+      fontSize: '16px', color: '#1f2937', fontStyle: 'bold',
+      wordWrap: { width: width - 60 }, align: 'center'
     }).setOrigin(0.5)
     this.questionContainer.add(questionText)
 
@@ -269,7 +269,7 @@ export class PhysicsQuizGameScene extends Phaser.Scene {
         .setInteractive()
       
       const text = this.add.text(width/2, y, option, {
-        fontSize: '11px', color: '#1f2937', fontFamily: 'Arial'
+        fontSize: '13px', color: '#1f2937', fontFamily: 'Arial'
       }).setOrigin(0.5)
       
       // Add to question container
@@ -321,18 +321,18 @@ export class PhysicsQuizGameScene extends Phaser.Scene {
     
     // Input area
     const inputLabel = this.add.text(width/2, height * 0.45, 'Type your answer:', {
-      fontSize: '10px', color: '#374151'
+      fontSize: '14px', color: '#374151'
     }).setOrigin(0.5)
 
-    const inputBox = this.add.rectangle(width/2, height * 0.55, 250, 30, 0xffffff)
-      .setStrokeStyle(2, 0x3b82f6)
+    const inputBox = this.add.rectangle(width/2, height * 0.55, 350, 40, 0xffffff)
+      .setStrokeStyle(3, 0x3b82f6)
 
     this.inputText = this.add.text(width/2, height * 0.55, '|', {
-      fontSize: '12px', color: '#1f2937'
+      fontSize: '16px', color: '#1f2937'
     }).setOrigin(0.5)
 
     const enterHint = this.add.text(width/2, height * 0.65, 'Press ENTER to submit', {
-      fontSize: '10px', color: '#6b7280'
+      fontSize: '12px', color: '#6b7280'
     }).setOrigin(0.5)
     
     // Add to question container
