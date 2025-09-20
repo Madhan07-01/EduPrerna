@@ -14,7 +14,11 @@ import SettingsPage from './pages/SettingsPage'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
-import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
+import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage, MiniGamePlayPage } from './pages/AdditionalPages'
+// @ts-ignore
+import GradeSelect from './mini-games/components/GradeSelect'
+// @ts-ignore
+import LessonSelect from './mini-games/components/LessonSelect'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -80,6 +84,10 @@ function AppContent() {
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/mini/:subject/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/mini/:subject/:game/grades" element={<PrivateRoute><GradeSelect /></PrivateRoute>} />
+              <Route path="/mini/:subject/:game/:grade/lessons" element={<PrivateRoute><LessonSelect /></PrivateRoute>} />
+              <Route path="/mini/:subject/:game/:grade/:lesson/play" element={<PrivateRoute><MiniGamePlayPage /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
             </Routes>

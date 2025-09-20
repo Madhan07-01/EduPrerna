@@ -1,7 +1,60 @@
 // using automatic JSX runtime; no React default import needed
 import { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { SectionCard } from './Pages'
 import MathRunnerGame from '../components/MathRunnerGame'
+
+export function MiniGamePlayPage() {
+  const { subject, game, grade, lesson } = useParams()
+  const navigate = useNavigate()
+
+  // Helper function to convert kebab-case back to proper lesson name
+  const convertLessonName = (lessonSlug: string | undefined): string => {
+    // This is a simple conversion - in a real app you might want to store the mapping
+    return lessonSlug?.split('-')
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ') || 'Unknown Lesson'
+  }
+
+  // Handle back navigation
+  const handleBack = () => {
+    navigate(`/mini/${subject}/${game}/${grade}/lessons`)
+  }
+
+  const lessonName = convertLessonName(lesson)
+
+  // For Math Runner, show the game component
+  if (game === 'math-runner') {
+    return (
+      <MathRunnerGame
+        subject={subject || 'mathematics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For other games, show a placeholder
+  return (
+    <div className="text-center py-12">
+      <div className="text-6xl mb-4">🎮</div>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Game Coming Soon</h2>
+      <p className="text-gray-600 dark:text-gray-400 mb-6">
+        {game?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} is under development
+      </p>
+      <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        Subject: {subject} | Grade: {grade} | Lesson: {lessonName}
+      </div>
+      <button
+        onClick={handleBack}
+        className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+      >
+        ← Back to Lessons
+      </button>
+    </div>
+  )
+}
 
 export function QuickQuizPage() {
   return (
@@ -45,11 +98,9 @@ export function DailyChallengePage() {
 }
 
 export function MiniGamesPage() {
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null)
-  const [selectedGame, setSelectedGame] = useState<string | null>(null)
-  const [selectedGrade, setSelectedGrade] = useState<string | null>(null)
-  const [selectedLesson, setSelectedLesson] = useState<string | null>(null)
-  const [showGame, setShowGame] = useState<boolean>(false)
+  const { subject } = useParams()
+  const navigate = useNavigate()
+  const selectedSubject = subject
 
   // Subject data with icons and descriptions
   const subjects = [
@@ -124,208 +175,8 @@ export function MiniGamesPage() {
     ]
   }
 
-  // Grade options
-  const grades = [
-    { id: 'grade-6', name: 'Grade 6', color: 'from-pink-500 to-rose-600', hoverColor: 'hover:from-pink-600 hover:to-rose-700' },
-    { id: 'grade-7', name: 'Grade 7', color: 'from-purple-500 to-indigo-600', hoverColor: 'hover:from-purple-600 hover:to-indigo-700' },
-    { id: 'grade-8', name: 'Grade 8', color: 'from-blue-500 to-cyan-600', hoverColor: 'hover:from-blue-600 hover:to-cyan-700' },
-    { id: 'grade-9', name: 'Grade 9', color: 'from-green-500 to-teal-600', hoverColor: 'hover:from-green-600 hover:to-teal-700' },
-    { id: 'grade-10', name: 'Grade 10', color: 'from-yellow-500 to-orange-600', hoverColor: 'hover:from-yellow-600 hover:to-orange-700' },
-    { id: 'grade-11', name: 'Grade 11', color: 'from-red-500 to-pink-600', hoverColor: 'hover:from-red-600 hover:to-pink-700' },
-    { id: 'grade-12', name: 'Grade 12', color: 'from-indigo-500 to-purple-600', hoverColor: 'hover:from-indigo-600 hover:to-purple-700' }
-  ]
-
-  // Lessons data organized by subject and grade
-  const lessonsBySubjectAndGrade = {
-    mathematics: {
-      'grade-6': ['Fractions', 'Algebra Basics', 'Geometry Fundamentals', 'Decimals', 'Percentages'],
-      'grade-7': ['Linear Equations', 'Ratios & Proportions', 'Area & Perimeter', 'Integers', 'Data Handling'],
-      'grade-8': ['Quadratic Equations', 'Triangles', 'Mensuration', 'Factorization', 'Graphs'],
-      'grade-9': ['Polynomials', 'Coordinate Geometry', 'Trigonometry Basics', 'Statistics', 'Probability'],
-      'grade-10': ['Real Numbers', 'Arithmetic Progressions', 'Circles', 'Surface Areas', 'Trigonometry'],
-      'grade-11': ['Sets & Functions', 'Limits & Derivatives', 'Mathematical Reasoning', 'Statistics', 'Probability'],
-      'grade-12': ['Relations & Functions', 'Calculus', 'Vectors', 'Three Dimensional Geometry', 'Linear Programming']
-    }
-  }
-
-  // Show Math Runner Game
-  if (showGame && selectedSubject && selectedGame && selectedGrade && selectedLesson) {
-    return (
-      <MathRunnerGame
-        subject={selectedSubject}
-        grade={selectedGrade}
-        lesson={selectedLesson}
-        onBack={() => {
-          setShowGame(false)
-          setSelectedLesson(null)
-        }}
-      />
-    )
-  }
-
-  // Grade Selection Screen
-  if (selectedSubject && selectedGame && !selectedGrade) {
-    const currentSubject = subjects.find(s => s.id === selectedSubject)
-    const currentGame = gamesBySubject[selectedSubject as keyof typeof gamesBySubject]?.find(g => g.name === selectedGame)
-    
-    return (
-      <div className="space-y-6">
-        {/* Header with Back Button */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => {
-                setSelectedGame(null)
-                setSelectedGrade(null)
-                setSelectedLesson(null)
-              }}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <span className="text-xl">←</span>
-              <span className="font-medium">Back to Games</span>
-            </button>
-          </div>
-          
-          <div className="text-center">
-            <div className="flex items-center space-x-3">
-              <span className="text-4xl">{currentGame?.icon}</span>
-              <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{selectedGame}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Choose your grade level</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="w-32"></div>
-        </div>
-
-        {/* Grade Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 max-w-6xl mx-auto">
-          {grades.map((grade) => (
-            <div
-              key={grade.id}
-              onClick={() => setSelectedGrade(grade.id)}
-              className="group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            >
-              <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br ${grade.color} ${grade.hoverColor} p-6 text-white shadow-lg transition-all duration-300 h-32 flex items-center justify-center`}>
-                <div className="text-center">
-                  <div className="text-3xl font-bold">{grade.name.split(' ')[1]}</div>
-                  <div className="text-sm opacity-90 font-medium">{grade.name}</div>
-                </div>
-                
-                {/* Decorative Elements */}
-                <div className="absolute top-1 right-1 opacity-20">
-                  <div className="w-4 h-4 rounded-full bg-white"></div>
-                </div>
-                
-                {/* Hover Effect */}
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-xl"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Grade Info */}
-        <div className="text-center mt-8">
-          <div className="inline-flex items-center space-x-4 px-6 py-3 bg-gray-100 dark:bg-gray-800 rounded-full">
-            <span className="text-2xl">🎓</span>
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Select your grade to see relevant lessons
-            </span>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Lesson Selection Screen
-  if (selectedSubject && selectedGame && selectedGrade && !selectedLesson) {
-    const currentSubject = subjects.find(s => s.id === selectedSubject)
-    const currentGame = gamesBySubject[selectedSubject as keyof typeof gamesBySubject]?.find(g => g.name === selectedGame)
-    const currentGrade = grades.find(g => g.id === selectedGrade)
-    const lessons = lessonsBySubjectAndGrade[selectedSubject as keyof typeof lessonsBySubjectAndGrade]?.[selectedGrade as keyof typeof lessonsBySubjectAndGrade[keyof typeof lessonsBySubjectAndGrade]] || []
-    
-    return (
-      <div className="space-y-6">
-        {/* Header with Back Button */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => {
-                setSelectedGrade(null)
-                setSelectedLesson(null)
-              }}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <span className="text-xl">←</span>
-              <span className="font-medium">Back to Grades</span>
-            </button>
-          </div>
-          
-          <div className="text-center">
-            <div className="flex items-center space-x-3">
-              <span className="text-4xl">{currentGame?.icon}</span>
-              <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{selectedGame} - {currentGrade?.name}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Choose a lesson to start playing</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="w-32"></div>
-        </div>
-
-        {/* Lessons Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {lessons.map((lesson, index) => (
-            <div
-              key={lesson}
-              onClick={() => {
-                setSelectedLesson(lesson)
-                if (selectedGame === 'Math Runner') {
-                  setShowGame(true)
-                }
-              }}
-              className="group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            >
-              <div className="relative overflow-hidden rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 p-6">
-                {/* Lesson Number */}
-                <div className="text-center mb-4">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg mb-3">
-                    {index + 1}
-                  </div>
-                </div>
-                
-                {/* Lesson Info */}
-                <div className="text-center space-y-3">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">{lesson}</h3>
-                  <button className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                    {selectedGame === 'Math Runner' ? 'Start Math Runner' : 'Start Level 1'}
-                  </button>
-                </div>
-                
-                {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-xl"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Lesson Info */}
-        <div className="text-center mt-8">
-          <div className="inline-flex items-center space-x-4 px-6 py-3 bg-gray-100 dark:bg-gray-800 rounded-full">
-            <span className="text-2xl">📚</span>
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {lessons.length} lessons available for {currentSubject?.name} {currentGrade?.name}
-            </span>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   // Subject Selection Screen
-  if (!selectedSubject) {
+  if (!selectedSubject || !subject) {
     return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
@@ -337,7 +188,7 @@ export function MiniGamesPage() {
         {subjects.map((subject) => (
           <div
             key={subject.id}
-            onClick={() => setSelectedSubject(subject.id)}
+            onClick={() => navigate(`/mini/${subject.id}/games`)}
             className={`group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl h-64`}
           >
             <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${subject.bgColor} ${subject.hoverColor} p-6 text-white shadow-lg transition-all duration-300 h-full flex flex-col justify-between`}>
@@ -392,7 +243,7 @@ export function MiniGamesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
-            onClick={() => setSelectedSubject(null)}
+            onClick={() => navigate('/games')}
             className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <span className="text-xl">←</span>
@@ -435,7 +286,7 @@ export function MiniGamesPage() {
                 
                 {/* Play Button */}
                 <button 
-                  onClick={() => setSelectedGame(game.name)}
+                  onClick={() => navigate(`/mini/${selectedSubject}/${game.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}/grades`)}
                   className="w-full rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-3 text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-white/30"
                 >
                   🎮 Play Game
