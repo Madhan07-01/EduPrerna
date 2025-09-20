@@ -41,19 +41,11 @@ export default function TeacherSidebar() {
         </button>
         
         <button
-          onClick={() => navigate('/teacher/exams')}
-          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/exams')}`}
-        >
-          <span className="text-lg">📋</span>
-          <span className="text-sm">Exams/Quizzes</span>
-        </button>
-        
-        <button
           onClick={() => navigate('/teacher/resources')}
           className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/resources')}`}
         >
           <span className="text-lg">📚</span>
-          <span className="text-sm">Resources</span>
+          <span className="text-sm">Resources 📚</span>
         </button>
         
         <button

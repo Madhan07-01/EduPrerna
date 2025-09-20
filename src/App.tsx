@@ -71,6 +71,7 @@ function AppContent() {
               <Route path="/achievements" element={<PrivateRoute><AchievementsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
+              <Route path="/teacher/*" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
               <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />
