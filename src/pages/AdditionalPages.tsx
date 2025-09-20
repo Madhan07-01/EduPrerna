@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { SectionCard } from './Pages'
 import MathRunnerGame from '../components/MathRunnerGame'
+import EquationBuilderGame from '../components/EquationBuilderGame'
+import GeometryShooterGame from '../components/GeometryShooterGame'
+import GenericGame from '../components/GenericGame'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -26,6 +29,25 @@ export function MiniGamePlayPage() {
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ') || 'Unknown Game'
 
+  // Game icon mapping - All 15 games
+  const gameIconMap: Record<string, string> = {
+    'math-runner': '🏃‍♂️',
+    'equation-builder-puzzle': '🧩',
+    'geometry-shooter': '🎯',
+    'code-breaker': '🐛',
+    'debugging-quest': '🔍',
+    'logic-maze': '🧠',
+    'physics-lab-escape': '⚗️',
+    'circuit-connect': '🔌',
+    'gravity-drop': '🌍',
+    'periodic-table-quest': '⚛️',
+    'reaction-time': '💥',
+    'molecule-builder': '🧪',
+    'cell-explorer': '🔬',
+    'human-body-quest': '🫀',
+    'eco-survival': '🌿'
+  }
+
   // For Math Runner, show the game component
   if (game === 'math-runner') {
     return (
@@ -38,27 +60,43 @@ export function MiniGamePlayPage() {
     )
   }
 
-  // For other games, show a placeholder
+  // For Equation Builder Puzzle
+  if (game === 'equation-builder-puzzle') {
+    return (
+      <EquationBuilderGame
+        subject={subject || 'mathematics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Geometry Shooter
+  if (game === 'geometry-shooter') {
+    return (
+      <GeometryShooterGame
+        subject={subject || 'mathematics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For other games, use GenericGame component
+  const gameIcon = gameIconMap[game || ''] || '🎮'
+  
+  // All games now use their respective components with hardcoded questions
   return (
-    <div className="text-center py-12">
-      <div className="text-6xl mb-4">🎮</div>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Game Starting...</h2>
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
-        {gameName} is loading for {lessonName}
-      </p>
-      <div className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Subject: {subject} | Grade: {grade?.replace('grade-', 'Grade ')} | Lesson: {lessonName}
-      </div>
-      <div className="mb-6">
-        <div className="inline-block w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-      </div>
-      <button
-        onClick={handleBack}
-        className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-      >
-        ← Back to Game Selection
-      </button>
-    </div>
+    <GenericGame
+      subject={subject || 'mathematics'}
+      grade={grade || 'grade-6'}
+      lesson={lessonName}
+      gameName={gameName}
+      gameIcon={gameIcon}
+      onBack={handleBack}
+    />
   )
 }
 
@@ -150,7 +188,7 @@ export function MiniGamesPage() {
     }
   ]
 
-  // Games data organized by subject
+  // Games data organized by subject - All 15 games
   const gamesBySubject = {
     mathematics: [
       { name: 'Math Runner', description: 'Run through levels solving math problems to avoid obstacles.', icon: '🏃‍♂️', color: 'from-blue-500 to-indigo-600', hoverColor: 'hover:from-blue-600 hover:to-indigo-700' },

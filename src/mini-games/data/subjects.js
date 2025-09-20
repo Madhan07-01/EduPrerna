@@ -14,36 +14,36 @@ export const subjectLessonMapping = {
     'grade-7': ['HTML Basics', 'CSS Fundamentals', 'Logo Programming', 'Internet Safety', 'Problem Solving'],
     'grade-8': ['JavaScript Basics', 'Web Development', 'Database Concepts', 'Networking Basics', 'Cybersecurity'],
     'grade-9': ['Python Programming', 'Data Structures', 'Object-Oriented Programming', 'Software Engineering', 'AI Basics'],
-    'grade-10': ['Advanced Python', 'Algorithms', 'Database Management', 'Computer Networks', 'Ethics in Computing'],
-    'grade-11': ['C++ Programming', 'Data Structures & Algorithms', 'Computer Graphics', 'Operating Systems', 'Web Technologies'],
-    'grade-12': ['Advanced Programming', 'Database Systems', 'Computer Networks', 'Software Engineering', 'Artificial Intelligence']
+    'grade-10': ['Advanced Python', 'Algorithms', 'Computer Networks', 'Database Management', 'Mobile Development'],
+    'grade-11': ['Data Science', 'Machine Learning', 'Web Frameworks', 'System Design', 'Ethics in Computing'],
+    'grade-12': ['Advanced Algorithms', 'Distributed Systems', 'Computer Graphics', 'Artificial Intelligence', 'Project Management']
   },
   physics: {
-    'grade-6': ['Simple Machines', 'Light & Shadows', 'Magnetism', 'Electricity Basics', 'Motion & Measurement'],
-    'grade-7': ['Heat & Temperature', 'Acids & Bases', 'Physical & Chemical Changes', 'Weather & Climate', 'Nutrition in Plants'],
-    'grade-8': ['Force & Pressure', 'Friction', 'Sound', 'Chemical Effects of Electric Current', 'Light'],
-    'grade-9': ['Motion', 'Force & Laws of Motion', 'Gravitation', 'Work & Energy', 'Sound'],
-    'grade-10': ['Light Reflection & Refraction', 'Human Eye', 'Electricity', 'Magnetic Effects', 'Sources of Energy'],
-    'grade-11': ['Physical World', 'Units & Measurements', 'Motion in Straight Line', 'Motion in Plane', 'Laws of Motion'],
-    'grade-12': ['Electric Charges & Fields', 'Electrostatic Potential', 'Current Electricity', 'Moving Charges', 'Magnetism']
+    'grade-6': ['Motion and Measurement', 'Light Shadows Reflections', 'Electricity and Circuits', 'Fun with Magnets', 'Water'],
+    'grade-7': ['Heat', 'Acids Bases and Salts', 'Physical and Chemical Changes', 'Weather Climate Water', 'Winds Storms Cyclones'],
+    'grade-8': ['Force and Motion', 'Friction', 'Sound', 'Chemical Effects of Electric Current', 'Light'],
+    'grade-9': ['Motion', 'Force and Laws of Motion', 'Gravitation', 'Work and Energy', 'Sound'],
+    'grade-10': ['Light Reflection Refraction', 'Human Eye', 'Electricity', 'Magnetic Effects', 'Sources of Energy'],
+    'grade-11': ['Units and Measurements', 'Kinematics', 'Laws of Motion', 'Work Energy Power', 'Rotational Motion'],
+    'grade-12': ['Electric Charges Fields', 'Current Electricity', 'Magnetic Effects', 'Electromagnetic Induction', 'Alternating Current']
   },
   chemistry: {
-    'grade-6': ['Sorting Materials', 'Separation of Substances', 'Changes Around Us', 'Getting to Know Plants', 'Body Movements'],
-    'grade-7': ['Acids, Bases & Salts', 'Physical & Chemical Changes', 'Weather, Climate & Adaptations', 'Soil', 'Respiration in Organisms'],
-    'grade-8': ['Synthetic Fibres & Plastics', 'Metals & Non-metals', 'Coal & Petroleum', 'Combustion & Flame', 'Natural Resources'],
-    'grade-9': ['Matter in Our Surroundings', 'Is Matter Around Us Pure', 'Atoms & Molecules', 'Structure of Atom', 'Cell'],
-    'grade-10': ['Chemical Reactions & Equations', 'Acids, Bases & Salts', 'Metals & Non-metals', 'Carbon & Its Compounds', 'Periodic Classification'],
+    'grade-6': ['Food Components', 'Acids and Bases', 'Physical and Chemical Changes', 'Getting to Know Plants', 'Body Movements'],
+    'grade-7': ['Acids Bases and Salts', 'Physical and Chemical Changes', 'Weather Climate Water', 'Soil', 'Respiration in Organisms'],
+    'grade-8': ['Synthetic Fibres and Plastics', 'Metals and Non-metals', 'Coal and Petroleum', 'Combustion and Flame', 'Pollution of Air Water'],
+    'grade-9': ['Matter in Our Surroundings', 'Is Matter Around Us Pure', 'Atoms and Molecules', 'Structure of Atom', 'Natural Resources'],
+    'grade-10': ['Chemical Reactions and Equations', 'Acids Bases and Salts', 'Metals and Non-metals', 'Carbon and its Compounds', 'Life Processes'],
     'grade-11': ['Some Basic Concepts', 'Structure of Atom', 'Classification of Elements', 'Chemical Bonding', 'States of Matter'],
     'grade-12': ['Solid State', 'Solutions', 'Electrochemistry', 'Chemical Kinetics', 'Surface Chemistry']
   },
   biology: {
-    'grade-6': ['Food & Its Components', 'Getting to Know Plants', 'Body Movements', 'Living Organisms', 'Motion & Measurement'],
-    'grade-7': ['Nutrition in Plants', 'Nutrition in Animals', 'Fibre to Fabric', 'Heat', 'Acids, Bases & Salts'],
-    'grade-8': ['Crop Production', 'Microorganisms', 'Synthetic Fibres', 'Metals & Non-metals', 'Coal & Petroleum'],
-    'grade-9': ['Fundamental Unit of Life', 'Tissues', 'Diversity in Living Organisms', 'Why Do We Fall Ill', 'Natural Resources'],
-    'grade-10': ['Life Processes', 'Control & Coordination', 'How Do Organisms Reproduce', 'Heredity & Evolution', 'Our Environment'],
-    'grade-11': ['Diversity in Living World', 'Structural Organisation', 'Cell Structure & Function', 'Plant Physiology', 'Human Physiology'],
-    'grade-12': ['Reproduction', 'Genetics & Evolution', 'Biology & Human Welfare', 'Biotechnology', 'Ecology & Environment']
+    'grade-6': ['Food Components', 'Getting to Know Plants', 'Body Movements', 'Living Organisms', 'Motion and Measurement'],
+    'grade-7': ['Nutrition in Plants', 'Nutrition in Animals', 'Respiration in Organisms', 'Transportation in Animals Plants', 'Reproduction in Plants'],
+    'grade-8': ['Crop Production Management', 'Microorganisms', 'Conservation of Plants Animals', 'Cell Structure Function', 'Reproduction in Animals'],
+    'grade-9': ['Life Processes', 'Control and Coordination', 'How do Organisms Reproduce', 'Heredity and Evolution', 'Natural Resource Management'],
+    'grade-10': ['Life Processes', 'Control and Coordination', 'How do Organisms Reproduce', 'Heredity and Evolution', 'Management of Natural Resources'],
+    'grade-11': ['Living World', 'Biological Classification', 'Plant Kingdom', 'Animal Kingdom', 'Morphology of Flowering Plants'],
+    'grade-12': ['Reproduction in Organisms', 'Sexual Reproduction', 'Human Reproduction', 'Reproductive Health', 'Principles of Inheritance']
   }
 }
 
