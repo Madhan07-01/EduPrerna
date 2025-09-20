@@ -1,26 +1,32 @@
 import { useState } from 'react'
+import { getSubjects, getGrades, getLessons } from '../data/curriculumData'
+import type { Subject, Grade, Lesson } from '../data/curriculumData'
 
 interface ResourceFilterProps {
   onFilterChange: (filters: { subject: string; grade: string; lesson: string }) => void
 }
 
 const ResourceFilter = ({ onFilterChange }: ResourceFilterProps) => {
-  const [subject, setSubject] = useState('')
-  const [grade, setGrade] = useState('')
-  const [lesson, setLesson] = useState('')
+  const [subject, setSubject] = useState<Subject | ''>('')
+  const [grade, setGrade] = useState<Grade | ''>('')
+  const [lesson, setLesson] = useState<Lesson | ''>('')
 
-  const subjects = ['Mathematics', 'Computer Science', 'Physics', 'Chemistry', 'Biology']
-  const grades = ['6', '7', '8', '9', '10', '11', '12'] 
-  const lessons = ['Algebra', 'Geometry', 'Calculus', 'Programming', 'Mechanics', 'Chemical Reactions', 'Ecology']
+  // Get available options based on current selections
+  const availableSubjects = getSubjects()
+  const availableGrades = subject ? getGrades(subject) : []
+  const availableLessons = subject && grade ? getLessons(subject, grade) : []
 
   const handleSubjectChange = (value: string) => {
-    setSubject(value)
-    onFilterChange({ subject: value, grade, lesson })
+    setSubject(value as Subject)
+    setGrade('')
+    setLesson('')
+    onFilterChange({ subject: value, grade: '', lesson: '' })
   }
 
   const handleGradeChange = (value: string) => {
     setGrade(value)
-    onFilterChange({ subject, grade: value, lesson })
+    setLesson('')
+    onFilterChange({ subject, grade: value, lesson: '' })
   }
 
   const handleLessonChange = (value: string) => {
@@ -63,7 +69,7 @@ const ResourceFilter = ({ onFilterChange }: ResourceFilterProps) => {
             onChange={(e) => handleSubjectChange(e.target.value)}
           >
             <option value="">All Subjects</option>
-            {subjects.map(sub => (
+            {availableSubjects.map(sub => (
               <option key={sub} value={sub}>{sub}</option>
             ))}
           </select>
@@ -80,7 +86,7 @@ const ResourceFilter = ({ onFilterChange }: ResourceFilterProps) => {
             onChange={(e) => handleGradeChange(e.target.value)}
           >
             <option value="">All Grades</option>
-            {grades.map(g => (
+            {availableGrades.map(g => (
               <option key={g} value={g}>Grade {g}</option>
             ))}
           </select>
@@ -97,7 +103,7 @@ const ResourceFilter = ({ onFilterChange }: ResourceFilterProps) => {
             onChange={(e) => handleLessonChange(e.target.value)}
           >
             <option value="">All Lessons</option>
-            {lessons.map(l => (
+            {availableLessons.map(l => (
               <option key={l} value={l}>{l}</option>
             ))}
           </select>

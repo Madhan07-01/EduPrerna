@@ -1,20 +1,41 @@
 import { useState } from 'react'
+import { getSubjects, getGrades, getLessons } from '../data/curriculumData'
+import type { Subject, Grade, Lesson } from '../data/curriculumData'
 
 interface ContextualUploadFormProps {
   onResourceUploaded: (newResource: any) => void
 }
 
 const ContextualUploadForm = ({ onResourceUploaded }: ContextualUploadFormProps) => {
-  const [selectedSubject, setSelectedSubject] = useState('')
-  const [selectedGrade, setSelectedGrade] = useState('')
-  const [selectedLesson, setSelectedLesson] = useState('')
+  const [selectedSubject, setSelectedSubject] = useState<Subject | ''>('')
+  const [selectedGrade, setSelectedGrade] = useState<Grade | ''>('')
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | ''>('')
 
-  const subjects = ['Mathematics', 'Computer Science', 'Physics', 'Chemistry', 'Biology']
-  const grades = ['6', '7', '8', '9', '10', '11', '12']
-  const lessons = ['Algebra', 'Geometry', 'Calculus', 'Programming', 'Mechanics', 'Chemical Reactions', 'Ecology']
+  // Get available options based on current selections
+  const availableSubjects = getSubjects()
+  const availableGrades = selectedSubject ? getGrades(selectedSubject) : []
+  const availableLessons = selectedSubject && selectedGrade ? getLessons(selectedSubject, selectedGrade) : []
 
   // Check if all three dropdowns have selections
   const isUploadEnabled = selectedSubject && selectedGrade && selectedLesson
+
+  // Handle subject change - reset grade and lesson
+  const handleSubjectChange = (value: string) => {
+    setSelectedSubject(value as Subject)
+    setSelectedGrade('')
+    setSelectedLesson('')
+  }
+
+  // Handle grade change - reset lesson
+  const handleGradeChange = (value: string) => {
+    setSelectedGrade(value)
+    setSelectedLesson('')
+  }
+
+  // Handle lesson change
+  const handleLessonChange = (value: string) => {
+    setSelectedLesson(value)
+  }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isUploadEnabled || !e.target.files || e.target.files.length === 0) {
@@ -71,10 +92,10 @@ const ContextualUploadForm = ({ onResourceUploaded }: ContextualUploadFormProps)
           <select 
             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
+            onChange={(e) => handleSubjectChange(e.target.value)}
           >
             <option value="">Select Subject</option>
-            {subjects.map(subject => (
+            {availableSubjects.map(subject => (
               <option key={subject} value={subject}>{subject}</option>
             ))}
           </select>
@@ -88,10 +109,11 @@ const ContextualUploadForm = ({ onResourceUploaded }: ContextualUploadFormProps)
           <select 
             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={selectedGrade}
-            onChange={(e) => setSelectedGrade(e.target.value)}
+            onChange={(e) => handleGradeChange(e.target.value)}
+            disabled={!selectedSubject}
           >
             <option value="">Select Grade</option>
-            {grades.map(grade => (
+            {availableGrades.map(grade => (
               <option key={grade} value={grade}>Grade {grade}</option>
             ))}
           </select>
@@ -105,10 +127,11 @@ const ContextualUploadForm = ({ onResourceUploaded }: ContextualUploadFormProps)
           <select 
             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={selectedLesson}
-            onChange={(e) => setSelectedLesson(e.target.value)}
+            onChange={(e) => handleLessonChange(e.target.value)}
+            disabled={!selectedGrade}
           >
             <option value="">Select Lesson</option>
-            {lessons.map(lesson => (
+            {availableLessons.map(lesson => (
               <option key={lesson} value={lesson}>{lesson}</option>
             ))}
           </select>
@@ -148,6 +171,16 @@ const ContextualUploadForm = ({ onResourceUploaded }: ContextualUploadFormProps)
         {!isUploadEnabled && (
           <div className="mt-2 text-amber-600 dark:text-amber-400">
             ⚠️ Please select Subject, Grade, and Lesson before uploading
+          </div>
+        )}
+        {selectedSubject && !selectedGrade && (
+          <div className="mt-2 text-blue-600 dark:text-blue-400">
+            💡 Now select a grade for {selectedSubject}
+          </div>
+        )}
+        {selectedSubject && selectedGrade && !selectedLesson && (
+          <div className="mt-2 text-blue-600 dark:text-blue-400">
+            💡 Now select a lesson from Grade {selectedGrade} {selectedSubject}
           </div>
         )}
       </div>
