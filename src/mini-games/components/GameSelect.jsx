@@ -10,7 +10,7 @@ const GameSelect = () => {
     mathematics: [
       { name: 'Math Runner', description: 'Run through levels solving math problems to avoid obstacles.', icon: '🏃‍♂️', color: 'from-blue-500 to-indigo-600', hoverColor: 'hover:from-blue-600 hover:to-indigo-700' },
       { name: 'Equation Builder Puzzle', description: 'Drag and drop numbers/operators to form correct equations.', icon: '🧩', color: 'from-purple-500 to-blue-600', hoverColor: 'hover:from-purple-600 hover:to-blue-700' },
-      { name: 'Geometry Shooter', description: 'Shoot the correct shapes, angles, or constructions.', icon: '🎯', color: 'from-indigo-500 to-purple-600', hoverColor: 'hover:from-indigo-600 hover:to-purple-700' }
+      { name: 'Math Balloon Pop', description: 'Pop the balloons with correct answers before they float away.', icon: '🎈', color: 'from-indigo-500 to-purple-600', hoverColor: 'hover:from-indigo-600 hover:to-purple-700' }
     ],
     'computer-science': [
       { name: 'Code Breaker', description: 'Solve coding challenges to unlock levels.', icon: '🐛', color: 'from-green-500 to-teal-600', hoverColor: 'hover:from-green-600 hover:to-teal-700' },

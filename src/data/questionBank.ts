@@ -13,10 +13,10 @@ export interface Question {
 
 export interface EquationQuestion {
   id: number
-  targetResult: number
-  availableNumbers: number[]
-  availableOperators: string[]
+  equation: string // Equation with blanks marked as _ or [blank]
+  availableOptions: (string | number)[] // Options to drag into blanks
   difficulty: number
+  // No more fixed blanks array - validation will be done by equation evaluation
 }
 
 export interface TargetQuestion {
@@ -268,83 +268,189 @@ export const EQUATION_QUESTION_BANK: Record<string, Record<string, Record<string
   mathematics: {
     'grade-6': {
       'Fractions': [
-        { id: 1, targetResult: 5, availableNumbers: [2, 3, 1], availableOperators: ['+', '-'], difficulty: 1 },
-        { id: 2, targetResult: 8, availableNumbers: [4, 2, 6], availableOperators: ['+', '-'], difficulty: 1 },
-        { id: 3, targetResult: 12, availableNumbers: [3, 4, 2], availableOperators: ['*', '+'], difficulty: 1 },
-        { id: 4, targetResult: 15, availableNumbers: [5, 3, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 5, targetResult: 20, availableNumbers: [4, 5, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 6, targetResult: 7, availableNumbers: [3, 4, 1], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 7, targetResult: 18, availableNumbers: [6, 3, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 8, targetResult: 10, availableNumbers: [5, 2, 3], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 9, targetResult: 24, availableNumbers: [6, 4, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 10, targetResult: 14, availableNumbers: [7, 2, 5], availableOperators: ['+', '-'], difficulty: 3 },
-        { id: 11, targetResult: 16, availableNumbers: [4, 4, 2], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 12, targetResult: 9, availableNumbers: [3, 3, 6], availableOperators: ['+', '-'], difficulty: 3 },
-        { id: 13, targetResult: 30, availableNumbers: [5, 6, 3], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 14, targetResult: 11, availableNumbers: [8, 3, 2], availableOperators: ['+', '-'], difficulty: 3 },
-        { id: 15, targetResult: 21, availableNumbers: [7, 3, 4], availableOperators: ['*', '+'], difficulty: 3 }
+        { id: 1, equation: '_ + _ = 8', availableOptions: [2, 3, 5, 7, 4, 6], difficulty: 1 },
+        { id: 2, equation: '_ - _ = 4', availableOptions: [1, 2, 3, 7, 8, 5], difficulty: 1 },
+        { id: 3, equation: '_ × _ = 12', availableOptions: [2, 3, 4, 6, 5, 1], difficulty: 1 },
+        { id: 4, equation: '_ + _ = 10', availableOptions: [2, 4, 6, 8, 3, 5], difficulty: 2 },
+        { id: 5, equation: '_ × _ = 15', availableOptions: [2, 3, 5, 7, 4, 6], difficulty: 2 },
+        { id: 6, equation: '_ - _ = 2', availableOptions: [1, 2, 3, 5, 6, 4], difficulty: 2 },
+        { id: 7, equation: '_ ÷ _ = 3', availableOptions: [2, 3, 6, 9, 4, 5], difficulty: 2 },
+        { id: 8, equation: '_ + _ = 9', availableOptions: [2, 4, 5, 7, 3, 6], difficulty: 2 },
+        { id: 9, equation: '_ × _ = 18', availableOptions: [2, 3, 6, 9, 4, 5], difficulty: 2 },
+        { id: 10, equation: '_ - _ = 5', availableOptions: [3, 5, 7, 8, 9, 6], difficulty: 3 },
+        { id: 11, equation: '_ × _ = 20', availableOptions: [2, 4, 5, 8, 6, 3], difficulty: 3 },
+        { id: 12, equation: '_ ÷ _ = 4', availableOptions: [3, 4, 6, 12, 8, 2], difficulty: 3 },
+        { id: 13, equation: '_ + _ = 15', availableOptions: [5, 6, 7, 8, 9, 4], difficulty: 3 },
+        { id: 14, equation: '_ - _ = 6', availableOptions: [4, 6, 8, 10, 12, 5], difficulty: 3 },
+        { id: 15, equation: '_ × _ = 24', availableOptions: [3, 4, 6, 8, 5, 7], difficulty: 3 }
       ],
       'Algebra Basics': [
-        { id: 1, targetResult: 13, availableNumbers: [5, 8, 3], availableOperators: ['+', '-'], difficulty: 1 },
-        { id: 2, targetResult: 16, availableNumbers: [4, 4, 2], availableOperators: ['*', '+'], difficulty: 1 },
-        { id: 3, targetResult: 6, availableNumbers: [9, 3, 2], availableOperators: ['-', '+'], difficulty: 1 },
-        { id: 4, targetResult: 25, availableNumbers: [5, 5, 3], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 5, targetResult: 17, availableNumbers: [12, 5, 4], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 6, targetResult: 36, availableNumbers: [6, 6, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 7, targetResult: 19, availableNumbers: [15, 4, 7], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 8, targetResult: 28, availableNumbers: [4, 7, 3], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 9, targetResult: 23, availableNumbers: [18, 5, 6], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 10, targetResult: 48, availableNumbers: [8, 6, 4], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 11, targetResult: 31, availableNumbers: [25, 6, 8], availableOperators: ['+', '-'], difficulty: 3 },
-        { id: 12, targetResult: 42, availableNumbers: [6, 7, 5], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 13, targetResult: 29, availableNumbers: [35, 6, 9], availableOperators: ['-', '+'], difficulty: 3 },
-        { id: 14, targetResult: 54, availableNumbers: [9, 6, 3], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 15, targetResult: 37, availableNumbers: [42, 5, 8], availableOperators: ['-', '+'], difficulty: 3 }
+        { id: 1, equation: 'x + _ = 12', availableOptions: [3, 4, 5, 6, 7, 8], difficulty: 1 },
+        { id: 2, equation: '_ - x = 8', availableOptions: [12, 13, 14, 15, 16, 17], difficulty: 1 },
+        { id: 3, equation: '_ × 3 = 21', availableOptions: [5, 6, 7, 8, 9, 10], difficulty: 1 },
+        { id: 4, equation: 'x + _ = 20', availableOptions: [6, 7, 8, 9, 10, 11], difficulty: 2 },
+        { id: 5, equation: '_ - 3x = 9', availableOptions: [18, 21, 24, 27, 30, 33], difficulty: 2 },
+        { id: 6, equation: '2x + _ = 16', availableOptions: [2, 3, 4, 5, 6, 7], difficulty: 2 },
+        { id: 7, equation: '_ ÷ x = 5', availableOptions: [20, 22, 25, 28, 30, 32], difficulty: 2 },
+        { id: 8, equation: 'x² - _ = 16', availableOptions: [6, 7, 8, 9, 10, 11], difficulty: 2 },
+        { id: 9, equation: '_ + 2x = 18', availableOptions: [6, 7, 8, 9, 10, 11], difficulty: 2 },
+        { id: 10, equation: '3x - _ = 12', availableOptions: [4, 5, 6, 7, 8, 9], difficulty: 3 },
+        { id: 11, equation: '_ + x² = 34', availableOptions: [7, 8, 9, 10, 11, 12], difficulty: 3 },
+        { id: 12, equation: 'x³ + _ = 35', availableOptions: [6, 7, 8, 9, 10, 11], difficulty: 3 },
+        { id: 13, equation: '_ - 4x = 8', availableOptions: [24, 26, 28, 30, 32, 34], difficulty: 3 },
+        { id: 14, equation: '5x + _ = 35', availableOptions: [8, 9, 10, 11, 12, 13], difficulty: 3 },
+        { id: 15, equation: '_ ÷ (x-1) = 6', availableOptions: [24, 27, 30, 33, 36, 39], difficulty: 3 }
+      ]
+    },
+    'grade-10': {
+      'Quadratic Equations': [
+        { id: 1, equation: 'x² + _x + 12 = 0', availableOptions: [4, 5, 6, 7, 8, 9], difficulty: 1 },
+        { id: 2, equation: 'x² - _ = 0', availableOptions: [9, 16, 25, 36, 49, 64], difficulty: 1 },
+        { id: 3, equation: '_ + x² = 13', availableOptions: [2, 3, 4, 5, 6, 7], difficulty: 1 },
+        { id: 4, equation: 'x² + 6x + _ = 0', availableOptions: [5, 8, 9, 10, 12, 15], difficulty: 2 },
+        { id: 5, equation: '2x² - _ = 0', availableOptions: [8, 18, 32, 50, 72, 98], difficulty: 2 },
+        { id: 6, equation: 'x² - _x + 20 = 0', availableOptions: [8, 9, 10, 11, 12, 13], difficulty: 2 },
+        { id: 7, equation: '_ - 4x² = -36', availableOptions: [0, 4, 8, 12, 16, 20], difficulty: 2 },
+        { id: 8, equation: 'x² + 2x - _ = 0', availableOptions: [8, 15, 24, 35, 48, 63], difficulty: 2 },
+        { id: 9, equation: '3x² + _x + 3 = 0', availableOptions: [4, 5, 6, 7, 8, 9], difficulty: 2 },
+        { id: 10, equation: 'x² - 10x + _ = 0', availableOptions: [16, 21, 25, 30, 36, 42], difficulty: 3 },
+        { id: 11, equation: '_x² + 8x + 12 = 0', availableOptions: [1, 2, 3, 4, 5, 6], difficulty: 3 },
+        { id: 12, equation: 'x² + _x - 56 = 0', availableOptions: [1, 3, 5, 7, 9, 11], difficulty: 3 },
+        { id: 13, equation: '4x² - _x + 1 = 0', availableOptions: [2, 3, 4, 5, 6, 7], difficulty: 3 },
+        { id: 14, equation: 'x² + 12x + _ = 0', availableOptions: [27, 32, 35, 36, 40, 45], difficulty: 3 },
+        { id: 15, equation: '_x² - 18x + 81 = 0', availableOptions: [1, 2, 3, 4, 5, 6], difficulty: 3 }
+      ]
+    },
+    'grade-12': {
+      'Calculus': [
+        { id: 1, equation: '∫ cos x dx = _', availableOptions: ['sin x + C', 'cos x + C', '-sin x + C', 'tan x + C', 'x + C', '1 + C'], difficulty: 1 },
+        { id: 2, equation: '∫ _ dx = x + C', availableOptions: ['1', 'x', 'x²', '2x', '0', 'C'], difficulty: 1 },
+        { id: 3, equation: 'd/dx (x²) = _', availableOptions: ['x', '2x', 'x²', '2', '1', '0'], difficulty: 1 },
+        { id: 4, equation: '∫ 2x dx = _', availableOptions: ['x² + C', '2x² + C', 'x + C', '2x + C', 'x³ + C', '2 + C'], difficulty: 2 },
+        { id: 5, equation: 'd/dx (sin x) = _', availableOptions: ['cos x', '-cos x', 'sin x', '-sin x', 'tan x', '1'], difficulty: 2 },
+        { id: 6, equation: '∫ _ dx = ln|x| + C', availableOptions: ['1/x', 'x', '1', 'ln x', 'e^x', 'x²'], difficulty: 2 },
+        { id: 7, equation: 'd/dx (e^x) = _', availableOptions: ['e^x', 'x*e^x', 'e', 'x', '1', 'ln x'], difficulty: 2 },
+        { id: 8, equation: '∫ x² dx = _', availableOptions: ['x³/3 + C', 'x² + C', '2x + C', 'x³ + C', '3x² + C', 'x/3 + C'], difficulty: 2 },
+        { id: 9, equation: 'd/dx (ln x) = _', availableOptions: ['1/x', 'x', '1', 'ln x', 'e^x', '0'], difficulty: 2 },
+        { id: 10, equation: '∫ e^x dx = _', availableOptions: ['e^x + C', 'x*e^x + C', 'e^x/x + C', 'ln(e^x) + C', 'x + C', 'e + C'], difficulty: 3 },
+        { id: 11, equation: 'd/dx (x^n) = _', availableOptions: ['n*x^(n-1)', 'x^n', 'n*x^n', 'x^(n-1)', 'n*x', 'x^(n+1)'], difficulty: 3 },
+        { id: 12, equation: '∫ sin x dx = _', availableOptions: ['-cos x + C', 'cos x + C', 'sin x + C', '-sin x + C', 'tan x + C', '1 + C'], difficulty: 3 },
+        { id: 13, equation: 'd/dx (tan x) = _', availableOptions: ['sec² x', 'cos² x', 'sin² x', 'tan² x', '1', 'sec x'], difficulty: 3 },
+        { id: 14, equation: '∫ _ dx = -cos x + C', availableOptions: ['sin x', 'cos x', '-sin x', '-cos x', 'tan x', '1'], difficulty: 3 },
+        { id: 15, equation: 'd/dx (cos x) = _', availableOptions: ['-sin x', 'sin x', 'cos x', '-cos x', 'tan x', '0'], difficulty: 3 }
       ]
     }
   },
   physics: {
     'grade-8': {
       'Electricity and Circuits': [
-        { id: 1, targetResult: 12, availableNumbers: [6, 2, 4], availableOperators: ['*', '+'], difficulty: 1 },
-        { id: 2, targetResult: 15, availableNumbers: [10, 5, 3], availableOperators: ['+', '-'], difficulty: 1 },
-        { id: 3, targetResult: 8, availableNumbers: [4, 2, 6], availableOperators: ['*', '+'], difficulty: 1 },
-        { id: 4, targetResult: 18, availableNumbers: [6, 3, 9], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 5, targetResult: 22, availableNumbers: [15, 7, 4], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 6, targetResult: 24, availableNumbers: [4, 6, 8], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 7, targetResult: 11, availableNumbers: [14, 3, 5], availableOperators: ['-', '+'], difficulty: 2 },
-        { id: 8, targetResult: 32, availableNumbers: [8, 4, 2], availableOperators: ['*', '+'], difficulty: 2 },
-        { id: 9, targetResult: 26, availableNumbers: [20, 6, 4], availableOperators: ['+', '-'], difficulty: 2 },
-        { id: 10, targetResult: 45, availableNumbers: [9, 5, 7], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 11, targetResult: 33, availableNumbers: [40, 7, 6], availableOperators: ['-', '+'], difficulty: 3 },
-        { id: 12, targetResult: 56, availableNumbers: [8, 7, 4], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 13, targetResult: 39, availableNumbers: [45, 6, 8], availableOperators: ['-', '+'], difficulty: 3 },
-        { id: 14, targetResult: 72, availableNumbers: [9, 8, 6], availableOperators: ['*', '+'], difficulty: 3 },
-        { id: 15, targetResult: 47, availableNumbers: [50, 3, 5], availableOperators: ['-', '+'], difficulty: 3 }
+        { id: 1, equation: 'V = I × _', availableOptions: ['R', 'P', 'W', 'Q', 'F', 'C'], difficulty: 1 },
+        { id: 2, equation: 'P = _ × I', availableOptions: ['V', 'R', 'W', 'Q', 'F', 'C'], difficulty: 1 },
+        { id: 3, equation: 'I = _ ÷ R', availableOptions: ['V', 'P', 'W', 'Q', 'F', 'C'], difficulty: 1 },
+        { id: 4, equation: 'R = _ ÷ I', availableOptions: ['V', 'P', 'W', 'Q', 'F', 'C'], difficulty: 2 },
+        { id: 5, equation: 'P = I² × _', availableOptions: ['R', 'V', 'W', 'Q', 'F', 'C'], difficulty: 2 },
+        { id: 6, equation: 'W = P × _', availableOptions: ['t', 'V', 'R', 'Q', 'F', 'C'], difficulty: 2 },
+        { id: 7, equation: 'Q = I × _', availableOptions: ['t', 'V', 'R', 'P', 'F', 'C'], difficulty: 2 },
+        { id: 8, equation: 'E = _ × Q', availableOptions: ['V', 'I', 'R', 'P', 'F', 'C'], difficulty: 2 },
+        { id: 9, equation: 'F = k × _', availableOptions: ['q₁q₂/r²', 'q₁+q₂', 'r²', 'q₁×q₂', 'r', 'k'], difficulty: 2 },
+        { id: 10, equation: 'C = Q ÷ _', availableOptions: ['V', 'I', 'R', 'P', 'F', 't'], difficulty: 3 },
+        { id: 11, equation: 'Rtotal = R₁ + R₂ + _', availableOptions: ['R₃', 'R₁R₂', '1/R₃', 'R₁-R₂', 'R₁×R₂', '2R₃'], difficulty: 3 },
+        { id: 12, equation: '1/Rtotal = 1/R₁ + 1/R₂ + _', availableOptions: ['1/R₃', 'R₃', 'R₁R₂', 'R₁+R₂', 'R₁×R₂', '2/R₃'], difficulty: 3 },
+        { id: 13, equation: 'η = (Pout ÷ _) × 100%', availableOptions: ['Pin', 'Pout', 'Ptotal', 'Ploss', 'V', 'I'], difficulty: 3 },
+        { id: 14, equation: 'τ = R × _', availableOptions: ['C', 'L', 'V', 'I', 'P', 'W'], difficulty: 3 },
+        { id: 15, equation: 'XL = 2π × f × _', availableOptions: ['L', 'C', 'R', 'f', 'π', 'ω'], difficulty: 3 }
       ]
     }
   },
   'computer-science': {
     'grade-7': {
       'Logic and Problem Solving': [
-        { id: 1, targetResult: 1, availableNumbers: [1, 0, 1], availableOperators: ['AND', 'OR'], difficulty: 1 },
-        { id: 2, targetResult: 0, availableNumbers: [0, 1, 0], availableOperators: ['AND', 'OR'], difficulty: 1 },
-        { id: 3, targetResult: 1, availableNumbers: [1, 1, 0], availableOperators: ['OR', 'AND'], difficulty: 1 },
-        { id: 4, targetResult: 0, availableNumbers: [1, 0, 1], availableOperators: ['AND', 'XOR'], difficulty: 2 },
-        { id: 5, targetResult: 1, availableNumbers: [0, 1, 1], availableOperators: ['OR', 'XOR'], difficulty: 2 },
-        { id: 6, targetResult: 0, availableNumbers: [1, 1, 0], availableOperators: ['XOR', 'AND'], difficulty: 2 },
-        { id: 7, targetResult: 1, availableNumbers: [0, 0, 1], availableOperators: ['OR', 'AND'], difficulty: 2 },
-        { id: 8, targetResult: 0, availableNumbers: [1, 1, 1], availableOperators: ['XOR', 'AND'], difficulty: 2 },
-        { id: 9, targetResult: 1, availableNumbers: [1, 0, 0], availableOperators: ['OR', 'XOR'], difficulty: 2 },
-        { id: 10, targetResult: 0, availableNumbers: [0, 1, 1], availableOperators: ['XOR', 'AND'], difficulty: 3 },
-        { id: 11, targetResult: 1, availableNumbers: [1, 1, 1], availableOperators: ['AND', 'OR'], difficulty: 3 },
-        { id: 12, targetResult: 0, availableNumbers: [1, 0, 0], availableOperators: ['AND', 'XOR'], difficulty: 3 },
-        { id: 13, targetResult: 1, availableNumbers: [0, 0, 0], availableOperators: ['OR', 'NOT'], difficulty: 3 },
-        { id: 14, targetResult: 0, availableNumbers: [1, 1, 0], availableOperators: ['AND', 'NOT'], difficulty: 3 },
-        { id: 15, targetResult: 1, availableNumbers: [0, 1, 0], availableOperators: ['XOR', 'OR'], difficulty: 3 }
+        { id: 1, equation: '_ AND 1 = 0', availableOptions: [0, 1, 'True', 'False', 'X', 'Y'], difficulty: 1 },
+        { id: 2, equation: '1 OR _ = 1', availableOptions: [0, 1, 'True', 'False', 'X', 'Y'], difficulty: 1 },
+        { id: 3, equation: 'NOT _ = 0', availableOptions: [0, 1, 'True', 'False', 'X', 'Y'], difficulty: 1 },
+        { id: 4, equation: '_ XOR 1 = 0', availableOptions: [0, 1, 'True', 'False', 'X', 'Y'], difficulty: 2 },
+        { id: 5, equation: '(A AND B) OR _ = 1', availableOptions: ['A', 'B', 'C', 'D', '0', '1'], difficulty: 2 },
+        { id: 6, equation: 'NOT(A OR _) = NOT A AND NOT B', availableOptions: ['A', 'B', 'C', 'D', '0', '1'], difficulty: 2 },
+        { id: 7, equation: 'A AND (B OR _) = (A AND B) OR (A AND C)', availableOptions: ['A', 'B', 'C', 'D', 'E', 'F'], difficulty: 2 },
+        { id: 8, equation: '_ NAND B = NOT(A AND B)', availableOptions: ['A', 'B', 'C', 'D', '0', '1'], difficulty: 2 },
+        { id: 9, equation: 'A NOR _ = NOT(A OR B)', availableOptions: ['A', 'B', 'C', 'D', '0', '1'], difficulty: 2 },
+        { id: 10, equation: '(A XOR B) XOR _ = A XOR (B XOR C)', availableOptions: ['A', 'B', 'C', 'D', 'E', 'F'], difficulty: 3 },
+        { id: 11, equation: 'A → B = _ OR B', availableOptions: ['A', 'NOT A', 'B', 'NOT B', 'C', 'D'], difficulty: 3 },
+        { id: 12, equation: 'A ↔ B = (A → B) AND (_→ A)', availableOptions: ['A', 'B', 'NOT A', 'NOT B', 'C', 'D'], difficulty: 3 },
+        { id: 13, equation: '∀x P(x) = P(a) AND P(b) AND _', availableOptions: ['P(a)', 'P(b)', 'P(c)', 'P(x)', 'Q(x)', 'R(x)'], difficulty: 3 },
+        { id: 14, equation: '∃x P(x) = P(a) OR P(b) OR _', availableOptions: ['P(a)', 'P(b)', 'P(c)', 'P(x)', 'Q(x)', 'R(x)'], difficulty: 3 },
+        { id: 15, equation: 'while(condition) { _ }', availableOptions: ['statement', 'condition', 'loop', 'break', 'continue', 'return'], difficulty: 3 }
       ]
     }
   }
+}
+
+// MCQ Question Bank for Geometry Shooter
+export const GEOMETRY_MCQ_BANK: Record<string, Record<string, Record<string, Question[]>>> = {
+  mathematics: {
+    'grade-6': {
+      'Geometry Fundamentals': [
+        { id: 1, question: 'How many sides does a triangle have?', options: ['2', '3', '4', '5'], correctAnswer: 1, difficulty: 1 },
+        { id: 2, question: 'How many sides does a hexagon have?', options: ['5', '6', '7', '8'], correctAnswer: 1, difficulty: 1 },
+        { id: 3, question: 'A right angle measures how many degrees?', options: ['45°', '90°', '180°', '360°'], correctAnswer: 1, difficulty: 1 },
+        { id: 4, question: 'How many vertices does a square have?', options: ['3', '4', '5', '6'], correctAnswer: 1, difficulty: 2 },
+        { id: 5, question: 'What is the sum of angles in a triangle?', options: ['90°', '180°', '270°', '360°'], correctAnswer: 1, difficulty: 2 },
+        { id: 6, question: 'How many sides does a pentagon have?', options: ['4', '5', '6', '7'], correctAnswer: 1, difficulty: 2 },
+        { id: 7, question: 'Which shape has all sides equal?', options: ['Rectangle', 'Square', 'Triangle', 'Circle'], correctAnswer: 1, difficulty: 2 },
+        { id: 8, question: 'How many faces does a cube have?', options: ['4', '6', '8', '12'], correctAnswer: 1, difficulty: 2 },
+        { id: 9, question: 'An obtuse angle is greater than?', options: ['30°', '60°', '90°', '120°'], correctAnswer: 2, difficulty: 2 },
+        { id: 10, question: 'How many sides does an octagon have?', options: ['6', '7', '8', '9'], correctAnswer: 2, difficulty: 3 },
+        { id: 11, question: 'What is a polygon with 10 sides called?', options: ['Nonagon', 'Decagon', 'Dodecagon', 'Hendecagon'], correctAnswer: 1, difficulty: 3 },
+        { id: 12, question: 'How many edges does a triangular prism have?', options: ['6', '9', '12', '15'], correctAnswer: 1, difficulty: 3 },
+        { id: 13, question: 'A straight angle measures?', options: ['90°', '180°', '270°', '360°'], correctAnswer: 1, difficulty: 3 },
+        { id: 14, question: 'How many diagonals does a rectangle have?', options: ['1', '2', '3', '4'], correctAnswer: 1, difficulty: 3 },
+        { id: 15, question: 'Which has no vertices?', options: ['Triangle', 'Square', 'Circle', 'Pentagon'], correctAnswer: 2, difficulty: 3 }
+      ]
+    },
+    'grade-7': {
+      'Triangles and Angles': [
+        { id: 1, question: 'In an isosceles triangle, how many sides are equal?', options: ['1', '2', '3', '0'], correctAnswer: 1, difficulty: 1 },
+        { id: 2, question: 'What type of triangle has all angles less than 90°?', options: ['Right', 'Acute', 'Obtuse', 'Scalene'], correctAnswer: 1, difficulty: 1 },
+        { id: 3, question: 'An exterior angle of a triangle equals?', options: ['Sum of two interior angles', 'Sum of all interior angles', 'One interior angle', 'Half of interior angle'], correctAnswer: 0, difficulty: 1 },
+        { id: 4, question: 'In a right triangle, the side opposite to right angle is?', options: ['Base', 'Height', 'Hypotenuse', 'Median'], correctAnswer: 2, difficulty: 2 },
+        { id: 5, question: 'If two angles of a triangle are 60° and 70°, the third angle is?', options: ['40°', '50°', '60°', '70°'], correctAnswer: 1, difficulty: 2 },
+        { id: 6, question: 'A triangle with sides 3, 4, 5 is?', options: ['Equilateral', 'Isosceles', 'Right', 'Obtuse'], correctAnswer: 2, difficulty: 2 },
+        { id: 7, question: 'Vertical angles are?', options: ['Equal', 'Supplementary', 'Complementary', 'Different'], correctAnswer: 0, difficulty: 2 },
+        { id: 8, question: 'Adjacent angles on a straight line are?', options: ['Equal', 'Vertical', 'Supplementary', 'Complementary'], correctAnswer: 2, difficulty: 2 },
+        { id: 9, question: 'In an equilateral triangle, each angle is?', options: ['30°', '45°', '60°', '90°'], correctAnswer: 2, difficulty: 2 },
+        { id: 10, question: 'The sum of complementary angles is?', options: ['90°', '180°', '270°', '360°'], correctAnswer: 0, difficulty: 3 },
+        { id: 11, question: 'In triangle ABC, if angle A = 90°, then BC is called?', options: ['Base', 'Height', 'Hypotenuse', 'Median'], correctAnswer: 2, difficulty: 3 },
+        { id: 12, question: 'If angles of a triangle are in ratio 1:2:3, the angles are?', options: ['30°, 60°, 90°', '20°, 40°, 120°', '45°, 90°, 45°', '60°, 60°, 60°'], correctAnswer: 0, difficulty: 3 },
+        { id: 13, question: 'The angle bisector of an angle divides it into?', options: ['Three equal parts', 'Two equal parts', 'Four equal parts', 'Unequal parts'], correctAnswer: 1, difficulty: 3 },
+        { id: 14, question: 'Linear pair of angles sum up to?', options: ['90°', '180°', '270°', '360°'], correctAnswer: 1, difficulty: 3 },
+        { id: 15, question: 'Alternate interior angles are?', options: ['Equal', 'Supplementary', 'Complementary', 'Vertical'], correctAnswer: 0, difficulty: 3 }
+      ]
+    },
+    'grade-10': {
+      'Circles and Mensuration': [
+        { id: 1, question: 'Area of a circle with radius r is?', options: ['πr²', '2πr', '2r', 'πd'], correctAnswer: 0, difficulty: 1 },
+        { id: 2, question: 'Circumference of a circle with radius r is?', options: ['πr²', '2πr', 'πr', 'r²'], correctAnswer: 1, difficulty: 1 },
+        { id: 3, question: 'Diameter is how many times the radius?', options: ['1', '2', '3', '4'], correctAnswer: 1, difficulty: 1 },
+        { id: 4, question: 'Area of a rectangle with length l and breadth b is?', options: ['l + b', '2(l + b)', 'lb', '2lb'], correctAnswer: 2, difficulty: 2 },
+        { id: 5, question: 'Perimeter of a square with side a is?', options: ['a²', '4a', '2a', 'a/4'], correctAnswer: 1, difficulty: 2 },
+        { id: 6, question: 'Volume of a cube with side a is?', options: ['a²', 'a³', '6a²', '4a'], correctAnswer: 1, difficulty: 2 },
+        { id: 7, question: 'Area of a triangle with base b and height h is?', options: ['bh', 'bh/2', '2bh', 'b + h'], correctAnswer: 1, difficulty: 2 },
+        { id: 8, question: 'Surface area of a sphere with radius r is?', options: ['4πr²', '2πr²', 'πr²', '4πr³'], correctAnswer: 0, difficulty: 2 },
+        { id: 9, question: 'Volume of a cylinder with radius r and height h is?', options: ['πr²h', '2πrh', 'πrh', 'πr²h/3'], correctAnswer: 0, difficulty: 2 },
+        { id: 10, question: 'Area of a trapezium with parallel sides a, b and height h is?', options: ['(a + b)h', '(a + b)h/2', 'abh', 'ah + bh'], correctAnswer: 1, difficulty: 3 },
+        { id: 11, question: 'Volume of a cone with radius r and height h is?', options: ['πr²h', 'πr²h/3', '2πr²h', 'πr²h/2'], correctAnswer: 1, difficulty: 3 },
+        { id: 12, question: 'Area of a rhombus with diagonals d₁ and d₂ is?', options: ['d₁d₂', 'd₁d₂/2', '2d₁d₂', 'd₁ + d₂'], correctAnswer: 1, difficulty: 3 },
+        { id: 13, question: 'Lateral surface area of a cylinder with radius r and height h is?', options: ['πr²h', '2πrh', 'πrh', '4πr²'], correctAnswer: 1, difficulty: 3 },
+        { id: 14, question: 'Area of sector with central angle θ (in radians) and radius r is?', options: ['θr²/2', 'θr²', '2θr²', 'θr'], correctAnswer: 0, difficulty: 3 },
+        { id: 15, question: 'Volume of a sphere with radius r is?', options: ['4πr³', '4πr³/3', '2πr³', 'πr³'], correctAnswer: 1, difficulty: 3 }
+      ]
+    }
+  }
+}
+
+// Helper function to get MCQ questions for Geometry Shooter
+export const getGeometryMCQForLesson = (subject: string, grade: string, lesson: string): Question[] => {
+  return GEOMETRY_MCQ_BANK[subject]?.[grade]?.[lesson] || []
 }
 
 // Target Shooting Question Bank (for Geometry Shooter)
@@ -353,13 +459,13 @@ export const TARGET_QUESTION_BANK: Record<string, Record<string, Record<string, 
     'grade-6': {
       'Geometry Fundamentals': [
         { id: 1, question: 'Shoot the triangle!', correctTarget: '🔺', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 1 },
-        { id: 2, question: 'Find the square!', correctTarget: '🟦', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 1 },
-        { id: 3, question: 'Shoot the circle!', correctTarget: '🔴', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 1 },
-        { id: 4, question: 'Find the shape with 4 sides!', correctTarget: '🟦', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 2 },
-        { id: 5, question: 'Shoot the shape with 3 vertices!', correctTarget: '🔺', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 2 },
-        { id: 6, question: 'Find the rectangle!', correctTarget: '⬛', targets: ['🔺', '🔴', '⬛', '⭐'], difficulty: 2 },
-        { id: 7, question: 'Shoot the pentagon!', correctTarget: '⭐', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 2 },
-        { id: 8, question: 'Find the hexagon!', correctTarget: '⬡', targets: ['🔺', '⬡', '🟦', '⭐'], difficulty: 2 },
+        { id: 2, question: 'Find the circle!', correctTarget: '🔴', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 1 },
+        { id: 3, question: 'Shoot the square!', correctTarget: '🟦', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 1 },
+        { id: 4, question: 'Find the star!', correctTarget: '⭐', targets: ['🔺', '🔴', '🟦', '⭐'], difficulty: 2 },
+        { id: 5, question: 'Shoot the pentagon!', correctTarget: '⬟', targets: ['⬟', '🔴', '🟦', '⭐'], difficulty: 2 },
+        { id: 6, question: 'Find the hexagon!', correctTarget: '⬢', targets: ['🔺', '⬢', '🟦', '⭐'], difficulty: 2 },
+        { id: 7, question: 'Shoot the rectangle!', correctTarget: '▭', targets: ['▭', '🔴', '🟦', '⭐'], difficulty: 2 },
+        { id: 8, question: 'Find the heart!', correctTarget: '❤️', targets: ['🔺', '❤️', '🟦', '⭐'], difficulty: 2 },
         { id: 9, question: 'Shoot the oval!', correctTarget: '🥚', targets: ['🔺', '🥚', '🟦', '⭐'], difficulty: 2 },
         { id: 10, question: 'Find the diamond!', correctTarget: '💎', targets: ['💎', '🔴', '🟦', '⭐'], difficulty: 3 },
         { id: 11, question: 'Shoot the octagon!', correctTarget: '🛑', targets: ['🔺', '🔴', '🛑', '⭐'], difficulty: 3 },
