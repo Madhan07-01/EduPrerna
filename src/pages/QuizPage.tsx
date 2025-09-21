@@ -1,24 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getLessonsForSubjectAndGrade, type Subject, type Grade } from '../data/lessonsData';
-import { SectionCard } from '../components/SectionCard';
 import { useAuth } from '../hooks/useAuth';
-import { loadLessonContent, type LessonContent } from '../utils/lessonContentLoader';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { loadLessonContent, type LessonContent, isOldFormat, isNewFormat } from '../utils/lessonContentLoader';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
-import { playSound, showConfetti, showShakeEffect } from '../utils/animations';
+import { showConfetti, playSound, showShakeEffect } from '../utils/animations';
 
-// Define types for our quiz structure
-interface Question {
-  question: string;
-  options: string[];
-  answer: string;
-  explanation: string;
-}
-
-interface Quiz {
-  questions: Question[];
-}
 
 // Define types for gamification data
 interface GamificationData {
@@ -38,7 +26,6 @@ export function QuizPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
   const [showExplanation, setShowExplanation] = useState<Record<number, boolean>>({}); // Track which explanations to show
   const [timeLeft, setTimeLeft] = useState(30); // 30 seconds per question
   const [showFeedback, setShowFeedback] = useState<{correct: boolean, message: string} | null>(null);
@@ -141,8 +128,8 @@ export function QuizPage() {
                   }
                 } as LessonContent);
               } else {
-                // Fallback to local content for Grade 6-9 chapters 1-3
-                if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+                // Fallback to local content for Grade 6-11 chapters 1-3
+                if (gradeParam >= 6 && gradeParam <= 11 && lessonIndex >= 0 && lessonIndex <= 2) {
                   const content = loadLessonContent(lessonIndex + 1, gradeParam);
                   if (content) {
                     setLessonContent(content);
@@ -154,8 +141,8 @@ export function QuizPage() {
                 }
               }
             } else {
-              // Fallback to local content for Grade 6-9 chapters 1-3
-              if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+              // Fallback to local content for Grade 6-11 chapters 1-3
+              if (gradeParam >= 6 && gradeParam <= 11 && lessonIndex >= 0 && lessonIndex <= 2) {
                 const content = loadLessonContent(lessonIndex + 1, gradeParam);
                 if (content) {
                   setLessonContent(content);
@@ -168,8 +155,8 @@ export function QuizPage() {
             }
           } catch (firestoreError) {
             console.error('Error fetching from Firestore:', firestoreError);
-            // Fallback to local content for Grade 6-9 chapters 1-3
-            if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+            // Fallback to local content for Grade 6-11 chapters 1-3
+            if (gradeParam >= 6 && gradeParam <= 11 && lessonIndex >= 0 && lessonIndex <= 2) {
               const content = loadLessonContent(lessonIndex + 1, gradeParam);
               if (content) {
                 setLessonContent(content);
@@ -182,7 +169,7 @@ export function QuizPage() {
           }
         } else {
           // For other subjects/grades, try local content first
-          if (subjectParam === 'Mathematics' && gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+          if (subjectParam === 'Mathematics' && gradeParam >= 6 && gradeParam <= 11 && lessonIndex >= 0 && lessonIndex <= 2) {
             const content = loadLessonContent(lessonIndex + 1, gradeParam);
             if (content) {
               setLessonContent(content);
@@ -268,67 +255,103 @@ export function QuizPage() {
     }, 2000);
   };
 
-  const handleAnswerSelect = (option: string) => {
-    if (quizSubmitted || showFeedback) return;
+  // Check if answer is correct
+  const checkAnswer = (option: string) => {
+    if (!lessonContent) return false;
     
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return false;
+    
+    // Handle old format
+    if (isOldFormat(lessonContent)) {
+      return option === (currentQuestion as any).answer;
+    }
+    // Handle new format
+    else if (isNewFormat(lessonContent)) {
+      return option === (currentQuestion as any).correctAnswer;
+    }
+    
+    return false;
+  };
+
+  const handleOptionSelect = (option: string) => {
+    if (showFeedback || !lessonContent) return;
+    
+    // Store selected answer
     setSelectedAnswers(prev => ({
       ...prev,
       [currentQuestionIndex]: option
     }));
-
+    
     // Clear any existing timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-
+    
     // Check if answer is correct
-    if (lessonContent) {
-      const currentQuestion = lessonContent.quiz.questions[questionOrder[currentQuestionIndex]];
-      const isCorrect = option === currentQuestion.answer;
-      
-      // Play sound effect
-      playSound(isCorrect ? 'correct' : 'incorrect');
-      
-      // Show animation effect
-      if (isCorrect) {
-        showConfetti();
-      } else if (quizCardRef.current) {
-        showShakeEffect(quizCardRef.current.id);
+    const isCorrect = checkAnswer(option);
+    
+    // Play sound effect
+    playSound(isCorrect ? 'correct' : 'incorrect');
+    
+    // Show animation effect
+    if (isCorrect) {
+      showConfetti();
+    } else if (quizCardRef.current) {
+      showShakeEffect(quizCardRef.current.id);
+    }
+    
+    // Show immediate feedback
+    const currentQuestion = getCurrentQuestion();
+    if (currentQuestion) {
+      let correctAnswerText = '';
+      if (isOldFormat(lessonContent)) {
+        correctAnswerText = (currentQuestion as any).answer;
+      } else if (isNewFormat(lessonContent)) {
+        correctAnswerText = (currentQuestion as any).correctAnswer;
       }
       
-      // Show immediate feedback
       setShowFeedback({
         correct: isCorrect,
         message: isCorrect 
           ? "✅ Well done! You got it right." 
-          : `❌ Not quite, the correct answer is ${currentQuestion.answer}.`
+          : `❌ Not quite, the correct answer is ${correctAnswerText}.`
       });
-
-      // Move to next question after a delay
-      setTimeout(() => {
-        setShowFeedback(null);
-        if (currentQuestionIndex < lessonContent.quiz.questions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-          setTimeLeft(30); // Reset timer
-        } else {
-          handleSubmitQuiz();
-        }
-      }, 2000);
     }
+    
+    // Move to next question after a delay
+    setTimeout(() => {
+      setShowFeedback(null);
+      if (lessonContent && currentQuestionIndex < getTotalQuestions() - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setTimeLeft(30); // Reset timer
+      } else {
+        handleSubmitQuiz();
+      }
+    }, 2000);
   };
 
   const handleHint = () => {
     if (lessonContent && !usedHints[currentQuestionIndex]) {
-      const currentQuestion = lessonContent.quiz.questions[questionOrder[currentQuestionIndex]];
+      const currentQuestion = getCurrentQuestion();
+      if (!currentQuestion) return;
+      
       setUsedHints(prev => ({ ...prev, [currentQuestionIndex]: true }));
       
       // Play sound effect
       playSound('hint');
       
       // Show hint feedback
+      let correctAnswerText = '';
+      if (lessonContent && isOldFormat(lessonContent)) {
+        correctAnswerText = (currentQuestion as any).answer;
+      } else if (lessonContent && isNewFormat(lessonContent)) {
+        correctAnswerText = (currentQuestion as any).correctAnswer;
+      }
+      
       setShowFeedback({
         correct: false,
-        message: `💡 Hint: The answer is related to "${currentQuestion.answer.substring(0, 1)}..."`
+        message: `💡 Hint: The answer is related to "${correctAnswerText.substring(0, 1)}..."`
       });
       
       // Hide hint after a delay
@@ -350,7 +373,7 @@ export function QuizPage() {
   };
 
   const handleNextQuestion = () => {
-    if (lessonContent && currentQuestionIndex < lessonContent.quiz.questions.length - 1) {
+    if (lessonContent && currentQuestionIndex < getTotalQuestions() - 1) {
       // Clear any existing timer
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -390,14 +413,24 @@ export function QuizPage() {
     
     // Calculate score
     let correctAnswers = 0;
-    lessonContent.quiz.questions.forEach((question, index) => {
-      if (selectedAnswers[index] === question.answer) {
+    const totalQuestions = getTotalQuestions();
+    
+    for (let i = 0; i < totalQuestions; i++) {
+      const question = lessonContent.quiz.questions[questionOrder[i]];
+      let correctAnswer = '';
+      
+      if (lessonContent && isOldFormat(lessonContent)) {
+        correctAnswer = (question as any).answer;
+      } else if (lessonContent && isNewFormat(lessonContent)) {
+        correctAnswer = (question as any).correctAnswer;
+      }
+      
+      if (selectedAnswers[i] === correctAnswer) {
         correctAnswers++;
       }
-    });
+    }
     
-    const finalScore = Math.round((correctAnswers / lessonContent.quiz.questions.length) * 100);
-    setScore(finalScore);
+    const finalScore = Math.round((correctAnswers / totalQuestions) * 100);
     setQuizSubmitted(true);
     
     // Play sound effect based on score
@@ -464,7 +497,7 @@ export function QuizPage() {
         lesson: lessonIndex + 1,
         lessonTitle: currentLesson,
         score: finalScore,
-        totalQuestions: lessonContent.quiz.questions.length,
+        totalQuestions: totalQuestions,
         correctAnswers,
         timestamp: new Date().toISOString(),
         selectedAnswers
@@ -478,65 +511,67 @@ export function QuizPage() {
     } catch (err) {
       console.error('Error saving quiz result to Firestore:', err);
       // Fallback to localStorage
-      try {
-        const quizResult = {
-          userId: currentUser.uid,
-          subject: subjectParam,
-          grade: gradeParam,
-          lesson: lessonIndex + 1,
-          lessonTitle: currentLesson,
-          score: finalScore,
-          totalQuestions: lessonContent.quiz.questions.length,
-          correctAnswers,
-          timestamp: new Date().toISOString(),
-          selectedAnswers
-        };
-        
-        const resultsKey = `quizResults_${subjectParam}_${gradeParam}_${lesson}`;
-        localStorage.setItem(resultsKey, JSON.stringify(quizResult));
-        console.log('Quiz result saved to localStorage as fallback');
-      } catch (localStorageErr) {
-        console.error('Error saving quiz result to localStorage:', localStorageErr);
-      }
+      localStorage.setItem(`quizResult_${subjectParam}_${gradeParam}_${lesson}`, JSON.stringify({
+        userId: currentUser.uid,
+        subject: subjectParam,
+        grade: gradeParam,
+        lesson: lessonIndex + 1,
+        lessonTitle: currentLesson,
+        score: finalScore,
+        totalQuestions: totalQuestions,
+        correctAnswers,
+        timestamp: new Date().toISOString(),
+        selectedAnswers
+      }));
     }
   };
 
-  const handleRetakeQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setSelectedAnswers({});
-    setQuizSubmitted(false);
-    setScore(0);
-    setShowExplanation({});
-    setTimeLeft(30);
-    setBookmarkedQuestions({});
-    setUsedHints({});
-    setShowFeedback(null);
-    
-    // Create new randomized question order
-    if (lessonContent && lessonContent.quiz) {
-      const indices = lessonContent.quiz.questions.map((_, index) => index);
-      const shuffled = [...indices].sort(() => Math.random() - 0.5);
-      setQuestionOrder(shuffled);
-    }
-    
-    // Restart timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          handleTimeUp();
-          return 30;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
+
 
   const handleBackToLessons = () => {
     navigate(`/lessons/${subjectParam}/${gradeParam}`);
+  };
+
+  // Helper function to get current question based on format
+  const getCurrentQuestion = () => {
+    if (!lessonContent) return null;
+    
+    const questions = lessonContent.quiz.questions;
+    if (questionOrder.length > currentQuestionIndex) {
+      return questions[questionOrder[currentQuestionIndex]];
+    }
+    return null;
+  };
+
+  // Helper function to get total questions based on format
+  const getTotalQuestions = () => {
+    if (!lessonContent) return 0;
+    return lessonContent.quiz.questions.length;
+  };
+
+  // Helper function to get question text based on format
+  const getQuestionText = (question: any) => {
+    if (lessonContent && isOldFormat(lessonContent)) {
+      return question.question;
+    } else if (lessonContent && isNewFormat(lessonContent)) {
+      return question.text;
+    }
+    return '';
+  };
+
+  // Helper function to get question options based on format
+  const getQuestionOptions = (question: any) => {
+    return question.options;
+  };
+
+  // Helper function to get question explanation based on format
+  const getQuestionExplanation = (question: any) => {
+    if (lessonContent && isOldFormat(lessonContent)) {
+      return question.explanation;
+    } else if (lessonContent && isNewFormat(lessonContent)) {
+      return question.explanation;
+    }
+    return '';
   };
 
   if (!currentLesson) {
@@ -592,188 +627,48 @@ export function QuizPage() {
     );
   }
 
-  // If we have quiz content, display it
-  if (lessonContent && lessonContent.quiz && questionOrder.length > 0) {
-    const currentQuestion = lessonContent.quiz.questions[questionOrder[currentQuestionIndex]];
-    const isLastQuestion = currentQuestionIndex === lessonContent.quiz.questions.length - 1;
-    const isFirstQuestion = currentQuestionIndex === 0;
-    const selectedAnswer = selectedAnswers[currentQuestionIndex];
-    
-    // Calculate progress
-    const progress = Math.round(((currentQuestionIndex + 1) / lessonContent.quiz.questions.length) * 100);
-
-    // Render circular progress timer
-    const renderTimer = () => {
-      const radius = 20;
-      const circumference = 2 * Math.PI * radius;
-      const progressOffset = circumference - (timeLeft / 30) * circumference;
-      
+  if (lessonContent) {
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) {
       return (
-        <div className="relative w-12 h-12">
-          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 50 50">
-            <circle
-              cx="25"
-              cy="25"
-              r={radius}
-              stroke="#e5e7eb"
-              strokeWidth="4"
-              fill="none"
-            />
-            <circle
-              cx="25"
-              cy="25"
-              r={radius}
-              stroke={timeLeft <= 5 ? "#ef4444" : "#3b82f6"}
-              strokeWidth="4"
-              fill="none"
-              strokeDasharray={circumference}
-              strokeDashoffset={progressOffset}
-              strokeLinecap="round"
-              className="transition-all duration-1000 ease-linear"
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">
-            {timeLeft}
-          </div>
-        </div>
-      );
-    };
-
-    if (quizSubmitted) {
-      return (
-        <div className="space-y-6 max-w-2xl mx-auto">
-          {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-slate-400">
-            <Link to="/courses" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Courses</Link>
-            <span>→</span>
-            <Link to={`/lessons/${subjectParam}/${gradeParam}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              {formatSubjectName(subjectParam)} Grade {gradeParam}
-            </Link>
-            <span>→</span>
-            <span className="font-medium">Quiz Results</span>
-          </div>
-          
-          {/* Gamification Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{gamificationData.points}</div>
-              <div className="text-sm text-gray-600 dark:text-slate-400">Points</div>
-            </div>
-            <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400">{gamificationData.streak} 🔥</div>
-              <div className="text-sm text-gray-600 dark:text-slate-400">Day Streak</div>
-            </div>
-            <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
-              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{gamificationData.badges.length}</div>
-              <div className="text-sm text-gray-600 dark:text-slate-400">Badges</div>
-            </div>
-          </div>
-          
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <div className={`inline-block p-6 rounded-2xl bg-gradient-to-br ${getSubjectColor(subjectParam)} text-white mb-4`}>
-              <div className="flex items-center justify-center space-x-4">
-                <span className="text-4xl">🎯</span>
-                <div className="text-left">
-                  <h1 className="text-2xl font-bold">Quiz Results</h1>
-                  <p className="text-lg opacity-90">{lessonContent.title}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Results */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-8 text-center shadow-lg">
-            <div className="text-6xl mb-6">
-              {score >= 80 ? '🎉' : score >= 60 ? '👍' : '📚'}
-            </div>
-            
-            <div className="space-y-3 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Your Score: {score}%
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-slate-400">
-                {score >= 80 
-                  ? currentLesson.includes('Rational') 
-                    ? '🌟 Outstanding! You are a Rational Numbers Master!' 
-                    : currentLesson.includes('Linear') 
-                      ? '🌟 Outstanding! You are an Equation Solver!' 
-                      : currentLesson.includes('Quadrilateral') 
-                        ? '🌟 Outstanding! You are a Geometry Explorer!' 
-                        : '🌟 Outstanding! Great job!'
-                  : score >= 60 
-                    ? '👏 Good job! You understood most of the material.' 
-                    : '📖 Keep studying! Review the lesson content and try again.'}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mt-6 mb-8">
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {Object.keys(selectedAnswers).filter(key => 
-                    selectedAnswers[parseInt(key)] === lessonContent.quiz.questions[parseInt(key)].answer
-                  ).length}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-slate-400">Correct</p>
-              </div>
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                  {lessonContent.quiz.questions.length}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-slate-400">Total Questions</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button
-                onClick={handleRetakeQuiz}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-              >
-                Retake Quiz
-              </button>
-              <button
-                onClick={handleBackToLessons}
-                className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
-              >
-                Back to Lessons
-              </button>
-            </div>
-          </div>
+        <div className="text-center py-12">
+          <div className="text-6xl mb-4">❓</div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Questions Found</h2>
+          <p className="text-gray-600 dark:text-slate-400 mb-6">
+            This quiz doesn't have any questions yet.
+          </p>
+          <Link
+            to={`/lessons/${subjectParam}/${gradeParam}/${lesson}`}
+            className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
+            ← Back to Lesson
+          </Link>
         </div>
       );
     }
 
+    // Calculate progress percentage
+    const progressPercentage = Math.round(((currentQuestionIndex + 1) / getTotalQuestions()) * 100);
+    
     return (
-      <div className="space-y-6 max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-slate-400">
+        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-slate-400 mb-6">
           <Link to="/courses" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Courses</Link>
           <span>→</span>
           <Link to={`/lessons/${subjectParam}/${gradeParam}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             {formatSubjectName(subjectParam)} Grade {gradeParam}
           </Link>
           <span>→</span>
+          <Link to={`/lessons/${subjectParam}/${gradeParam}/${lesson}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Lesson {lesson}
+          </Link>
+          <span>→</span>
           <span className="font-medium">Quiz</span>
         </div>
         
-        {/* Gamification Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{gamificationData.points}</div>
-            <div className="text-sm text-gray-600 dark:text-slate-400">Points</div>
-          </div>
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{gamificationData.streak} 🔥</div>
-            <div className="text-sm text-gray-600 dark:text-slate-400">Day Streak</div>
-          </div>
-          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{gamificationData.badges.length}</div>
-            <div className="text-sm text-gray-600 dark:text-slate-400">Badges</div>
-          </div>
-        </div>
-        
         {/* Header */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 mb-8">
           <div className={`inline-block p-6 rounded-2xl bg-gradient-to-br ${getSubjectColor(subjectParam)} text-white mb-4`}>
             <div className="flex items-center justify-center space-x-4">
               <span className="text-4xl">{getSubjectIcon(subjectParam)}</span>
@@ -786,9 +681,9 @@ export function QuizPage() {
         </div>
 
         {/* Timer and Progress */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
-            {renderTimer()}
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeLeft}</div>
             <span className="text-sm text-gray-600 dark:text-slate-400">seconds left</span>
           </div>
           
@@ -813,154 +708,156 @@ export function QuizPage() {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5">
+        <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-6">
           <div 
             className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
         <div className="text-right text-sm text-gray-600 dark:text-slate-400 mb-6">
-          Question {currentQuestionIndex + 1} of {lessonContent.quiz.questions.length}
+          Question {currentQuestionIndex + 1} of {getTotalQuestions()}
         </div>
-
-        {/* Feedback Message */}
-        {showFeedback && (
-          <div className={`p-4 rounded-lg mb-6 text-center ${
-            showFeedback.correct 
-              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' 
-              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200'
-          }`}>
-            {showFeedback.message}
-          </div>
-        )}
 
         {/* Quiz Content Card */}
         <div 
           ref={quizCardRef}
           id="quiz-card"
-          className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-lg"
+          className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-lg transition-all duration-300 ${
+            showFeedback && !showFeedback.correct ? 'animate-shake' : ''
+          }`}
         >
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-            {currentQuestion.question}
-          </h3>
-          
+          {/* Progress bar */}
+          <div className="mb-6">
+            <div className="flex justify-between text-sm text-gray-600 dark:text-slate-400 mb-1">
+              <span>Question {currentQuestionIndex + 1} of {getTotalQuestions()}</span>
+              <span>{timeLeft}s</span>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Question */}
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+            {getQuestionText(currentQuestion)}
+          </h2>
+
+          {/* Options */}
           <div className="space-y-3 mb-6">
-            {currentQuestion.options.map((option, optionIndex) => (
+            {getQuestionOptions(currentQuestion).map((option: string, index: number) => (
               <button
-                key={optionIndex}
-                onClick={() => handleAnswerSelect(option)}
-                disabled={quizSubmitted || showFeedback !== null}
-                className={`w-full text-left p-4 rounded-lg border transition-colors ${
-                  selectedAnswer === option
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                    : 'border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800'
+                key={index}
+                onClick={() => handleOptionSelect(option)}
+                disabled={showFeedback !== null}
+                className={`w-full text-left p-4 rounded-lg border transition-all ${
+                  selectedAnswers[currentQuestionIndex] === option
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                    : 'border-gray-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-700'
                 } ${
-                  quizSubmitted && option === currentQuestion.answer
-                    ? 'border-green-500 bg-green-50 dark:bg-green-900/30'
+                  showFeedback && checkAnswer(option)
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
                     : ''
                 } ${
-                  quizSubmitted && selectedAnswer === option && option !== currentQuestion.answer
-                    ? 'border-red-500 bg-red-50 dark:bg-red-900/30'
+                  showFeedback && selectedAnswers[currentQuestionIndex] === option && !checkAnswer(option)
+                    ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
                     : ''
+                } ${
+                  showFeedback ? 'cursor-default' : 'hover:bg-gray-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <div className="flex items-center">
-                  <div className={`flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
-                    selectedAnswer === option
+                  <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 flex-shrink-0 ${
+                    selectedAnswers[currentQuestionIndex] === option
                       ? 'border-blue-500 bg-blue-500 text-white'
-                      : 'border-gray-300 dark:border-slate-600'
+                      : 'border-gray-300 dark:border-slate-500'
                   } ${
-                    quizSubmitted && option === currentQuestion.answer
+                    showFeedback && checkAnswer(option)
                       ? 'border-green-500 bg-green-500 text-white'
                       : ''
                   } ${
-                    quizSubmitted && selectedAnswer === option && option !== currentQuestion.answer
+                    showFeedback && selectedAnswers[currentQuestionIndex] === option && !checkAnswer(option)
                       ? 'border-red-500 bg-red-500 text-white'
                       : ''
                   }`}>
-                    {String.fromCharCode(65 + optionIndex)}
+                    {String.fromCharCode(65 + index)}
                   </div>
-                  <span>{option}</span>
+                  <span className="text-gray-900 dark:text-slate-200">{option}</span>
                 </div>
               </button>
             ))}
           </div>
 
-          {/* Explanation Section */}
-          {quizSubmitted && (
-            <div className="mt-4 mb-6">
-              <button
-                onClick={() => toggleExplanation(currentQuestionIndex)}
-                className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-              >
-                <span className="mr-2">💡</span>
-                {showExplanation[currentQuestionIndex] ? 'Hide Explanation' : 'Show Explanation'}
-                <svg 
-                  className={`w-5 h-5 ml-2 transform transition-transform ${
-                    showExplanation[currentQuestionIndex] ? 'rotate-180' : ''
-                  }`} 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              {showExplanation[currentQuestionIndex] && currentQuestion.explanation && (
-                <div className="mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-blue-800 dark:text-blue-200">
-                    <span className="font-semibold">Explanation:</span> {currentQuestion.explanation}
-                  </p>
-                </div>
-              )}
-
+          {/* Feedback */}
+          {showFeedback && (
+            <div className={`p-4 rounded-lg mb-6 ${
+              showFeedback.correct 
+                ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' 
+                : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+            }`}>
+              <p className="font-medium text-gray-900 dark:text-white">{showFeedback.message}</p>
             </div>
           )}
 
-          {/* Correct Answer Feedback */}
-          {quizSubmitted && selectedAnswer !== currentQuestion.answer && (
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 mb-6">
-              <p className="text-green-800 dark:text-green-200">
-                <span className="font-semibold">Correct Answer:</span> {currentQuestion.answer}
+          {/* Explanation */}
+          {showExplanation[currentQuestionIndex] && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+              <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">Explanation:</h3>
+              <p className="text-gray-800 dark:text-slate-300">
+                {getQuestionExplanation(currentQuestion)}
               </p>
             </div>
           )}
 
-          <div className="flex justify-between pt-4">
+          {/* Actions */}
+          <div className="flex flex-wrap gap-3">
             <button
-              onClick={handlePreviousQuestion}
-              disabled={isFirstQuestion || showFeedback !== null}
-              className={`px-4 py-2 rounded-lg ${
-                isFirstQuestion
-                  ? 'bg-gray-100 text-gray-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
-              }`}
+              onClick={() => toggleExplanation(currentQuestionIndex)}
+              className="px-4 py-2 text-sm bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300 rounded-lg transition-colors"
             >
-              ← Previous
+              {showExplanation[currentQuestionIndex] ? 'Hide Explanation' : 'Show Explanation'}
             </button>
             
-            {isLastQuestion ? (
+            <button
+              onClick={handleHint}
+              disabled={usedHints[currentQuestionIndex] || showFeedback !== null}
+              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                usedHints[currentQuestionIndex] || showFeedback !== null
+                  ? 'bg-gray-100 dark:bg-slate-700 text-gray-400 dark:text-slate-500 cursor-not-allowed'
+                  : 'bg-yellow-100 dark:bg-yellow-900/30 hover:bg-yellow-200 dark:hover:bg-yellow-800 text-yellow-800 dark:text-yellow-200'
+              }`}
+            >
+              💡 Hint {usedHints[currentQuestionIndex] ? '(Used)' : ''}
+            </button>
+            
+            <button
+              onClick={toggleBookmark}
+              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                bookmarkedQuestions[currentQuestionIndex]
+                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200'
+                  : 'bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300'
+              }`}
+            >
+              {bookmarkedQuestions[currentQuestionIndex] ? '🔖 Bookmarked' : '🔖 Bookmark'}
+            </button>
+            
+            <div className="flex-1"></div>
+            
+            {currentQuestionIndex > 0 && (
               <button
-                onClick={handleSubmitQuiz}
-                disabled={!selectedAnswer || showFeedback !== null}
-                className={`px-4 py-2 rounded-lg ${
-                  selectedAnswer
-                    ? 'bg-green-600 hover:bg-green-700 text-white'
-                    : 'bg-gray-300 text-gray-500 dark:bg-slate-700 dark:text-slate-400 cursor-not-allowed'
-                }`}
+                onClick={handlePreviousQuestion}
+                className="px-4 py-2 text-sm bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300 rounded-lg transition-colors"
               >
-                Submit Quiz
+                ← Previous
               </button>
-            ) : (
+            )}
+            
+            {currentQuestionIndex < getTotalQuestions() - 1 && (
               <button
                 onClick={handleNextQuestion}
-                disabled={!selectedAnswer || showFeedback !== null}
-                className={`px-4 py-2 rounded-lg ${
-                  selectedAnswer
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                    : 'bg-gray-300 text-gray-500 dark:bg-slate-700 dark:text-slate-400 cursor-not-allowed'
-                }`}
+                className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
               >
                 Next →
               </button>
@@ -971,11 +868,18 @@ export function QuizPage() {
         {/* Navigation */}
         <div className="flex justify-between items-center pt-6">
           <Link
-            to={`/lessons/${subjectParam}/${gradeParam}`}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+            to={`/lessons/${subjectParam}/${gradeParam}/${lesson}`}
+            className="inline-flex items-center px-4 py-2 text-gray-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
-            ← Back to Lessons
+            ← Back to Lesson
           </Link>
+          
+          <button
+            onClick={handleSubmitQuiz}
+            className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all transform hover:scale-105 shadow-lg"
+          >
+            Submit Quiz
+          </button>
         </div>
       </div>
     );

@@ -1,0 +1,93 @@
+{
+  "title": "Relations and Functions",
+  "subtopics": [
+    {
+      "title": "Introduction to Relations and Functions",
+      "content": "<h4>Introduction</h4><p>In mathematics, sets are the foundation. Once we know how to describe sets, we often want to study how elements of one set are connected to elements of another. This brings us to relations and functions.</p><p>A relation shows how two sets are associated.</p><p>A function is a special kind of relation where each element of the first set is connected to exactly one element of the second set.</p><p>These concepts are central in algebra, calculus, computer science, and real-world applications like mapping, coding, and data analysis.</p>"
+    },
+    {
+      "title": "Cartesian Product of Sets",
+      "content": "<h4>Cartesian Product of Sets</h4><p>If A and B are two sets, then the Cartesian product is:</p><p>A × B = {(a, b): a ∈ A, b ∈ B}</p><p><strong>Example:</strong> If A = {1, 2}, B = {x, y}, then</p><p>A × B = {(1, x), (1, y), (2, x), (2, y)}</p>"
+    },
+    {
+      "title": "Relations",
+      "content": "<h4>Relations</h4><p>A relation from set A to set B is any subset of A × B.</p><p><strong>Example:</strong> Let A = {1, 2, 3}, B = {4, 5}.</p><p>A possible relation: R = {(1, 4), (2, 5)}.</p><h4>Types of Relations:</h4><ul><li><strong>Empty relation:</strong> No elements.</li><li><strong>Universal relation:</strong> Every element of A × B.</li><li><strong>Reflexive:</strong> Every element relates to itself.</li><li><strong>Symmetric:</strong> If (a, b) ∈ R, then (b, a) ∈ R.</li><li><strong>Transitive:</strong> If (a, b) ∈ R and (b, c) ∈ R, then (a, c) ∈ R.</li><li><strong>Equivalence relation:</strong> Reflexive + Symmetric + Transitive.</li></ul>"
+    },
+    {
+      "title": "Functions",
+      "content": "<h4>Functions</h4><p>A function is a relation where:</p><ul><li>Every element of the domain has an image.</li><li>No element of the domain is mapped to more than one image.</li></ul><p>If f: A → B, then for each a ∈ A, there exists a unique b ∈ B such that (a, b) ∈ f.</p><p>Here,</p><ul><li>A = domain</li><li>B = codomain</li><li>The set of actual outputs is called the range</li></ul>"
+    },
+    {
+      "title": "Types of Functions",
+      "content": "<h4>Types of Functions</h4><ul><li><strong>One-one (Injective):</strong> Different elements of domain map to different elements of codomain.</li><li><strong>Onto (Surjective):</strong> Every element of codomain is mapped by some element of domain.</li><li><strong>One-one onto (Bijective):</strong> Both one-one and onto.</li><li><strong>Constant function:</strong> All domain elements map to the same codomain element.</li><li><strong>Identity function:</strong> f(x) = x for all x in domain.</li></ul>"
+    },
+    {
+      "title": "Composition and Inverse of Functions",
+      "content": "<h4>Composition of Functions</h4><p>If f: A → B and g: B → C, then composition is:</p><p>(g ∘ f)(x) = g(f(x))</p><h4>Inverse of a Function</h4><p>A function f: A → B has an inverse f⁻¹: B → A if and only if f is bijective.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "If A = {1, 2} and B = {a, b}, what is the number of elements in A × B?",
+        "options": ["2", "4", "6", "8"],
+        "answer": "4",
+        "explanation": "The Cartesian product A × B contains all ordered pairs (a, b) where a ∈ A and b ∈ B. Since A has 2 elements and B has 2 elements, A × B has 2 × 2 = 4 elements: {(1, a), (1, b), (2, a), (2, b)}."
+      },
+      {
+        "question": "Which of the following is NOT a function?",
+        "options": ["f(x) = 2x + 1", "f(x) = x²", "f(x) = ±√x", "f(x) = x³"],
+        "answer": "f(x) = ±√x",
+        "explanation": "A function must assign exactly one output to each input. f(x) = ±√x assigns two values (positive and negative) to each positive input, so it is not a function. The other options are all valid functions."
+      },
+      {
+        "question": "What is the domain of f(x) = 1/(x - 2)?",
+        "options": ["R", "R - {0}", "R - {2}", "R - {-2}"],
+        "answer": "R - {2}",
+        "explanation": "The function f(x) = 1/(x - 2) is undefined when the denominator is zero, which occurs when x = 2. Therefore, the domain is all real numbers except 2, written as R - {2}."
+      },
+      {
+        "question": "If R = {(a, a): a ∈ A} where A = {1, 2, 3}, what type of relation is R?",
+        "options": ["Empty relation", "Universal relation", "Equivalence relation", "Function"],
+        "answer": "Equivalence relation",
+        "explanation": "R = {(1, 1), (2, 2), (3, 3)} is reflexive (every element relates to itself), symmetric (if (a, a) ∈ R, then (a, a) ∈ R), and transitive (if (a, a) ∈ R and (a, a) ∈ R, then (a, a) ∈ R). Therefore, R is an equivalence relation."
+      },
+      {
+        "question": "If f: R → R is defined by f(x) = 2x + 3, what type of function is f?",
+        "options": ["One-one but not onto", "Onto but not one-one", "Bijective", "Neither one-one nor onto"],
+        "answer": "Bijective",
+        "explanation": "f(x) = 2x + 3 is a linear function with slope 2 ≠ 0. It is one-one (injective) because different inputs give different outputs, and it is onto (surjective) because every real number y can be obtained as f(x) = y by choosing x = (y - 3)/2. Therefore, f is bijective."
+      },
+      {
+        "question": "What is the number of relations from a set with 3 elements to a set with 2 elements?",
+        "options": ["5", "6", "8", "64"],
+        "answer": "64",
+        "explanation": "If set A has 3 elements and set B has 2 elements, then A × B has 3 × 2 = 6 elements. A relation from A to B is any subset of A × B. The number of subsets of a set with 6 elements is 2⁶ = 64."
+      },
+      {
+        "question": "What type of function is f(x) = x³?",
+        "options": ["One-one but not onto", "Onto but not one-one", "Bijective", "Neither one-one nor onto"],
+        "answer": "Bijective",
+        "explanation": "f(x) = x³ is strictly increasing, meaning different inputs give different outputs (one-one). It also covers all real numbers in its range (onto). Therefore, f is bijective."
+      },
+      {
+        "question": "If f(x) = 2x + 1 and g(x) = x², what is (g ∘ f)(x)?",
+        "options": ["(2x + 1)²", "2x² + 1", "4x² + 4x + 1", "2x² + 4x + 1"],
+        "answer": "(2x + 1)²",
+        "explanation": "The composition (g ∘ f)(x) = g(f(x)) = g(2x + 1) = (2x + 1)²."
+      },
+      {
+        "question": "If f(x) = 3x - 4, what is f⁻¹(x)?",
+        "options": ["(x - 4)/3", "(x + 4)/3", "3x + 4", "(3x - 4)⁻¹"],
+        "answer": "(x + 4)/3",
+        "explanation": "To find the inverse, we solve y = 3x - 4 for x: y = 3x - 4 → y + 4 = 3x → x = (y + 4)/3. Therefore, f⁻¹(x) = (x + 4)/3."
+      },
+      {
+        "question": "What is the identity function on R?",
+        "options": ["f(x) = 0", "f(x) = 1", "f(x) = x", "f(x) = -x"],
+        "answer": "f(x) = x",
+        "explanation": "The identity function on R maps every real number to itself, so f(x) = x for all x ∈ R."
+      }
+    ]
+  }
+}

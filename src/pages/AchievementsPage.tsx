@@ -2,7 +2,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { useState, useEffect } from 'react'
 import StreakLeaderboard from '../components/StreakLeaderboard'
 import { useAuth } from '../hooks/useAuth'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
 import { useLocation } from 'react-router-dom'
 

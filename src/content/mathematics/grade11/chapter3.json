@@ -1,0 +1,97 @@
+{
+  "title": "Trigonometric Functions",
+  "subtopics": [
+    {
+      "title": "Introduction to Trigonometric Functions",
+      "content": "<h4>Introduction</h4><p>Trigonometry (from Greek: trigonon = triangle, metron = measure) deals with the relationship between the angles and sides of a triangle. Extending beyond right-angled triangles, trigonometric functions are defined for all real numbers using the unit circle. These functions play a key role in geometry, physics, engineering, astronomy, and calculus.</p>"
+    },
+    {
+      "title": "Angles and Their Measurement",
+      "content": "<h4>Angles</h4><p>Angles are measured in degrees (°) and radians (rad).</p><p>180° = π radians.</p><p>General formula:</p><p>θ (in radians) = (π/180) × θ (in degrees)</p>"
+    },
+    {
+      "title": "Trigonometric Functions on Unit Circle",
+      "content": "<h4>Trigonometric Functions on Unit Circle</h4><p>On a unit circle (circle with radius 1):</p><p>For an angle θ, if P(x, y) lies on the circle, then:</p><ul><li>sin θ = y</li><li>cos θ = x</li><li>tan θ = y/x (x ≠ 0)</li><li>cot θ = x/y</li><li>sec θ = 1/x</li><li>csc θ = 1/y</li></ul>"
+    },
+    {
+      "title": "Signs of Trigonometric Functions",
+      "content": "<h4>Signs of Trigonometric Functions (ASTC Rule)</h4><p>In four quadrants:</p><ul><li><strong>I Quadrant:</strong> All positive</li><li><strong>II Quadrant:</strong> Sine, cosec positive</li><li><strong>III Quadrant:</strong> Tan, cot positive</li><li><strong>IV Quadrant:</strong> Cos, sec positive</li></ul>"
+    },
+    {
+      "title": "Trigonometric Identities",
+      "content": "<h4>Trigonometric Identities</h4><ul><li>sin²θ + cos²θ = 1</li><li>1 + tan²θ = sec²θ</li><li>1 + cot²θ = csc²θ</li></ul>"
+    },
+    {
+      "title": "Periodicity and Graphs",
+      "content": "<h4>Periodicity</h4><ul><li>sin θ, cos θ: Period = 2π</li><li>tan θ, cot θ: Period = π</li></ul><h4>Graphs of Trigonometric Functions</h4><p>Sine and cosine: Smooth, wave-like (bounded between -1 and 1).</p><p>Tangent and cotangent: Have vertical asymptotes.</p><p>Secant and cosecant: Reciprocal wave-like curves with asymptotes.</p>"
+    },
+    {
+      "title": "Principal Values",
+      "content": "<h4>Principal Values</h4><ul><li>sin⁻¹x ∈ [-π/2, π/2]</li><li>cos⁻¹x ∈ [0, π]</li><li>tan⁻¹x ∈ (-π/2, π/2)</li></ul>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Convert 150° to radians.",
+        "options": ["3π/4", "5π/6", "2π/3", "7π/6"],
+        "answer": "5π/6",
+        "explanation": "To convert degrees to radians, multiply by π/180°. 150° × (π/180°) = 150π/180 = 5π/6 radians."
+      },
+      {
+        "question": "If sin θ = 3/5 and θ is in the first quadrant, what is cos θ?",
+        "options": ["3/5", "4/5", "5/4", "5/3"],
+        "answer": "4/5",
+        "explanation": "Using the identity sin²θ + cos²θ = 1: (3/5)² + cos²θ = 1 → 9/25 + cos²θ = 1 → cos²θ = 16/25 → cos θ = ±4/5. Since θ is in the first quadrant, cos θ is positive, so cos θ = 4/5."
+      },
+      {
+        "question": "Which of the following is true?",
+        "options": ["sin²θ - cos²θ = 1", "tan²θ + 1 = sec²θ", "cot²θ - 1 = csc²θ", "sin θ + cos θ = 1"],
+        "answer": "tan²θ + 1 = sec²θ",
+        "explanation": "This is one of the fundamental trigonometric identities. The other options are incorrect: sin²θ + cos²θ = 1 (not subtraction), cot²θ + 1 = csc²θ (not subtraction), and sin θ + cos θ = 1 is not generally true."
+      },
+      {
+        "question": "What is the period of tan x?",
+        "options": ["π/2", "π", "2π", "4π"],
+        "answer": "π",
+        "explanation": "The tangent function has a period of π, meaning tan(x + π) = tan(x) for all x in its domain."
+      },
+      {
+        "question": "If cos θ = -12/13 and θ is in the second quadrant, what is sin θ?",
+        "options": ["-5/13", "5/13", "12/13", "-12/13"],
+        "answer": "5/13",
+        "explanation": "Using sin²θ + cos²θ = 1: sin²θ + (-12/13)² = 1 → sin²θ + 144/169 = 1 → sin²θ = 25/169 → sin θ = ±5/13. Since θ is in the second quadrant, sin θ is positive, so sin θ = 5/13."
+      },
+      {
+        "question": "What is sin 225°?",
+        "options": ["-√2/2", "√2/2", "-1/2", "1/2"],
+        "answer": "-√2/2",
+        "explanation": "225° is in the third quadrant where sine is negative. 225° = 180° + 45°, so sin 225° = -sin 45° = -√2/2."
+      },
+      {
+        "question": "Which of the following is not defined?",
+        "options": ["tan(π/2)", "sin(π/2)", "cos(π/2)", "tan(π/4)"],
+        "answer": "tan(π/2)",
+        "explanation": "tan(π/2) is undefined because cos(π/2) = 0, and tan θ = sin θ/cos θ, which would involve division by zero. The other values are all defined: sin(π/2) = 1, cos(π/2) = 0, tan(π/4) = 1."
+      },
+      {
+        "question": "What is the principal value of sin⁻¹(-1/2)?",
+        "options": ["π/6", "-π/6", "5π/6", "-5π/6"],
+        "answer": "-π/6",
+        "explanation": "The principal value of sin⁻¹x lies in the interval [-π/2, π/2]. Since sin(-π/6) = -1/2 and -π/6 is in the required interval, sin⁻¹(-1/2) = -π/6."
+      },
+      {
+        "question": "If sin A = cos B, what is A + B?",
+        "options": ["90°", "180°", "45°", "360°"],
+        "answer": "90°",
+        "explanation": "If sin A = cos B, then A and B are complementary angles. This is because sin θ = cos(90° - θ). So if sin A = cos B, then A = 90° - B, which means A + B = 90°."
+      },
+      {
+        "question": "What is the range of y = sin x?",
+        "options": ["(-∞, ∞)", "[-1, 1]", "[0, 1]", "[-π/2, π/2]"],
+        "answer": "[-1, 1]",
+        "explanation": "The sine function oscillates between -1 and 1 for all real values of x. Therefore, the range of y = sin x is [-1, 1]."
+      }
+    ]
+  }
+}

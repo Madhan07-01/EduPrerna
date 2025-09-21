@@ -1,0 +1,232 @@
+{
+  "id": "grade12-inverse-trigonometric-functions",
+  "title": "Inverse Trigonometric Functions",
+  "description": "Study the principal value branches, properties, and graphs of inverse trigonometric functions.",
+  "chapters": [
+    {
+      "id": "principal-value-branches",
+      "title": "Principal Value Branches",
+      "content": [
+        {
+          "type": "text",
+          "text": "To make trigonometric functions invertible, we restrict their domains to ensure they are one-one and onto. These restricted domains define the principal value branches."
+        },
+        {
+          "type": "text",
+          "text": "Principal Value Branches:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "sin⁻¹x: Domain [-1,1], Range [-π/2, π/2]",
+            "cos⁻¹x: Domain [-1,1], Range [0, π]",
+            "tan⁻¹x: Domain R, Range (-π/2, π/2)",
+            "cot⁻¹x: Domain R, Range (0, π)",
+            "sec⁻¹x: Domain R-(-1,1), Range [0, π]-{π/2}",
+            "cosec⁻¹x: Domain R-(-1,1), Range [-π/2, π/2]-{0}"
+          ]
+        },
+        {
+          "type": "component",
+          "name": "InverseTrigUnitCircle",
+          "props": {}
+        }
+      ]
+    },
+    {
+      "id": "properties",
+      "title": "Properties",
+      "content": [
+        {
+          "type": "text",
+          "text": "Inverse trigonometric functions satisfy several important properties that are useful in simplifying expressions and solving equations."
+        },
+        {
+          "type": "text",
+          "text": "Reciprocal Relationships:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "sin⁻¹(1/x) = cosec⁻¹x for x ≥ 1 or x ≤ -1",
+            "cos⁻¹(1/x) = sec⁻¹x for x ≥ 1 or x ≤ -1",
+            "tan⁻¹(1/x) = cot⁻¹x for x > 0"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Symmetry Properties:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "sin⁻¹(-x) = -sin⁻¹x for x ∈ [-1,1]",
+            "cos⁻¹(-x) = π - cos⁻¹x for x ∈ [-1,1]",
+            "tan⁻¹(-x) = -tan⁻¹x for x ∈ R"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Complementary Relationships:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "sin⁻¹x + cos⁻¹x = π/2 for x ∈ [-1,1]",
+            "tan⁻¹x + cot⁻¹x = π/2 for x ∈ R",
+            "sec⁻¹x + cosec⁻¹x = π/2 for |x| ≥ 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "graphs",
+      "title": "Graphs",
+      "content": [
+        {
+          "type": "text",
+          "text": "The graphs of inverse trigonometric functions are obtained by reflecting the graphs of corresponding trigonometric functions in the line y = x."
+        },
+        {
+          "type": "text",
+          "text": "Key Characteristics:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Graphs of sin⁻¹x and tan⁻¹x are increasing functions",
+            "Graph of cos⁻¹x is a decreasing function",
+            "All inverse trigonometric functions are continuous in their domains",
+            "tan⁻¹x and cot⁻¹x are defined for all real numbers",
+            "sin⁻¹x, cos⁻¹x, sec⁻¹x, and cosec⁻¹x have bounded ranges"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": {
+    "title": "Inverse Trigonometric Functions Quiz",
+    "questions": [
+      {
+        "id": 1,
+        "text": "sin⁻¹(0) = ?",
+        "options": [
+          "a) π/2",
+          "b) 0",
+          "c) π",
+          "d) -π/2"
+        ],
+        "correctAnswer": "b",
+        "explanation": "sin⁻¹(0) = 0 because sin(0) = 0 and 0 is in the principal range [-π/2, π/2]."
+      },
+      {
+        "id": 2,
+        "text": "If cos⁻¹x = π/3, then x = ?",
+        "options": [
+          "a) 1/2",
+          "b) √3/2",
+          "c) 1",
+          "d) 0"
+        ],
+        "correctAnswer": "a",
+        "explanation": "cos(π/3) = 1/2, so if cos⁻¹x = π/3, then x = 1/2."
+      },
+      {
+        "id": 3,
+        "text": "Principal value of tan⁻¹(-1) ?",
+        "options": [
+          "a) -π/4",
+          "b) 3π/4",
+          "c) π/4",
+          "d) -3π/4"
+        ],
+        "correctAnswer": "a",
+        "explanation": "tan(-π/4) = -1 and -π/4 is in the principal range (-π/2, π/2)."
+      },
+      {
+        "id": 4,
+        "text": "sin⁻¹x + cos⁻¹x = ?",
+        "options": [
+          "a) π",
+          "b) 0",
+          "c) π/2",
+          "d) π/4"
+        ],
+        "correctAnswer": "c",
+        "explanation": "This is a complementary relationship: sin⁻¹x + cos⁻¹x = π/2 for all x ∈ [-1,1]."
+      },
+      {
+        "id": 5,
+        "text": "Graph of y = sin⁻¹x lies between:",
+        "options": [
+          "a) [0, π]",
+          "b) [-π/2, π/2]",
+          "c) (-π/2, π/2)",
+          "d) [0, π/2]"
+        ],
+        "correctAnswer": "b",
+        "explanation": "The range of sin⁻¹x is [-π/2, π/2], so the graph lies between these values."
+      },
+      {
+        "id": 6,
+        "text": "tan⁻¹x + tan⁻¹y = π/4 when?",
+        "options": [
+          "a) (x+y)/(1-xy) = 1",
+          "b) x + y = 1",
+          "c) xy = 1",
+          "d) x - y = 1"
+        ],
+        "correctAnswer": "a",
+        "explanation": "Using the addition formula: tan⁻¹x + tan⁻¹y = tan⁻¹((x+y)/(1-xy)) = π/4, which means (x+y)/(1-xy) = tan(π/4) = 1."
+      },
+      {
+        "id": 7,
+        "text": "sin⁻¹(-1/2) = ?",
+        "options": [
+          "a) π/6",
+          "b) -π/6",
+          "c) 5π/6",
+          "d) -5π/6"
+        ],
+        "correctAnswer": "b",
+        "explanation": "sin(-π/6) = -1/2 and -π/6 is in the principal range [-π/2, π/2]."
+      },
+      {
+        "id": 8,
+        "text": "If θ = cos⁻¹x, then sinθ = ?",
+        "options": [
+          "a) √(1-x²)",
+          "b) -√(1-x²)",
+          "c) 1-x²",
+          "d) x²-1"
+        ],
+        "correctAnswer": "a",
+        "explanation": "Since θ = cos⁻¹x, we have cosθ = x. Using the identity sin²θ + cos²θ = 1, we get sinθ = √(1-cos²θ) = √(1-x²). Since θ ∈ [0,π], sinθ ≥ 0."
+      },
+      {
+        "id": 9,
+        "text": "Which is NOT true?",
+        "options": [
+          "a) sin⁻¹(-x) = -sin⁻¹x",
+          "b) cos⁻¹(-x) = π - cos⁻¹x",
+          "c) tan⁻¹(-x) = π - tan⁻¹x",
+          "d) tan⁻¹x + cot⁻¹x = π/2"
+        ],
+        "correctAnswer": "c",
+        "explanation": "tan⁻¹(-x) = -tan⁻¹x, not π - tan⁻¹x. The correct relationship is tan⁻¹(-x) = -tan⁻¹x."
+      },
+      {
+        "id": 10,
+        "text": "Range of tan⁻¹x is:",
+        "options": [
+          "a) [-π/2, π/2]",
+          "b) [0, π]",
+          "c) (-π/2, π/2)",
+          "d) (0, π)"
+        ],
+        "correctAnswer": "c",
+        "explanation": "The range of tan⁻¹x is (-π/2, π/2), an open interval excluding the endpoints."
+      }
+    ]
+  }
+}

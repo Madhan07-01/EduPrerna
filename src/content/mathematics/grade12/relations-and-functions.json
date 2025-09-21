@@ -1,0 +1,247 @@
+{
+  "id": "grade12-relations-and-functions",
+  "title": "Relations and Functions",
+  "description": "Explore the fundamental concepts of relations and functions, including types of relations, functions, composition of functions, and invertible functions.",
+  "chapters": [
+    {
+      "id": "relations",
+      "title": "Relations",
+      "content": [
+        {
+          "type": "text",
+          "text": "A relation R from a non-empty set A to a non-empty set B is a subset of the Cartesian product A × B. The subset is derived by describing a relationship between the first element and the second element of the ordered pairs in A × B."
+        },
+        {
+          "type": "text",
+          "text": "Types of Relations:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Reflexive: A relation R in a set A is reflexive if (a, a) ∈ R for every a ∈ A",
+            "Symmetric: A relation R in a set A is symmetric if (a, b) ∈ R implies (b, a) ∈ R for all a, b ∈ A",
+            "Transitive: A relation R in a set A is transitive if (a, b) ∈ R and (b, c) ∈ R implies (a, c) ∈ R for all a, b, c ∈ A",
+            "Equivalence: A relation R in a set A is an equivalence relation if R is reflexive, symmetric, and transitive"
+          ]
+        },
+        {
+          "type": "component",
+          "name": "RelationGraphBuilder",
+          "props": {}
+        }
+      ]
+    },
+    {
+      "id": "functions",
+      "title": "Functions",
+      "content": [
+        {
+          "type": "text",
+          "text": "A function f from a set A to a set B is a specific type of relation where every element of set A has exactly one image in set B. This is denoted as f: A → B."
+        },
+        {
+          "type": "text",
+          "text": "Types of Functions:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "One-one (Injective): A function f: X → Y is one-one if f(x₁) = f(x₂) implies x₁ = x₂ for all x₁, x₂ ∈ X",
+            "Onto (Surjective): A function f: X → Y is onto if for every y ∈ Y, there exists an element x ∈ X such that f(x) = y",
+            "Bijective: A function f: X → Y is bijective if it is both one-one and onto"
+          ]
+        },
+        {
+          "type": "component",
+          "name": "FunctionVisualizer",
+          "props": {}
+        }
+      ]
+    },
+    {
+      "id": "composition-of-functions",
+      "title": "Composition of Functions",
+      "content": [
+        {
+          "type": "text",
+          "text": "If f: A → B and g: B → C are two functions, then the composition of f and g, denoted by g∘f, is defined as the function g∘f: A → C given by (g∘f)(x) = g(f(x)) for all x ∈ A."
+        },
+        {
+          "type": "text",
+          "text": "Properties:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Composition is not commutative in general: f∘g ≠ g∘f",
+            "Composition is associative: (h∘g)∘f = h∘(g∘f)",
+            "If f and g are one-one, then g∘f is also one-one",
+            "If f and g are onto, then g∘f is also onto"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "invertible-functions",
+      "title": "Invertible Functions",
+      "content": [
+        {
+          "type": "text",
+          "text": "A function f: X → Y is invertible if there exists a function g: Y → X such that g∘f = Iₓ and f∘g = Iᵧ, where Iₓ and Iᵧ are identity functions on X and Y respectively."
+        },
+        {
+          "type": "text",
+          "text": "A function is invertible if and only if it is bijective (both one-one and onto). The inverse of f is denoted by f⁻¹."
+        }
+      ]
+    },
+    {
+      "id": "binary-operations",
+      "title": "Binary Operations",
+      "content": [
+        {
+          "type": "text",
+          "text": "A binary operation ∗ on a set A is a function ∗: A × A → A. We denote ∗(a, b) by a ∗ b."
+        },
+        {
+          "type": "text",
+          "text": "Properties of Binary Operations:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Commutative: a ∗ b = b ∗ a for all a, b ∈ A",
+            "Associative: (a ∗ b) ∗ c = a ∗ (b ∗ c) for all a, b, c ∈ A",
+            "Identity Element: There exists an element e ∈ A such that a ∗ e = e ∗ a = a for all a ∈ A",
+            "Inverse Element: For each a ∈ A, there exists an element b ∈ A such that a ∗ b = b ∗ a = e, where e is the identity element"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": {
+    "title": "Relations and Functions Quiz",
+    "questions": [
+      {
+        "id": 1,
+        "text": "f(x)=x² from R→R is:",
+        "options": [
+          "a) One-one but not onto",
+          "b) Onto but not one-one",
+          "c) Bijective",
+          "d) Neither one-one nor onto"
+        ],
+        "correctAnswer": "d",
+        "explanation": "f(x)=x² is not one-one because f(2) = f(-2) = 4. It's also not onto because negative numbers in the codomain don't have pre-images."
+      },
+      {
+        "id": 2,
+        "text": "Relation R={(a,b): a−b divisible by 3} on Z is:",
+        "options": [
+          "a) Reflexive only",
+          "b) Symmetric only",
+          "c) Equivalence relation",
+          "d) None of these"
+        ],
+        "correctAnswer": "c",
+        "explanation": "This relation is reflexive (a-a=0 is divisible by 3), symmetric (if a-b is divisible by 3, then b-a is also), and transitive (if a-b and b-c are divisible by 3, then a-c is also)."
+      },
+      {
+        "id": 3,
+        "text": "If f(x)=2x+1, g(x)=x², then (g∘f)(x)=?",
+        "options": [
+          "a) 2x²+1",
+          "b) (2x+1)²",
+          "c) 4x²+1",
+          "d) 2x²+4x+1"
+        ],
+        "correctAnswer": "b",
+        "explanation": "(g∘f)(x) = g(f(x)) = g(2x+1) = (2x+1)²"
+      },
+      {
+        "id": 4,
+        "text": "Inverse of f(x)=3x+5?",
+        "options": [
+          "a) f⁻¹(x)=(x−5)/3",
+          "b) f⁻¹(x)=(x+5)/3",
+          "c) f⁻¹(x)=3x−5",
+          "d) f⁻¹(x)=x/3−5"
+        ],
+        "correctAnswer": "a",
+        "explanation": "To find the inverse, solve y = 3x+5 for x: x = (y-5)/3. Therefore, f⁻¹(x) = (x-5)/3."
+      },
+      {
+        "id": 5,
+        "text": "A bijective function is always:",
+        "options": [
+          "a) One-one only",
+          "b) Onto only",
+          "c) Both one-one and onto",
+          "d) Neither one-one nor onto"
+        ],
+        "correctAnswer": "c",
+        "explanation": "By definition, a bijective function is both one-one (injective) and onto (surjective)."
+      },
+      {
+        "id": 6,
+        "text": "If f: A→B and g: B→C, then g∘f is a function from:",
+        "options": [
+          "a) A→C",
+          "b) A→B",
+          "c) B→C",
+          "d) C→A"
+        ],
+        "correctAnswer": "a",
+        "explanation": "The composition g∘f maps elements from the domain of f (set A) to the codomain of g (set C)."
+      },
+      {
+        "id": 7,
+        "text": "Which of the following is a binary operation on R?",
+        "options": [
+          "a) Addition (+)",
+          "b) Subtraction (−)",
+          "c) Both (a) and (b)",
+          "d) Division (÷)"
+        ],
+        "correctAnswer": "c",
+        "explanation": "Both addition and subtraction are binary operations on R because they take two real numbers and produce another real number."
+      },
+      {
+        "id": 8,
+        "text": "No. of reflexive relations on set with 3 elements?",
+        "options": [
+          "a) 2⁶ = 64",
+          "b) 2⁹ = 512",
+          "c) 2³ = 8",
+          "d) 3² = 9"
+        ],
+        "correctAnswer": "a",
+        "explanation": "For a reflexive relation on a set with n elements, the diagonal elements are fixed (n elements). The remaining n²-n elements can be chosen freely, giving 2^(n²-n) possibilities. For n=3: 2^(9-3) = 2⁶ = 64."
+      },
+      {
+        "id": 9,
+        "text": "f(x)=x³ is:",
+        "options": [
+          "a) One-one but not onto",
+          "b) Onto but not one-one",
+          "c) Bijective",
+          "d) Neither one-one nor onto"
+        ],
+        "correctAnswer": "c",
+        "explanation": "f(x)=x³ is one-one because if x₁³ = x₂³, then x₁ = x₂. It's also onto because for any real number y, there exists x = ∛y such that f(x) = y."
+      },
+      {
+        "id": 10,
+        "text": "An equivalence relation on a set divides it into:",
+        "options": [
+          "a) Overlapping subsets",
+          "b) Disjoint subsets (partitions)",
+          "c) Identical subsets",
+          "d) Empty subsets"
+        ],
+        "correctAnswer": "b",
+        "explanation": "An equivalence relation partitions a set into disjoint equivalence classes, where each element belongs to exactly one class."
+      }
+    ]
+  }
+}

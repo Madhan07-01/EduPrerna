@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendPasswordResetEmail } from 'firebase/auth'
@@ -26,7 +26,7 @@ export default function TeacherLogin() {
   const navigate = useNavigate()
 
   // Rotate quotes every 5 seconds
-  useState(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentQuoteIndex(prev => (prev + 1) % MOTIVATIONAL_QUOTES.length)
     }, 5000)

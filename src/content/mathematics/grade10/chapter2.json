@@ -1,0 +1,93 @@
+{
+  "title": "Polynomials",
+  "subtopics": [
+    {
+      "title": "Introduction to Polynomials",
+      "content": "<h4>Introduction</h4><p>A polynomial is an algebraic expression consisting of variables, coefficients, and non-negative integer powers of variables combined using addition, subtraction, and multiplication.</p><p><strong>Examples:</strong></p><p>2x³ + 3x² - 5x + 7</p><p>x² + 4x + 4</p><p>Polynomials are one of the most important topics in algebra because they appear in equations, curves, and real-world models.</p>"
+    },
+    {
+      "title": "Degree of a Polynomial",
+      "content": "<h4>Degree of a Polynomial</h4><p>The degree of a polynomial is the highest power of the variable.</p><p><strong>Examples:</strong></p><p>3x² + 5x + 7 → degree = 2</p><p>2x⁴ - x³ + 8 → degree = 4</p>"
+    },
+    {
+      "title": "Types of Polynomials",
+      "content": "<h4>Types of Polynomials</h4><p>Based on degree:</p><ul><li><strong>Linear Polynomial:</strong> Degree = 1 → e.g., 2x + 3</li><li><strong>Quadratic Polynomial:</strong> Degree = 2 → e.g., x² - 4x + 4</li><li><strong>Cubic Polynomial:</strong> Degree = 3 → e.g., x³ - 2x + 1</li></ul>"
+    },
+    {
+      "title": "Zeros of a Polynomial",
+      "content": "<h4>Zeros of a Polynomial</h4><p>A zero of a polynomial p(x) is a value of x for which p(x) = 0.</p><p><strong>Example:</strong> For p(x) = x² - 9, zeros are x = 3 and x = -3.</p>"
+    },
+    {
+      "title": "Relationship Between Zeros and Coefficients",
+      "content": "<h4>Relationship Between Zeros and Coefficients</h4><p>For quadratic polynomial ax² + bx + c:</p><p>Sum of zeros, α + β = -b/a</p><p>Product of zeros, αβ = c/a</p><p>For cubic polynomial ax³ + bx² + cx + d:</p><p>Sum of zeros, α + β + γ = -b/a</p><p>Sum of product of zeros taken two at a time = c/a</p><p>Product of zeros = -d/a</p>"
+    },
+    {
+      "title": "Division Algorithm",
+      "content": "<h4>Division Algorithm</h4><p>If a polynomial p(x) is divided by another polynomial g(x), then</p><p>p(x) = g(x) · q(x) + r(x)</p><p>where,</p><ul><li>q(x) = quotient polynomial</li><li>r(x) = remainder polynomial (degree of r(x) < degree of g(x))</li></ul>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Degree of 7x⁴–3x²+2x–9:",
+        "options": ["2", "3", "4", "5"],
+        "answer": "4",
+        "explanation": "The degree of a polynomial is the highest power of the variable. In 7x⁴–3x²+2x–9, the highest power is 4."
+      },
+      {
+        "question": "Which is linear?",
+        "options": ["x²+3", "2x+7", "x³-1", "x⁴+x"],
+        "answer": "2x+7",
+        "explanation": "A linear polynomial has degree 1. 2x+7 is linear because the highest power of x is 1."
+      },
+      {
+        "question": "Zeros of x²–16:",
+        "options": ["±2", "±4", "±8", "±16"],
+        "answer": "±4",
+        "explanation": "x²–16 = (x–4)(x+4) = 0. So x = 4 or x = -4. The zeros are ±4."
+      },
+      {
+        "question": "For p(x)=x²–5x+6, sum & product of zeros:",
+        "options": ["Sum=5, Product=6", "Sum=-5, Product=6", "Sum=5, Product=-6", "Sum=-5, Product=-6"],
+        "answer": "Sum=5, Product=6",
+        "explanation": "For ax²+bx+c, sum of zeros = -b/a and product = c/a. Here a=1, b=-5, c=6. So sum = -(-5)/1 = 5 and product = 6/1 = 6."
+      },
+      {
+        "question": "If zeros are 2 and 3, polynomial is:",
+        "options": ["x²–5x+6", "x²+5x+6", "x²–5x-6", "x²+5x-6"],
+        "answer": "x²–5x+6",
+        "explanation": "If zeros are 2 and 3, the polynomial is (x-2)(x-3) = x²-3x-2x+6 = x²-5x+6."
+      },
+      {
+        "question": "For 2x²+3x–5, sum of zeros =",
+        "options": ["–3/2", "3/2", "–2/3", "2/3"],
+        "answer": "–3/2",
+        "explanation": "For ax²+bx+c, sum of zeros = -b/a. Here a=2, b=3. So sum = -3/2."
+      },
+      {
+        "question": "Which is NOT a polynomial?",
+        "options": ["2x³ + 3x + 1", "2x³ + 1/x", "x² + 5", "3x + 7"],
+        "answer": "2x³ + 1/x",
+        "explanation": "2x³ + 1/x is not a polynomial because it contains 1/x, which is equivalent to x⁻¹. Polynomials can only have non-negative integer powers of variables."
+      },
+      {
+        "question": "For x³–3x²+3x–1, one zero is:",
+        "options": ["1", "–1", "0", "2"],
+        "answer": "1",
+        "explanation": "x³–3x²+3x–1 = (x-1)³. So x = 1 is a zero (with multiplicity 3)."
+      },
+      {
+        "question": "If x²+kx+6 has zeros –2, –3 → k=?",
+        "options": ["–5", "5", "6", "–6"],
+        "answer": "5",
+        "explanation": "If zeros are –2 and –3, the polynomial is (x+2)(x+3) = x²+3x+2x+6 = x²+5x+6. Comparing with x²+kx+6, we get k = 5."
+      },
+      {
+        "question": "(x³–4x) ÷ (x–2), remainder =",
+        "options": ["0", "4", "–4", "8"],
+        "answer": "0",
+        "explanation": "x³–4x = x(x²–4) = x(x–2)(x+2). So (x³–4x) ÷ (x–2) = x(x+2) = x²+2x with remainder 0."
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "title": "Real Numbers",
+  "subtopics": [
+    {
+      "title": "Introduction to Real Numbers",
+      "content": "<h4>Introduction</h4><p>In earlier classes, you have studied natural numbers, whole numbers, integers, rational numbers, and irrational numbers. Together, all these form the set of real numbers. Real numbers are the foundation of algebra and geometry. They allow us to perform arithmetic, solve equations, and represent points on the number line.</p><p>The study of real numbers in Grade 10 focuses mainly on the properties of prime numbers, the Euclid's Division Lemma, the Fundamental Theorem of Arithmetic, and decimal expansions of rational numbers. These concepts are useful not just in pure mathematics but also in cryptography, computer science, and engineering.</p>"
+    },
+    {
+      "title": "Euclid's Division Lemma",
+      "content": "<h4>Euclid's Division Lemma</h4><p>Euclid's Division Lemma states:</p><p>For any two positive integers a and b, there exist unique integers q and r such that:</p><p>a = bq + r, 0 ≤ r < b</p><p>Here,</p><ul><li>a = dividend</li><li>b = divisor</li><li>q = quotient</li><li>r = remainder</li></ul><p><strong>Example:</strong> When 20 is divided by 3, 20 = 3 × 6 + 2. Here, q = 6 and r = 2.</p><p>This lemma forms the basis of the Euclidean Algorithm for finding the HCF (Highest Common Factor).</p>"
+    },
+    {
+      "title": "Fundamental Theorem of Arithmetic",
+      "content": "<h4>Fundamental Theorem of Arithmetic</h4><p>Every composite number can be expressed as a product of primes uniquely, except for the order of the factors.</p><p><strong>Example:</strong></p><p>120 = 2³ × 3 × 5</p><p>84 = 2² × 3 × 7</p><p>This property helps in finding HCF and LCM:</p><ul><li>HCF = product of common prime factors with the lowest powers.</li><li>LCM = product of all prime factors with the highest powers.</li></ul><p><strong>Example:</strong></p><p>HCF(84, 120) = 2² × 3 = 12</p><p>LCM(84, 120) = 2³ × 3 × 5 × 7 = 840</p>"
+    },
+    {
+      "title": "Irrational Numbers",
+      "content": "<h4>Irrational Numbers</h4><p>Numbers that cannot be expressed in the form p/q (with q ≠ 0) are called irrational numbers.</p><p><strong>Examples:</strong> √2, √3, π, e</p><p><strong>Important fact:</strong> The sum/product of a rational and irrational number is always irrational.</p>"
+    },
+    {
+      "title": "Decimal Expansions of Rational Numbers",
+      "content": "<h4>Decimal Expansions of Rational Numbers</h4><p>A rational number (p/q) has two possible types of decimal expansions:</p><ul><li><strong>Terminating Decimal</strong> – Division ends after a finite number of steps.</li><li><strong>Non-terminating, Recurring Decimal</strong> – Division continues forever but with repeating digits.</li></ul><p><strong>Example:</strong> 1/8 = 0.125 (terminating)</p><p><strong>Example:</strong> 1/3 = 0.333… (non-terminating, recurring)</p><p><strong>Rule:</strong></p><p>If the denominator (in lowest form) has only 2 and/or 5 as prime factors → decimal is terminating.</p><p>Otherwise → non-terminating, recurring.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Euclid's Division Lemma states:",
+        "options": ["a = bq + r, 0 < r < b", "a = bq + r, 0 ≤ r < b", "a = bq + r, 0 ≤ r ≤ b", "a = bq + r, 0 < r ≤ b"],
+        "answer": "a = bq + r, 0 ≤ r < b",
+        "explanation": "Euclid's Division Lemma states that for any two positive integers a and b, there exist unique integers q and r such that a = bq + r, where 0 ≤ r < b."
+      },
+      {
+        "question": "Prime factorization of 210 is:",
+        "options": ["2 × 3 × 5 × 7", "2 × 3 × 7", "2 × 5 × 7", "3 × 5 × 7"],
+        "answer": "2 × 3 × 5 × 7",
+        "explanation": "210 = 2 × 3 × 5 × 7. This is the prime factorization according to the Fundamental Theorem of Arithmetic."
+      },
+      {
+        "question": "HCF of 72 and 120 is:",
+        "options": ["12", "24", "36", "6"],
+        "answer": "24",
+        "explanation": "Prime factorization: 72 = 2³ × 3² and 120 = 2³ × 3 × 5. HCF = 2³ × 3 = 8 × 3 = 24."
+      },
+      {
+        "question": "Which of the following is irrational?",
+        "options": ["√4", "√2", "√9", "√16"],
+        "answer": "√2",
+        "explanation": "√2 is irrational because it cannot be expressed as a ratio of two integers. √4 = 2, √9 = 3, and √16 = 4 are all rational."
+      },
+      {
+        "question": "Decimal expansion of 13/2 is:",
+        "options": ["6.5", "6.0", "6.25", "6.75"],
+        "answer": "6.5",
+        "explanation": "13/2 = 6.5, which is a terminating decimal because the denominator (2) has only 2 as its prime factor."
+      },
+      {
+        "question": "If denominator has factors other than 2 or 5 → decimal is:",
+        "options": ["Terminating", "Recurring, non-terminating", "Irrational", "Undefined"],
+        "answer": "Recurring, non-terminating",
+        "explanation": "A rational number has a terminating decimal expansion if and only if its denominator (in lowest form) has no prime factors other than 2 or 5. Otherwise, it's recurring and non-terminating."
+      },
+      {
+        "question": "Fundamental Theorem guarantees:",
+        "options": ["Every natural number can be uniquely written as product of primes", "Every integer is prime", "All numbers are rational", "Primes are infinite"],
+        "answer": "Every natural number can be uniquely written as product of primes",
+        "explanation": "The Fundamental Theorem of Arithmetic states that every composite number can be expressed as a product of primes uniquely, except for the order of the factors."
+      },
+      {
+        "question": "LCM of 18 and 24:",
+        "options": ["36", "72", "48", "96"],
+        "answer": "72",
+        "explanation": "Prime factorization: 18 = 2 × 3² and 24 = 2³ × 3. LCM = 2³ × 3² = 8 × 9 = 72."
+      },
+      {
+        "question": "Which has terminating decimal expansion?",
+        "options": ["4/15", "4/25", "4/9", "4/6"],
+        "answer": "4/25",
+        "explanation": "4/25 has a terminating decimal because 25 = 5², which has only 5 as its prime factor. 15 = 3 × 5, 9 = 3², and 6 = 2 × 3 all have prime factors other than 2 or 5."
+      },
+      {
+        "question": "If a=65, b=12 → q, r are:",
+        "options": ["q=5, r=5", "q=6, r=5", "q=5, r=6", "q=6, r=6"],
+        "answer": "q=5, r=5",
+        "explanation": "Using Euclid's Division Lemma: 65 = 12 × 5 + 5. So q = 5 and r = 5. We verify: 12 × 5 = 60, and 65 - 60 = 5."
+      }
+    ]
+  }
+}

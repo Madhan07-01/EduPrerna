@@ -11,10 +11,10 @@ exports.generateFallbackDocumentId = generateFallbackDocumentId;
  */
 function generateDocumentId(grade, lessonTitle) {
     // Convert title to lowercase and replace spaces with hyphens
-    var formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
+    const formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
     // Remove special characters except hyphens
-    var cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
-    return "grade-".concat(grade, "-").concat(cleanTitle);
+    const cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
+    return `grade-${grade}-${cleanTitle}`;
 }
 /**
  * Generates possible alternative document IDs for a lesson
@@ -23,20 +23,20 @@ function generateDocumentId(grade, lessonTitle) {
  * @returns An array of possible document IDs
  */
 function generatePossibleDocumentIds(grade, lessonTitle) {
-    var ids = [];
+    const ids = [];
     // Standard format
     ids.push(generateDocumentId(grade, lessonTitle));
     // Alternative formats that might exist in the database
-    var formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
-    var cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
+    const formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
+    const cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
     // Format without "grade-" prefix
-    ids.push("".concat(grade, "-").concat(cleanTitle));
+    ids.push(`${grade}-${cleanTitle}`);
     // Format with "chapter-" prefix
-    ids.push("chapter-".concat(grade, "-").concat(cleanTitle));
+    ids.push(`chapter-${grade}-${cleanTitle}`);
     // Format with just the clean title
     ids.push(cleanTitle);
     // Format with grade number at the end
-    ids.push("".concat(cleanTitle, "-grade-").concat(grade));
+    ids.push(`${cleanTitle}-grade-${grade}`);
     return ids;
 }
 /**
@@ -47,7 +47,7 @@ function generatePossibleDocumentIds(grade, lessonTitle) {
  */
 function generateFallbackDocumentId(grade, lessonTitle) {
     // Use a simple format as fallback
-    var formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
-    var cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
-    return "".concat(grade, "_").concat(cleanTitle);
+    const formattedTitle = lessonTitle.toLowerCase().replace(/\s+/g, '-');
+    const cleanTitle = formattedTitle.replace(/[^a-z0-9-]/g, '');
+    return `${grade}_${cleanTitle}`;
 }

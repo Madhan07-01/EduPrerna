@@ -1,0 +1,89 @@
+{
+  "title": "Sets",
+  "subtopics": [
+    {
+      "title": "Introduction to Sets",
+      "content": "<h4>Introduction</h4><p>The concept of sets forms the foundation of modern mathematics. A set is simply a well-defined collection of distinct objects, considered as a single entity. These objects are called elements or members of the set. Sets help us represent groups of numbers, symbols, or even real-life objects in a structured way.</p><p>For example:</p><p>The set of vowels in English: V = {a, e, i, o, u}</p><p>The set of natural numbers less than 5: N = {1, 2, 3, 4}</p><p>Sets are widely used in algebra, probability, relations, functions, computer science, and logic.</p>"
+    },
+    {
+      "title": "Representation and Types of Sets",
+      "content": "<h4>Representation of Sets</h4><p><strong>Roster/Tabular Form:</strong> Listing elements, e.g. A = {2, 4, 6, 8}</p><p><strong>Set-builder Form:</strong> Describing property of elements, e.g. A = {x: x is an even natural number less than 10}</p><h4>Types of Sets</h4><ul><li><strong>Finite Set:</strong> Has a countable number of elements, e.g. {1, 2, 3, 4, 5}</li><li><strong>Infinite Set:</strong> Has uncountable/infinite elements, e.g. N = {1, 2, 3, 4, …}</li><li><strong>Null/Empty Set (∅):</strong> No elements, e.g. {x: x² = -1}</li><li><strong>Singleton Set:</strong> Exactly one element, e.g. {0}</li><li><strong>Equal Sets:</strong> Two sets are equal if they have identical elements.</li><li><strong>Subset:</strong> A ⊆ B means every element of A is in B.</li><li><strong>Power Set:</strong> The set of all subsets of a set. If A = {1, 2}, then P(A) = {∅, {1}, {2}, {1, 2}}.</li><li><strong>Universal Set:</strong> The set containing all objects under consideration. Usually denoted as U.</li></ul>"
+    },
+    {
+      "title": "Venn Diagrams and Set Operations",
+      "content": "<h4>Venn Diagrams</h4><p>Venn diagrams are visual tools using circles to represent sets and their relationships (intersection, union, etc.).</p><h4>Set Operations</h4><ul><li><strong>Union (A ∪ B):</strong> Elements in A or B or both.</li><li><strong>Intersection (A ∩ B):</strong> Elements common to both A and B.</li><li><strong>Difference (A - B):</strong> Elements in A but not in B.</li><li><strong>Complement (A′):</strong> Elements in universal set U but not in A.</li></ul>"
+    },
+    {
+      "title": "Properties of Set Operations",
+      "content": "<h4>Properties of Set Operations</h4><ul><li><strong>Commutative:</strong> A ∪ B = B ∪ A, A ∩ B = B ∩ A</li><li><strong>Associative:</strong> (A ∪ B) ∪ C = A ∪ (B ∪ C)</li><li><strong>Distributive:</strong> A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</li><li><strong>De Morgan's Laws:</strong><ul><li>(A ∪ B)′ = A′ ∩ B′</li><li>(A ∩ B)′ = A′ ∪ B′</li></ul></li></ul>"
+    },
+    {
+      "title": "Cardinality of a Set",
+      "content": "<h4>Cardinality of a Set</h4><p>The number of elements in a set is called its cardinality. For finite sets, if A = {1, 2, 3}, then n(A) = 3.</p><p>For union and intersection:</p><p>n(A ∪ B) = n(A) + n(B) - n(A ∩ B)</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of the following is NOT a set?",
+        "options": ["{1, 2, 3, 4, 5}", "{x: x is a natural number}", "{x: x is an intelligent student in class}", "{a, e, i, o, u}"],
+        "answer": "{x: x is an intelligent student in class}",
+        "explanation": "The set of all intelligent students in class is not well-defined because 'intelligent' is subjective and not a precise criterion for membership in a set."
+      },
+      {
+        "question": "What is the power set of A = {1, 2}?",
+        "options": ["{∅, {1}, {2}}", "{∅, {1}, {2}, {1, 2}}", "{∅, {1, 2}}", "{1, 2, {1, 2}}"],
+        "answer": "{∅, {1}, {2}, {1, 2}}",
+        "explanation": "The power set of A contains all possible subsets of A, including the empty set and A itself. For A = {1, 2}, the subsets are: ∅, {1}, {2}, {1, 2}."
+      },
+      {
+        "question": "If U = {1, 2, 3, 4, 5} and A = {1, 2, 3}, what is A′?",
+        "options": ["{1, 2, 3}", "{4, 5}", "{1, 4, 5}", "∅"],
+        "answer": "{4, 5}",
+        "explanation": "A′ (complement of A) contains all elements in the universal set U that are not in A. Since U = {1, 2, 3, 4, 5} and A = {1, 2, 3}, A′ = {4, 5}."
+      },
+      {
+        "question": "Which of the following is true?",
+        "options": ["A ∪ ∅ = A", "A ∩ ∅ = A", "A - ∅ = ∅", "∅ ⊆ A is false"],
+        "answer": "A ∪ ∅ = A",
+        "explanation": "The union of any set A with the empty set ∅ is A itself, because the empty set contributes no elements. A ∩ ∅ = ∅, A - ∅ = A, and ∅ is a subset of every set."
+      },
+      {
+        "question": "If A = {2, 4, 6} and B = {4, 6, 8}, what is A ∩ B?",
+        "options": ["{2, 4, 6, 8}", "{2, 8}", "{4, 6}", "{4, 6, 8}"],
+        "answer": "{4, 6}",
+        "explanation": "The intersection A ∩ B contains elements that are common to both A and B. The common elements between {2, 4, 6} and {4, 6, 8} are {4, 6}."
+      },
+      {
+        "question": "Which of the following sets are equal?",
+        "options": ["{1, 2, 3} and {3, 2, 1}", "{1, 2} and {1, 2, 3}", "{a, b, c} and {a, b}", "{1} and {1, 1}"],
+        "answer": "{1, 2, 3} and {3, 2, 1}",
+        "explanation": "Sets are equal if they contain exactly the same elements, regardless of order. {1, 2, 3} and {3, 2, 1} contain the same elements, so they are equal."
+      },
+      {
+        "question": "If A ⊆ B and B ⊆ A, then:",
+        "options": ["A = B", "A ⊂ B", "B ⊂ A", "A and B are disjoint"],
+        "answer": "A = B",
+        "explanation": "If A is a subset of B and B is a subset of A, then every element of A is in B and every element of B is in A, which means A and B have exactly the same elements. Therefore, A = B."
+      },
+      {
+        "question": "What is the complement of the universal set U?",
+        "options": ["U", "∅", "{0}", "None of these"],
+        "answer": "∅",
+        "explanation": "The complement of the universal set U contains all elements that are not in U. Since U contains all elements under consideration, there are no elements outside U, so U′ = ∅."
+      },
+      {
+        "question": "If A = {1, 2} and B = {2, 3}, what is A ∪ B?",
+        "options": ["{1, 2, 3}", "{2}", "{1, 2, 2, 3}", "{1, 3}"],
+        "answer": "{1, 2, 3}",
+        "explanation": "The union A ∪ B contains all elements that are in A or B or both. A = {1, 2} and B = {2, 3}, so A ∪ B = {1, 2, 3}. Note that each element appears only once in a set."
+      },
+      {
+        "question": "What is the cardinality of the empty set ∅?",
+        "options": ["1", "0", "∞", "Undefined"],
+        "answer": "0",
+        "explanation": "The cardinality of a set is the number of elements in the set. The empty set ∅ contains no elements, so its cardinality is 0."
+      }
+    ]
+  }
+}
