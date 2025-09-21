@@ -112,7 +112,8 @@ import ChemG12Electrochemistry from './pages/lessons/ChemG12Electrochemistry'
 import BioG12Reproduction from './pages/lessons/BioG12Reproduction'
 import BioG12GeneticsEvolution from './pages/lessons/BioG12GeneticsEvolution'
 import BioG12BiologyHumanWelfare from './pages/lessons/BioG12BiologyHumanWelfare'
-import { QuickQuizPage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
+import { QuickQuizPage, DownloadGradePage } from './pages/AdditionalPages'
+import MiniGamesRoutes from './pages/mini-games'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -276,7 +277,7 @@ function AppContent() {
               <Route path="/supabase-signin" element={<SupabaseSignIn />} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
-              <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              <Route path="/games/*" element={<PrivateRoute><MiniGamesRoutes /></PrivateRoute>} />
               <Route path="/stem-hub" element={<PrivateRoute><StemHub /></PrivateRoute>} />
               <Route path="/stem-leaderboard" element={<PrivateRoute><StemLeaderboard /></PrivateRoute>} />
               <Route path="/my-progress" element={<PrivateRoute><MyProgress /></PrivateRoute>} />
