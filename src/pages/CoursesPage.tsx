@@ -29,7 +29,7 @@ export function CoursesPage() {
   const handlePlayStem = () => {
     const stem = mapToStemSubject(selectedSubject)
     if (stem) {
-      navigate(`/stem/${stem}/${selectedGrade}`)
+      navigate(`/challenge?grade=${selectedGrade}&subject=${encodeURIComponent(stem)}`)
     }
   }
 

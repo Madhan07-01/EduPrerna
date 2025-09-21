@@ -3,16 +3,150 @@ import { getLessonsForSubjectAndGrade, type Subject, type Grade } from '../data/
 import { SectionCard } from '../components/SectionCard'
 
 export function LessonDetailPage() {
+
   const { subject, grade, lesson } = useParams<{ subject: string; grade: string; lesson: string }>()
   
   // Parse URL params
-  const subjectParam = subject as Subject
+  const normalizeSubject = (s: string | undefined): Subject => {
+    const raw = (s || '').trim()
+    const map: Record<string, Subject> = {
+      Mathematics: 'Mathematics',
+      Maths: 'Mathematics',
+      Math: 'Mathematics',
+      Physics: 'Physics',
+      Chemistry: 'Chemistry',
+      Biology: 'Biology',
+      ComputerScience: 'ComputerScience',
+      'Computer Science': 'ComputerScience',
+    }
+    if (map[raw as keyof typeof map]) return map[raw as keyof typeof map]
+    // Fallback: remove spaces and try again for Computer Science-like strings
+    const noSpace = raw.replace(/\s+/g, '')
+    if (map[noSpace as keyof typeof map]) return map[noSpace as keyof typeof map]
+    return (raw as Subject) || 'Mathematics'
+  }
+  const subjectParam = normalizeSubject(subject)
   const gradeParam = parseInt(grade || '6') as Grade
   const lessonIndex = parseInt(lesson || '1') - 1
   
   // Get lessons for this subject and grade
   const lessons = getLessonsForSubjectAndGrade(subjectParam, gradeParam)
   const currentLesson = lessons[lessonIndex]
+
+  // Resolve module route per subject/lesson for quick navigation
+  const getModuleRoute = (subject: Subject, grade: number, index: number) => {
+    switch (subject) {
+      case 'Mathematics': {
+        if (grade === 6) {
+          if (index === 0) return '/module/math-g6-number-system'
+          if (index === 1) return '/module/math-g6-operations-whole-numbers'
+          if (index === 2) return '/module/math-g6-integers'
+          return null
+        }
+        if (grade === 7) {
+          if (index === 0) return '/module/math-g7-integers'
+          if (index === 1) return '/module/math-g7-fractions-decimals'
+          if (index === 2) return '/module/math-g7-data-handling'
+          return null
+        }
+        if (grade === 8) {
+          if (index === 0) return '/module/math-g8-rational-numbers'
+          if (index === 1) return '/module/math-g8-linear-equations'
+          if (index === 2) return '/module/math-g8-understanding-quadrilaterals'
+          return null
+        }
+        if (grade === 9) {
+          if (index === 0) return '/module/math-g9-number-systems'
+          if (index === 1) return '/module/math-g9-polynomials'
+          if (index === 2) return '/module/math-g9-coordinate-geometry'
+          return null
+        }
+        return null
+      }
+      case 'ComputerScience':
+        if (grade === 6) {
+          if (index === 0) return '/module/cs-g6-categories-computers-languages'
+          if (index === 1) return '/module/cs-g6-file-management'
+          if (index === 2) return '/module/cs-g6-word-processor-tables'
+          return null
+        }
+        if (grade === 7) {
+          if (index === 0) return '/module/cs-g7-programming-languages'
+          if (index === 1) return '/module/cs-g7-word-editing'
+          if (index === 2) return '/module/cs-g7-powerpoint'
+          return null
+        }
+        if (grade === 8) {
+          if (index === 0) return '/module/cs-g8-intro-computer-language'
+          if (index === 1) return '/module/cs-g8-intro-database'
+          if (index === 2) return '/module/cs-g8-ms-access-dbms'
+          return null
+        }
+        if (grade === 9) {
+          if (index === 0) return '/module/cs-g9-basics-it'
+          if (index === 1) return '/module/cs-g9-cyber-safety'
+          if (index === 2) return '/module/cs-g9-office-tools'
+          return null
+        }
+        return null
+      case 'Physics':
+        if (grade === 6) {
+          if (index === 0) return '/module/phy-g6-measurement-motion'
+          if (index === 1) return '/module/phy-g6-light-shadows-reflections'
+          if (index === 2) return '/module/phy-g6-electricity-circuits'
+          return null
+        }
+        if (grade === 7) {
+          if (index === 0) return '/module/phy-g7-motion-time'
+          if (index === 1) return '/module/phy-g7-electric-current-circuits'
+          if (index === 2) return '/module/phy-g7-heat'
+          return null
+        }
+        if (grade === 8) {
+          if (index === 0) return '/module/phy-g8-force-pressure'
+          if (index === 1) return '/module/phy-g8-friction'
+          if (index === 2) return '/module/phy-g8-sound'
+          return null
+        }
+        return null
+      case 'Chemistry':
+        if (grade === 6) {
+          if (index === 0) return '/module/chem-g6-intro-chemistry'
+          if (index === 1) return '/module/chem-g6-matter-properties'
+          if (index === 2) return '/module/chem-g6-atoms-molecules'
+        }
+        return null
+      case 'Biology':
+        if (grade === 6) {
+          if (index === 0) return '/module/bio-g6-living-nonliving'
+          if (index === 1) return '/module/bio-g6-plants-animals'
+          if (index === 2) return '/module/bio-g6-our-body-health'
+          return null
+        }
+        if (grade === 7) {
+          if (index === 0) return '/module/bio-g7-life-processes'
+          if (index === 1) return '/module/bio-g7-nutrition-animals-plants'
+          if (index === 2) return '/module/bio-g7-respiration-circulation'
+          return null
+        }
+        if (grade === 8) {
+          if (index === 0) return '/module/bio-g8-cell-structure-function'
+          if (index === 1) return '/module/bio-g8-tissues'
+          if (index === 2) return '/module/bio-g8-movement-locomotion'
+          return null
+        }
+        if (grade === 9) {
+          if (index === 0) return '/module/bio-g9-cell-theory'
+          if (index === 1) return '/module/bio-g9-plant-animal-cells'
+          if (index === 2) return '/module/bio-g9-diversity-organisms'
+          return null
+        }
+        return null
+      default:
+        return null
+    }
+  }
+  const moduleRoute = getModuleRoute(subjectParam, gradeParam, lessonIndex)
 
   const getSubjectIcon = (subject: Subject) => {
     const icons = {
@@ -120,12 +254,16 @@ export function LessonDetailPage() {
                     <span>Progress tracking and scoring</span>
                   </li>
                 </ul>
-                <button
-                  disabled
-                  className="w-full mt-4 py-2 bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 rounded-lg cursor-not-allowed"
-                >
-                  🔒 Coming Soon
-                </button>
+                {moduleRoute ? (
+                  <Link
+                    to={moduleRoute}
+                    className="w-full mt-4 inline-flex justify-center py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-semibold"
+                  >
+                    Take Lesson
+                  </Link>
+                ) : (
+                  <button disabled className="w-full mt-4 py-2 bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 rounded-lg cursor-not-allowed">🔒 Coming Soon</button>
+                )}
               </div>
 
               <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
@@ -147,12 +285,16 @@ export function LessonDetailPage() {
                     <span>Visual aids and diagrams</span>
                   </li>
                 </ul>
-                <button
-                  disabled
-                  className="w-full mt-4 py-2 bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 rounded-lg cursor-not-allowed"
-                >
-                  🔒 Coming Soon
-                </button>
+                {moduleRoute ? (
+                  <Link
+                    to={moduleRoute}
+                    className="w-full mt-4 inline-flex justify-center py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-semibold"
+                  >
+                    Open Study Materials
+                  </Link>
+                ) : (
+                  <button disabled className="w-full mt-4 py-2 bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 rounded-lg cursor-not-allowed">🔒 Coming Soon</button>
+                )}
               </div>
             </div>
 

@@ -95,14 +95,161 @@ export function LessonsPage() {
                       </span>
                     </div>
                     
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center gap-2">
                       <div className="text-xs text-gray-500 dark:text-slate-400">
                         {formatSubjectName(subjectParam)} • Grade {grade}
                       </div>
-                      
-                      <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 group-hover:shadow-lg">
-                        Start Lesson →
-                      </button>
+                      <div className="ml-auto flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (subjectParam === 'Mathematics' && gradeParam === 6) {
+                              if (index === 0) navigate('/module/math-g6-number-system')
+                              else if (index === 1) navigate('/module/math-g6-operations-whole-numbers')
+                              else if (index === 2) navigate('/module/math-g6-integers')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 6) {
+                              if (index === 0) navigate('/module/cs-g6-categories-computers-languages')
+                              else if (index === 1) navigate('/module/cs-g6-file-management')
+                              else if (index === 2) navigate('/module/cs-g6-word-processor-tables')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Chemistry' && gradeParam === 6) {
+                              if (index === 0) navigate('/module/chem-g6-intro-chemistry')
+                              else if (index === 1) navigate('/module/chem-g6-matter-properties')
+                              else if (index === 2) navigate('/module/chem-g6-atoms-molecules')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 6) {
+                              if (index === 0) navigate('/module/bio-g6-living-nonliving')
+                              else if (index === 1) navigate('/module/bio-g6-plants-animals')
+                              else if (index === 2) navigate('/module/bio-g6-our-body-health')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 7) {
+                              if (index === 0) navigate('/module/math-g7-integers')
+                              else if (index === 1) navigate('/module/math-g7-fractions-decimals')
+                              else if (index === 2) navigate('/module/math-g7-data-handling')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 7) {
+                              if (index === 0) navigate('/module/cs-g7-programming-languages')
+                              else if (index === 1) navigate('/module/cs-g7-word-editing')
+                              else if (index === 2) navigate('/module/cs-g7-powerpoint')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Physics' && gradeParam === 7) {
+                              if (index === 0) navigate('/module/phy-g7-motion-time')
+                              else if (index === 1) navigate('/module/phy-g7-electric-current-circuits')
+                              else if (index === 2) navigate('/module/phy-g7-heat')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 7) {
+                              if (index === 0) navigate('/module/bio-g7-life-processes')
+                              else if (index === 1) navigate('/module/bio-g7-nutrition-animals-plants')
+                              else if (index === 2) navigate('/module/bio-g7-respiration-circulation')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 8) {
+                              if (index === 0) navigate('/module/math-g8-rational-numbers')
+                              else if (index === 1) navigate('/module/math-g8-linear-equations')
+                              else if (index === 2) navigate('/module/math-g8-understanding-quadrilaterals')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 8) {
+                              if (index === 0) navigate('/module/cs-g8-intro-computer-language')
+                              else if (index === 1) navigate('/module/cs-g8-intro-database')
+                              else if (index === 2) navigate('/module/cs-g8-ms-access-dbms')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Physics' && gradeParam === 8) {
+                              if (index === 0) navigate('/module/phy-g8-force-pressure')
+                              else if (index === 1) navigate('/module/phy-g8-friction')
+                              else if (index === 2) navigate('/module/phy-g8-sound')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 8) {
+                              if (index === 0) navigate('/module/bio-g8-cell-structure-function')
+                              else if (index === 1) navigate('/module/bio-g8-tissues')
+                              else if (index === 2) navigate('/module/bio-g8-movement-locomotion')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 9) {
+                              if (index === 0) navigate('/module/math-g9-number-systems')
+                              else if (index === 1) navigate('/module/math-g9-polynomials')
+                              else if (index === 2) navigate('/module/math-g9-coordinate-geometry')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 9) {
+                              if (index === 0) navigate('/module/cs-g9-basics-it')
+                              else if (index === 1) navigate('/module/cs-g9-cyber-safety')
+                              else if (index === 2) navigate('/module/cs-g9-office-tools')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 10) {
+                              if (index === 0) navigate('/module/math-g10-real-numbers')
+                              else if (index === 1) navigate('/module/math-g10-polynomials')
+                              else if (index === 2) navigate('/module/math-g10-pair-linear-equations')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 11) {
+                              if (index === 0) navigate('/module/math-g11-sets')
+                              else if (index === 1) navigate('/module/math-g11-relations-functions')
+                              else if (index === 2) navigate('/module/math-g11-trigonometric-functions')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Mathematics' && gradeParam === 12) {
+                              if (index === 0) navigate('/module/math-g12-relations-functions')
+                              else if (index === 1) navigate('/module/math-g12-inverse-trigonometric-functions')
+                              else if (index === 2) navigate('/module/math-g12-matrices')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 11) {
+                              if (index === 0) navigate('/module/cs-g11-computer-fundamentals')
+                              else if (index === 1) navigate('/module/cs-g11-programming-methodology-python')
+                              else if (index === 2) navigate('/module/cs-g11-intro-cpp')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Chemistry' && gradeParam === 11) {
+                              if (index === 0) navigate('/module/chem-g11-some-basic-concepts')
+                              else if (index === 1) navigate('/module/chem-g11-structure-of-atom')
+                              else if (index === 2) navigate('/module/chem-g11-classification-periodicity')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 12) {
+                              if (index === 0) navigate('/module/cs-g12-advanced-programming')
+                              else if (index === 1) navigate('/module/cs-g12-data-structures-algorithms')
+                              else if (index === 2) navigate('/module/cs-g12-dbms-sql')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Physics' && gradeParam === 12) {
+                              if (index === 0) navigate('/module/phy-g12-electrostatics')
+                              else if (index === 1) navigate('/module/phy-g12-current-electricity')
+                              else if (index === 2) navigate('/module/phy-g12-magnetic-effects')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Chemistry' && gradeParam === 12) {
+                              if (index === 0) navigate('/module/chem-g12-solid-state')
+                              else if (index === 1) navigate('/module/chem-g12-solutions')
+                              else if (index === 2) navigate('/module/chem-g12-electrochemistry')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 12) {
+                              if (index === 0) navigate('/module/bio-g12-reproduction')
+                              else if (index === 1) navigate('/module/bio-g12-genetics-evolution')
+                              else if (index === 2) navigate('/module/bio-g12-biology-human-welfare')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Physics' && gradeParam === 10) {
+                              if (index === 0) navigate('/module/phy-g10-light-reflection-refraction')
+                              else if (index === 1) navigate('/module/phy-g10-human-eye-colourful-world')
+                              else if (index === 2) navigate('/module/phy-g10-electricity')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Physics' && gradeParam === 9) {
+                              if (index === 0) navigate('/module/phy-g9-motion')
+                              else if (index === 1) navigate('/module/phy-g9-force-laws')
+                              else if (index === 2) navigate('/module/phy-g9-gravitation')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'ComputerScience' && gradeParam === 10) {
+                              if (index === 0) navigate('/module/cs-g10-intro-programming')
+                              else if (index === 1) navigate('/module/cs-g10-office-automation')
+                              else if (index === 2) navigate('/module/cs-g10-internet-network-basics')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 10) {
+                              if (index === 0) navigate('/module/bio-g10-life-processes')
+                              else if (index === 1) navigate('/module/bio-g10-control-coordination')
+                              else if (index === 2) navigate('/module/bio-g10-heredity-evolution')
+                              else handleLessonClick(index)
+                            } else if (subjectParam === 'Biology' && gradeParam === 9) {
+                              if (index === 0) navigate('/module/bio-g9-cell-theory')
+                              else if (index === 1) navigate('/module/bio-g9-plant-animal-cells')
+                              else if (index === 2) navigate('/module/bio-g9-diversity-organisms')
+                              else handleLessonClick(index)
+                            } else handleLessonClick(index)
+                          }}
+                          className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 group-hover:shadow-lg"
+                        >
+                          Start Lesson →
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </SectionCard>
