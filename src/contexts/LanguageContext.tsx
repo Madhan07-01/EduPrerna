@@ -1,5 +1,6 @@
 import type React from 'react'
 import { createContext, useContext, useState, useEffect } from 'react'
+import i18n from '../i18n'
 
 type Language = 'en' | 'hi' | 'or'
 
@@ -131,18 +132,39 @@ const translations = {
   }
 }
 
+// Normalize i18n detected language (e.g., 'en-US', 'hi-IN') to supported app languages
+const SUPPORTED: Array<Language> = ['en', 'hi', 'or']
+const normalizeLang = (lng?: string | null): Language => {
+  const base = (lng || 'en').split?.('-')[0] || 'en'
+  return (SUPPORTED.includes(base as Language) ? (base as Language) : 'en')
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem('language')
-    return (saved as Language) || 'en'
+    const savedRaw = localStorage.getItem('language')
+    const saved = savedRaw ? normalizeLang(savedRaw) : undefined
+    const detected = normalizeLang(i18n.language as string)
+    const initial = (saved || detected || 'en') as Language
+    // Ensure i18next uses the same initial language
+    i18n.changeLanguage(initial)
+    return initial
   })
 
   useEffect(() => {
-    localStorage.setItem('language', language)
+    try {
+      const normalized = normalizeLang(language)
+      localStorage.setItem('language', normalized)
+      localStorage.setItem('i18nextLng', normalized)
+    } catch {}
+    // Propagate to i18next
+    i18n.changeLanguage(normalizeLang(language))
   }, [language])
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key
+    const lang = normalizeLang(language)
+    const table = translations[lang] as Record<string, string>
+    const fallback = table[key] || key
+    return i18n.t(key, { defaultValue: fallback })
   }
 
   return (

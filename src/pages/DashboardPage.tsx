@@ -1,15 +1,17 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { useAuth } from '../hooks/useAuth'
 import { SectionCard } from '../components/SectionCard'
+import { useTranslation } from 'react-i18next'
 
 export function DashboardPage() {
   const { t } = useLanguage()
+  const { t: tI18n } = useTranslation()
   const { currentUser, profile } = useAuth()
   const name = profile?.name ?? currentUser?.displayName ?? currentUser?.email ?? 'Learner'
   
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold">Welcome, {name} 👋</h2>
+      <h2 className="text-lg font-bold">{tI18n('dashboard.welcomeUser', { defaultValue: 'Welcome, {{name}} 👋', name })}</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 p-6 text-white">
           <div className="text-xl font-bold">{t('welcome.title')}</div>
@@ -39,7 +41,9 @@ export function DashboardPage() {
             <div key={c} className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-4">
               <div className="flex items-center justify-between">
                 <div className="text-gray-900 dark:text-white font-semibold">{c}</div>
-            <button className="rounded-md bg-sky-600 text-white text-sm px-3 py-1" aria-label={`Open ${c} course`}>Open</button>
+                <button className="rounded-md bg-sky-600 text-white text-sm px-3 py-1" aria-label={`Open ${c} course`}>
+                  {tI18n('dashboard.open', { defaultValue: 'Open' })}
+                </button>
               </div>
               <div className="h-2 bg-gray-200 dark:bg-slate-800 rounded mt-3">
                 <div className="h-2 w-2/3 bg-sky-500 rounded"></div>

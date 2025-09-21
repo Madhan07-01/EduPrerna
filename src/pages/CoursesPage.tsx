@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSubjects, getGrades, type Subject, type Grade } from '../data/lessonsData'
+import { useTranslation } from 'react-i18next'
 
 export function CoursesPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
   const [selectedGrade, setSelectedGrade] = useState<Grade>(6)
 
@@ -63,9 +65,9 @@ export function CoursesPage() {
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Choose Your Subject</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{t('courses.chooseSubject', { defaultValue: 'Choose Your Subject' })}</h1>
         <p className="text-xl text-gray-600 dark:text-slate-400">
-          Select a subject and grade to start your learning journey
+          {t('courses.selectSubjectAndGrade', { defaultValue: 'Select a subject and grade to start your learning journey' })}
         </p>
       </div>
 
@@ -86,7 +88,7 @@ export function CoursesPage() {
               <div className="text-5xl">{getSubjectIcon(subject)}</div>
               <h3 className="text-xl font-bold">{formatSubjectName(subject)}</h3>
               <p className="text-sm opacity-90">
-                Grade {selectedGrade} Ready
+                {t('courses.gradeReady', { defaultValue: 'Grade {{grade}} Ready', grade: selectedGrade })}
               </p>
               {selectedSubject === subject && (
                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
@@ -101,7 +103,7 @@ export function CoursesPage() {
       {/* Grade Selection */}
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Select Your Grade</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t('courses.selectYourGrade', { defaultValue: 'Select Your Grade' })}</h2>
           <div className="grid grid-cols-4 md:grid-cols-7 gap-3">
             {grades.map((grade) => (
               <button
@@ -114,7 +116,7 @@ export function CoursesPage() {
                 }`}
               >
                 <div className="text-2xl mb-1">📚</div>
-                <div className="text-sm">Grade</div>
+                <div className="text-sm">{t('grade', { defaultValue: 'Grade' })}</div>
                 <div className="text-xl font-bold">{grade}</div>
               </button>
             ))}
@@ -135,8 +137,8 @@ export function CoursesPage() {
             }`}
           >
             {selectedSubject 
-              ? `🚀 Start Learning ${formatSubjectName(selectedSubject)} - Grade ${selectedGrade}` 
-              : '👆 Select a Subject to Continue'
+              ? t('courses.startLearningCta', { defaultValue: '🚀 Start Learning {{subject}} - Grade {{grade}}', subject: formatSubjectName(selectedSubject), grade: selectedGrade })
+              : t('courses.selectSubjectToContinue', { defaultValue: '👆 Select a Subject to Continue' })
             }
           </button>
 
@@ -149,7 +151,7 @@ export function CoursesPage() {
                 : 'bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed'
             }`}
           >
-            🎮 Play STEM Daily Challenge
+            {t('courses.playStemDaily', { defaultValue: '🎮 Play STEM Daily Challenge' })}
           </button>
         </div>
       </div>
@@ -163,12 +165,12 @@ export function CoursesPage() {
                 <div className="text-4xl">{getSubjectIcon(selectedSubject)}</div>
                 <div>
                   <h3 className="text-2xl font-bold">{formatSubjectName(selectedSubject)}</h3>
-                  <p className="opacity-90">Grade {selectedGrade} Curriculum</p>
+                  <p className="opacity-90">{t('courses.gradeCurriculum', { defaultValue: 'Grade {{grade}} Curriculum', grade: selectedGrade })}</p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold">Ready!</div>
-                <div className="text-sm opacity-90">Click Start Learning to begin</div>
+                <div className="text-3xl font-bold">{t('courses.ready', { defaultValue: 'Ready!' })}</div>
+                <div className="text-sm opacity-90">{t('courses.clickStartToBegin', { defaultValue: 'Click Start Learning to begin' })}</div>
               </div>
             </div>
           </div>
@@ -179,25 +181,25 @@ export function CoursesPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
         <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
           <div className="text-4xl mb-4">📊</div>
-          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">Track Progress</h3>
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">{t('courses.trackProgress', { defaultValue: 'Track Progress' })}</h3>
           <p className="text-blue-700 dark:text-blue-400 text-sm">
-            Monitor your learning journey with detailed progress tracking
+            {t('courses.trackProgressDesc', { defaultValue: 'Monitor your learning journey with detailed progress tracking' })}
           </p>
         </div>
         
         <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
           <div className="text-4xl mb-4">🎯</div>
-          <h3 className="text-lg font-semibold text-green-900 dark:text-green-300 mb-2">Interactive Learning</h3>
+          <h3 className="text-lg font-semibold text-green-900 dark:text-green-300 mb-2">{t('courses.interactiveLearning', { defaultValue: 'Interactive Learning' })}</h3>
           <p className="text-green-700 dark:text-green-400 text-sm">
-            Engage with MCQs, quizzes, and interactive content
+            {t('courses.interactiveLearningDesc', { defaultValue: 'Engage with MCQs, quizzes, and interactive content' })}
           </p>
         </div>
         
         <div className="text-center p-6 bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800">
           <div className="text-4xl mb-4">📚</div>
-          <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">Rich Content</h3>
+          <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">{t('courses.richContent', { defaultValue: 'Rich Content' })}</h3>
           <p className="text-purple-700 dark:text-purple-400 text-sm">
-            Access comprehensive study materials and resources
+            {t('courses.richContentDesc', { defaultValue: 'Access comprehensive study materials and resources' })}
           </p>
         </div>
       </div>

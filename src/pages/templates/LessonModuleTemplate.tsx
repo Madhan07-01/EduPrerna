@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../supabase/client'
+import { useTranslation } from 'react-i18next'
 
 export type TemplateSection = { title: string; content: string }
 export type TemplateOption = { key: 'a' | 'b' | 'c' | 'd'; text: string }
@@ -43,6 +44,8 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
     progressTable = 'user_progress',
     storePercent = true,
   } = props
+
+  const { t } = useTranslation()
 
   const [answers, setAnswers] = useState<Record<string, TemplateOption['key'] | null>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -173,14 +176,14 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
     <div className="space-y-8">
       {backLink && (
         <div>
-          <Link to={backLink} className="text-sm text-blue-600 hover:underline">← Back to Lessons</Link>
+          <Link to={backLink} className="text-sm text-blue-600 hover:underline">← {t('backToLessons', { defaultValue: 'Back to Lessons' })}</Link>
         </div>
       )}
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Lesson: {title}</h1>
-          <p className="text-sm text-gray-600 dark:text-slate-400">Grade {grade} • {subject}</p>
+          <h1 className="text-2xl md:text-3xl font-bold">{t('lesson', { defaultValue: 'Lesson' })}: {t(`${lessonId}.title`, { defaultValue: title })}</h1>
+          <p className="text-sm text-gray-600 dark:text-slate-400">{t('grade', { defaultValue: 'Grade' })} {grade} • {subject}</p>
           <div className="mt-2 text-xs">
             <span className={`inline-flex items-center gap-2 px-2 py-1 rounded-full ring-1 ring-inset ${
               completion === 'completed'
@@ -192,38 +195,42 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
               <span className={`h-2 w-2 rounded-full ${
                 completion === 'completed' ? 'bg-emerald-500' : completion === 'in_progress' ? 'bg-amber-500' : 'bg-gray-400'
               }`} />
-              {completion === 'completed' ? 'Already learnt' : completion === 'in_progress' ? 'In progress' : 'Not started'}
+              {completion === 'completed'
+                ? t('status.completed', { defaultValue: 'Already learnt' })
+                : completion === 'in_progress'
+                ? t('status.inProgress', { defaultValue: 'In progress' })
+                : t('status.notStarted', { defaultValue: 'Not started' })}
             </span>
             {previousScore !== null && (
-              <span className="ml-3 text-gray-600 dark:text-slate-400">Last score: {previousScore}/{storePercent ? 100 : mcqs.length}</span>
+              <span className="ml-3 text-gray-600 dark:text-slate-400">{t('lastScore', { defaultValue: 'Last score' })}: {previousScore}/{storePercent ? 100 : mcqs.length}</span>
             )}
           </div>
         </div>
         <div className="flex gap-3">
           <button onClick={() => mcqRef.current?.scrollIntoView({ behavior: 'smooth' })} className="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow">
-            Take Lesson
+            {t('takeLesson', { defaultValue: 'Take Lesson' })}
           </button>
           <button onClick={downloadMaterials} className="px-4 py-2 rounded-xl bg-gray-900/80 dark:bg-slate-800 text-white text-sm font-semibold hover:bg-black">
-            Download Study Materials
+            {t('downloadStudyMaterials', { defaultValue: 'Download Study Materials' })}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="p-5 rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 backdrop-blur">
-          <div className="text-xl font-semibold mb-3">📚 Study Materials</div>
+          <div className="text-xl font-semibold mb-3">📚 {t('studyMaterials', { defaultValue: 'Study Materials' })}</div>
           <div className="space-y-4 text-sm leading-6 text-gray-800 dark:text-slate-200">
-            {sections.map((s) => (
+            {sections.map((s, i) => (
               <section key={s.title} className="group">
-                <h3 className="font-semibold text-gray-900 dark:text-white">{s.title}</h3>
-                <p className="mt-1 text-gray-700 dark:text-slate-300 whitespace-pre-line">{s.content}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">{t(`${lessonId}.sections.${i}.title`, { defaultValue: s.title })}</h3>
+                <p className="mt-1 text-gray-700 dark:text-slate-300 whitespace-pre-line">{t(`${lessonId}.sections.${i}.content`, { defaultValue: s.content })}</p>
               </section>
             ))}
           </div>
         </div>
 
         <div ref={mcqRef} className="p-5 rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 backdrop-blur">
-          <div className="text-xl font-semibold mb-3">📝 MCQ Practice</div>
+          <div className="text-xl font-semibold mb-3">📝 {t('mcqPractice', { defaultValue: 'MCQ Practice' })}</div>
           <div className="space-y-6">
             {mcqs.map((q, idx) => {
               const selected = answers[q.id]
@@ -231,7 +238,7 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
               const showFeedback = submitted || (selected && selected === q.answer)
               return (
                 <div key={q.id} className="rounded-xl border border-gray-200 dark:border-slate-700 p-4">
-                  <div className="font-medium mb-3">Q{idx + 1}. {q.question}</div>
+                  <div className="font-medium mb-3">Q{idx + 1}. {t(`${lessonId}.mcq.${q.id}.question`, { defaultValue: q.question })}</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {q.options.map((opt) => {
                       const active = selected === opt.key
@@ -248,7 +255,7 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
                           } ${correct ? 'ring-2 ring-emerald-500' : ''} ${wrong ? 'ring-2 ring-rose-500' : ''}`}
                         >
                           <span className="font-semibold mr-2">{opt.key.toUpperCase()})</span>
-                          {opt.text}
+                          {t(`${lessonId}.mcq.${q.id}.options.${opt.key}`, { defaultValue: opt.text })}
                         </button>
                       )
                     })}
@@ -261,7 +268,7 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
                           : 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300'
                       }`}
                     >
-                      {isCorrect ? '✅ Correct!' : 'ℹ️ Explanation:'} {q.explanation || ''}
+                      {isCorrect ? `✅ ${t('correct', { defaultValue: 'Correct!' })}` : `ℹ️ ${t('explanation', { defaultValue: 'Explanation:' })}`} {t(`${lessonId}.mcq.${q.id}.explanation`, { defaultValue: q.explanation || '' })}
                     </div>
                   )}
                 </div>
@@ -271,7 +278,7 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
 
           <div className="mt-5 flex items-center justify-between">
             <div className="text-sm text-gray-700 dark:text-slate-300">
-              Score: {storePercent ? percentScore : score}/{storePercent ? 100 : mcqs.length}
+              {t('score', { defaultValue: 'Score' })}: {storePercent ? percentScore : score}/{storePercent ? 100 : mcqs.length}
             </div>
             <button
               onClick={handleSubmit}
@@ -280,7 +287,7 @@ export default function LessonModuleTemplate(props: LessonModuleTemplateProps) {
                 saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'
               }`}
             >
-              {saving ? 'Saving…' : 'Submit & Save Progress'}
+              {saving ? t('saving', { defaultValue: 'Saving…' }) : t('submitAndSave', { defaultValue: 'Submit & Save Progress' })}
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../supabase/client'
+import { useTranslation } from 'react-i18next'
 
 // IDs and constants for this lesson
 const LESSON_ID_TEXT = 'math-g6-number-system'
@@ -138,6 +139,7 @@ const SECTIONS = [
 ]
 
 export default function MathG6NumberSystem() {
+  const { t } = useTranslation()
   const [answers, setAnswers] = useState<Record<string, Option['key'] | null>>({})
   const [submitted, setSubmitted] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -247,13 +249,15 @@ export default function MathG6NumberSystem() {
 
   const downloadMaterials = () => {
     const lines: string[] = []
-    lines.push('Lesson: Number System')
-    lines.push('Grade: 6  Subject: Mathematics')
+    lines.push(`${t('lesson', { defaultValue: 'Lesson' })}: ${t(`${LESSON_ID_TEXT}.title`, { defaultValue: 'Number System' })}`)
+    lines.push(`${t('grade', { defaultValue: 'Grade' })}: 6  ${t('courseTitle', { defaultValue: 'Course Title' })}: Mathematics`)
     lines.push('')
-    for (const s of SECTIONS) {
-      lines.push(s.title)
-      lines.push('-'.repeat(s.title.length))
-      lines.push(s.content)
+    for (const [i, s] of SECTIONS.entries()) {
+      const st = t(`${LESSON_ID_TEXT}.sections.${i}.title`, { defaultValue: s.title })
+      const sc = t(`${LESSON_ID_TEXT}.sections.${i}.content`, { defaultValue: s.content })
+      lines.push(st)
+      lines.push('-'.repeat(String(st).length))
+      lines.push(String(sc))
       lines.push('')
     }
     const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' })
@@ -274,10 +278,10 @@ export default function MathG6NumberSystem() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Lesson: Number System</h1>
-          <p className="text-sm text-gray-600 dark:text-slate-400">Grade 6 • Mathematics</p>
+          <h1 className="text-2xl md:text-3xl font-bold">{t('lesson', { defaultValue: 'Lesson' })}: {t(`${LESSON_ID_TEXT}.title`, { defaultValue: 'Number System' })}</h1>
+          <p className="text-sm text-gray-600 dark:text-slate-400">{t('grade', { defaultValue: 'Grade' })} 6 • Mathematics</p>
           {loading ? (
-            <div className="mt-2 text-xs text-gray-500">Loading your progress…</div>
+            <div className="mt-2 text-xs text-gray-500">{t('loadingProgress', { defaultValue: 'Loading your progress…' })}</div>
           ) : (
             <div className="mt-2 text-xs">
               <span className={`inline-flex items-center gap-2 px-2 py-1 rounded-full ring-1 ring-inset ${
@@ -290,20 +294,20 @@ export default function MathG6NumberSystem() {
                 <span className={`h-2 w-2 rounded-full ${
                   completion === 'completed' ? 'bg-emerald-500' : completion === 'in_progress' ? 'bg-amber-500' : 'bg-gray-400'
                 }`} />
-                {completion === 'completed' ? 'Already learnt' : completion === 'in_progress' ? 'In progress' : 'Not started'}
+                {completion === 'completed' ? t('status.completed', { defaultValue: 'Already learnt' }) : completion === 'in_progress' ? t('status.inProgress', { defaultValue: 'In progress' }) : t('status.notStarted', { defaultValue: 'Not started' })}
               </span>
               {previousScore !== null && (
-                <span className="ml-3 text-gray-600 dark:text-slate-400">Last score: {previousScore}/{MCQS.length}</span>
+                <span className="ml-3 text-gray-600 dark:text-slate-400">{t('lastScore', { defaultValue: 'Last score' })}: {previousScore}/{MCQS.length}</span>
               )}
             </div>
           )}
         </div>
         <div className="flex gap-3">
           <button onClick={startMcq} className="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow">
-            Start MCQ
+            {t('mcqPractice', { defaultValue: 'MCQ Practice' })}
           </button>
           <button onClick={downloadMaterials} className="px-4 py-2 rounded-xl bg-gray-900/80 dark:bg-slate-800 text-white text-sm font-semibold hover:bg-black">
-            Download Study Materials
+            {t('downloadStudyMaterials', { defaultValue: 'Download Study Materials' })}
           </button>
         </div>
       </div>
@@ -312,12 +316,12 @@ export default function MathG6NumberSystem() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Study Materials */}
         <div className="p-5 rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 backdrop-blur">
-          <div className="text-xl font-semibold mb-3">📚 Study Materials</div>
+          <div className="text-xl font-semibold mb-3">📚 {t('studyMaterials', { defaultValue: 'Study Materials' })}</div>
           <div className="space-y-4 text-sm leading-6 text-gray-800 dark:text-slate-200">
-            {SECTIONS.map((s) => (
+            {SECTIONS.map((s, i) => (
               <section key={s.title} className="group">
-                <h3 className="font-semibold text-gray-900 dark:text-white">{s.title}</h3>
-                <p className="mt-1 text-gray-700 dark:text-slate-300">{s.content}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">{t(`${LESSON_ID_TEXT}.sections.${i}.title`, { defaultValue: s.title })}</h3>
+                <p className="mt-1 text-gray-700 dark:text-slate-300">{t(`${LESSON_ID_TEXT}.sections.${i}.content`, { defaultValue: s.content })}</p>
               </section>
             ))}
           </div>
@@ -325,7 +329,7 @@ export default function MathG6NumberSystem() {
 
         {/* MCQ Practice */}
         <div ref={mcqRef} className="p-5 rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 backdrop-blur">
-          <div className="text-xl font-semibold mb-3">📝 MCQ Practice</div>
+          <div className="text-xl font-semibold mb-3">📝 {t('mcqPractice', { defaultValue: 'MCQ Practice' })}</div>
 
           <div className="space-y-6">
             {questions.map((q, idx) => {
@@ -334,8 +338,8 @@ export default function MathG6NumberSystem() {
               const showFeedback = submitted || (selected && selected === q.answer)
               return (
                 <div key={q.id} className="rounded-xl border border-gray-200 dark:border-slate-700 p-4">
-                  <div className="text-sm text-gray-500 dark:text-slate-400 mb-1">Section: {q.section}</div>
-                  <div className="font-medium mb-3">Q{idx + 1}. {q.question}</div>
+                  <div className="text-sm text-gray-500 dark:text-slate-400 mb-1">{t('section', { defaultValue: 'Section' })}: {t(`${LESSON_ID_TEXT}.mcq.${q.id}.section`, { defaultValue: q.section })}</div>
+                  <div className="font-medium mb-3">Q{idx + 1}. {t(`${LESSON_ID_TEXT}.mcq.${q.id}.question`, { defaultValue: q.question })}</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {q.options.map((opt) => {
                       const active = selected === opt.key
@@ -352,7 +356,7 @@ export default function MathG6NumberSystem() {
                           } ${correct ? 'ring-2 ring-emerald-500' : ''} ${wrong ? 'ring-2 ring-rose-500' : ''}`}
                         >
                           <span className="font-semibold mr-2">{opt.key.toUpperCase()})</span>
-                          {opt.text}
+                          {t(`${LESSON_ID_TEXT}.mcq.${q.id}.options.${opt.key}`, { defaultValue: opt.text })}
                         </button>
                       )
                     })}
@@ -362,7 +366,8 @@ export default function MathG6NumberSystem() {
                     <div className={`mt-3 text-sm rounded-lg px-3 py-2 ${
                       isCorrect ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300'
                     }`}>
-                      {isCorrect ? '✅ Correct! ' : 'ℹ️ Explanation: '} {q.explanation}
+                      {isCorrect ? `✅ ${t('correct', { defaultValue: 'Correct!' })} ` : `ℹ️ ${t('explanation', { defaultValue: 'Explanation:' })} `}
+                      {t(`${LESSON_ID_TEXT}.mcq.${q.id}.explanation`, { defaultValue: q.explanation })}
                     </div>
                   )}
                 </div>
@@ -371,7 +376,7 @@ export default function MathG6NumberSystem() {
           </div>
 
           <div className="mt-5 flex items-center justify-between">
-            <div className="text-sm text-gray-700 dark:text-slate-300">Score: {score}/{MCQS.length}</div>
+            <div className="text-sm text-gray-700 dark:text-slate-300">{t('score', { defaultValue: 'Score' })}: {score}/{MCQS.length}</div>
             <button
               onClick={handleSubmit}
               disabled={saving}
@@ -379,7 +384,7 @@ export default function MathG6NumberSystem() {
                 saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'
               }`}
             >
-              {saving ? 'Saving…' : 'Submit & Save Progress'}
+              {saving ? t('saving', { defaultValue: 'Saving…' }) : t('submitAndSave', { defaultValue: 'Submit & Save Progress' })}
             </button>
           </div>
         </div>

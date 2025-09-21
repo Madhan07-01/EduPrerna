@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 type Subject = 'Mathematics' | 'ComputerScience' | 'Physics' | 'Chemistry' | 'Biology'
 const grades = [6, 7, 8, 9, 10, 11, 12]
@@ -10,6 +11,7 @@ export default function DailyChallengePage() {
   const [searchParams] = useSearchParams()
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null)
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
+  const { t } = useTranslation()
 
   const getSubjectIcon = (s: Subject) => {
     const icons: Record<Subject, string> = {
@@ -61,20 +63,14 @@ export default function DailyChallengePage() {
     <div className="space-y-10">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-          Daily STEM Challenge
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-slate-400">
-          Pick your grade and subject to play today&apos;s interactive game
-        </p>
-        <p className="text-sm text-emerald-500 mt-1">New challenges unlock daily at 7 AM</p>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{t('daily.title', { defaultValue: 'Daily STEM Challenge' })}</h1>
+        <p className="text-lg text-gray-600 dark:text-slate-400">{t('daily.pickGradeSubject', { defaultValue: "Pick your grade and subject to play today's interactive game" })}</p>
+        <p className="text-sm text-emerald-500 mt-1">{t('daily.unlockTime', { defaultValue: 'New challenges unlock daily at 7 AM' })}</p>
       </div>
 
       {/* Grade Selector */}
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-center text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Select Grade
-        </h2>
+        <h2 className="text-center text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('daily.selectGrade', { defaultValue: 'Select Grade' })}</h2>
         <div className="grid grid-cols-4 md:grid-cols-7 gap-3 justify-items-center">
           {grades.map((g) => (
             <button
@@ -89,16 +85,12 @@ export default function DailyChallengePage() {
             </button>
           ))}
         </div>
-        <p className="text-center text-sm text-gray-500 mt-2">
-          Grades 6–12 supported
-        </p>
+        <p className="text-center text-sm text-gray-500 mt-2">{t('daily.gradesSupported', { defaultValue: 'Grades 6–12 supported' })}</p>
       </div>
 
       {/* Subject Cards */}
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-center text-xl font-semibold text-gray-900 dark:text-white mb-6">
-          STEM Subject
-        </h2>
+        <h2 className="text-center text-xl font-semibold text-gray-900 dark:text-white mb-6">{t('daily.stemSubject', { defaultValue: 'STEM Subject' })}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {subjects.map((subject) => (
             <button
@@ -111,7 +103,7 @@ export default function DailyChallengePage() {
               <div className="relative text-center text-white space-y-4">
                 <div className="text-5xl">{getSubjectIcon(subject)}</div>
                 <h3 className="text-xl font-bold">{subject === 'ComputerScience' ? 'Computer Science' : subject}</h3>
-                <p className="text-sm opacity-90">Daily puzzles & mini-games</p>
+                <p className="text-sm opacity-90">{t('daily.puzzlesTag', { defaultValue: 'Daily puzzles & mini-games' })}</p>
               </div>
             </button>
           ))}
@@ -130,8 +122,8 @@ export default function DailyChallengePage() {
             }`}
         >
           {selectedGrade && selectedSubject
-            ? `🎮 Play Daily Challenge` 
-            : 'Select Grade & Subject'}
+            ? t('daily.playCta', { defaultValue: '🎮 Play Daily Challenge' })
+            : t('daily.selectGradeSubject', { defaultValue: 'Select Grade & Subject' })}
         </button>
       </div>
     </div>

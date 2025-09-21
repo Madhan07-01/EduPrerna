@@ -16,6 +16,7 @@ import CodeDebugScene from '../games/CodeDebugScene'
 import AlgorithmMazeScene from '../games/AlgorithmMazeScene'
 import CircuitPuzzleScene from '../games/CircuitPuzzleScene'
 import { fetchDailyChallenge, type Challenge, type Subject } from '../services/supabaseGames'
+import { useTranslation } from 'react-i18next'
 
 const SUBJECTS: Subject[] = ['Mathematics', 'Science', 'Technology', 'Engineering']
 
@@ -27,6 +28,7 @@ export default function DailyStemChallenge() {
   const params = useParams()
   const subjectParam = (params.subject || '').trim()
   const gradeParam = Number(params.grade)
+  const { t } = useTranslation()
 
   const [challenge, setChallenge] = useState<Challenge | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -77,11 +79,11 @@ export default function DailyStemChallenge() {
   }, [challenge])
 
   if (!validSubject || !Number.isFinite(validGrade)) {
-    return <div className="text-red-600">Invalid subject or grade in URL.</div>
+    return <div className="text-red-600">{t('daily.invalidUrl', { defaultValue: 'Invalid subject or grade in URL.' })}</div>
   }
-  if (loading) return <div>Loading daily challenge…</div>
-  if (error) return <div className="text-red-600">Error: {error}</div>
-  if (!challenge || !scene) return <div>No challenge available for today.</div>
+  if (loading) return <div>{t('daily.loading', { defaultValue: 'Loading daily challenge…' })}</div>
+  if (error) return <div className="text-red-600">{t('daily.error', { defaultValue: 'Error: {{msg}}', msg: error })}</div>
+  if (!challenge || !scene) return <div>{t('daily.noChallenge', { defaultValue: 'No challenge available for today.' })}</div>
 
   const sceneData = {
     challenge_id: challenge.id,

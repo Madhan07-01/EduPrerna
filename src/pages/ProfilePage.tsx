@@ -1,9 +1,11 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { useAuth } from '../hooks/useAuth'
 import { SectionCard } from '../components/SectionCard'
+import { useTranslation } from 'react-i18next'
 
 export function ProfilePage() {
   const { t } = useLanguage()
+  const { t: tI18n } = useTranslation()
   const { currentUser, profile } = useAuth()
   const name = profile?.name ?? currentUser?.displayName ?? currentUser?.email ?? 'User'
   
@@ -11,7 +13,7 @@ export function ProfilePage() {
     <div className="space-y-4">
       <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-fuchsia-600 p-6 text-white">
         <div className="text-xl font-bold">{name}</div>
-        <div className="text-sm">Grade 6 • English</div>
+        <div className="text-sm">{tI18n('grade', { defaultValue: 'Grade' })} 6 • {tI18n('language', { defaultValue: 'Language' })}: {tI18n('english', { defaultValue: 'English' })}</div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
@@ -25,7 +27,9 @@ export function ProfilePage() {
           </SectionCard>
         ))}
       </div>
-      <SectionCard title="Learning History">Start your learning journey</SectionCard>
+      <SectionCard title={tI18n('profile.learningHistory', { defaultValue: 'Learning History' })}>
+        {tI18n('profile.startJourney', { defaultValue: 'Start your learning journey' })}
+      </SectionCard>
     </div>
   )
 }
