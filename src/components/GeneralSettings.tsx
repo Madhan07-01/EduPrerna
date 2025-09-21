@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useLanguage } from '../contexts/LanguageContext'
 
 const GeneralSettings = () => {
   

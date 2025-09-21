@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Phaser from 'phaser'
 
 // Constants
-const QUESTIONS_PER_LEVEL = 5
+const QUESTIONS_PER_LEVEL = 3
 const MAX_LEVELS = 5
 
 // Types
@@ -28,38 +28,28 @@ interface GameState {
   status: 'levelStart' | 'playing' | 'levelComplete' | 'gameOver' | 'gameComplete'
 }
 
-// Build question bank (Grade 6)
+// Build question bank (Grade 6) — 5 levels × 3 questions each
 const questions: Question[] = [
-  // Level 1
-  { id: 1, question: '3 + 2 = ?', options: [4, 5, 6], correctAnswer: 1 },
-  { id: 2, question: '10 − 4 = ?', options: [5, 6, 7], correctAnswer: 1 },
-  { id: 3, question: '2 × 3 = ?', options: [5, 6, 7], correctAnswer: 1 },
-  { id: 4, question: '12 ÷ 4 = ?', options: [2, 3, 5], correctAnswer: 1 },
-  { id: 5, question: '8 + 1 = ?', options: [9, 10, 11], correctAnswer: 0 },
-  // Level 2
-  { id: 6, question: '14 − 7 = ?', options: [6, 7, 8], correctAnswer: 1 },
-  { id: 7, question: '5 × 4 = ?', options: [15, 20, 25], correctAnswer: 1 },
-  { id: 8, question: '18 ÷ 3 = ?', options: [5, 6, 7], correctAnswer: 1 },
-  { id: 9, question: '9 + 8 = ?', options: [16, 17, 18], correctAnswer: 1 },
-  { id: 10, question: '20 − 9 = ?', options: [11, 12, 13], correctAnswer: 0 },
-  // Level 3
-  { id: 11, question: '7 × 6 = ?', options: [40, 42, 44], correctAnswer: 1 },
-  { id: 12, question: '45 ÷ 5 = ?', options: [8, 9, 10], correctAnswer: 1 },
-  { id: 13, question: '30 − 18 = ?', options: [12, 13, 14], correctAnswer: 0 },
-  { id: 14, question: '25 + 36 = ?', options: [60, 61, 62], correctAnswer: 1 },
-  { id: 15, question: '9 × 9 = ?', options: [80, 81, 82], correctAnswer: 1 },
-  // Level 4
-  { id: 16, question: '64 ÷ 8 = ?', options: [6, 7, 8], correctAnswer: 2 },
-  { id: 17, question: '15 × 4 = ?', options: [50, 55, 60], correctAnswer: 2 },
-  { id: 18, question: '72 − 39 = ?', options: [32, 33, 34], correctAnswer: 1 },
-  { id: 19, question: '11 × 11 = ?', options: [120, 121, 122], correctAnswer: 1 },
-  { id: 20, question: '100 − 47 = ?', options: [52, 53, 54], correctAnswer: 1 },
-  // Level 5
-  { id: 21, question: '125 ÷ 25 = ?', options: [4, 5, 6], correctAnswer: 1 },
-  { id: 22, question: '18 × 12 = ?', options: [210, 216, 220], correctAnswer: 1 },
-  { id: 23, question: '144 ÷ 12 = ?', options: [10, 11, 12], correctAnswer: 2 },
-  { id: 24, question: '75 + 68 = ?', options: [141, 142, 143], correctAnswer: 1 },
-  { id: 25, question: '99 − 37 = ?', options: [61, 62, 63], correctAnswer: 1 }
+  // Level 1 – Basic Arithmetic
+  { id: 1, question: '5 + 4 = ?', options: [8, 9, 10], correctAnswer: 1 },
+  { id: 2, question: '12 − 7 = ?', options: [4, 5, 6], correctAnswer: 1 },
+  { id: 3, question: '3 × 2 = ?', options: [5, 6, 7], correctAnswer: 1 },
+  // Level 2 – Larger Numbers
+  { id: 4, question: '25 − 9 = ?', options: [15, 16, 17], correctAnswer: 1 },
+  { id: 5, question: '7 × 5 = ?', options: [34, 35, 36], correctAnswer: 1 },
+  { id: 6, question: '56 ÷ 8 = ?', options: [6, 7, 8], correctAnswer: 1 },
+  // Level 3 – Squares & Mixed Ops
+  { id: 7, question: '6 × 6 = ?', options: [35, 36, 37], correctAnswer: 1 },
+  { id: 8, question: '81 ÷ 9 = ?', options: [8, 9, 10], correctAnswer: 1 },
+  { id: 9, question: '14 + 29 = ?', options: [42, 43, 44], correctAnswer: 1 },
+  // Level 4 – Word Problems & Harder Ops
+  { id: 10, question: 'A box has 48 apples, shared by 6 kids. Each gets?', options: [7, 8, 9], correctAnswer: 1 },
+  { id: 11, question: '12 × 9 = ?', options: [107, 108, 109], correctAnswer: 1 },
+  { id: 12, question: '144 ÷ 12 = ?', options: [10, 11, 12], correctAnswer: 2 },
+  // Level 5 – Challenge Round
+  { id: 13, question: '125 ÷ 5 = ?', options: [24, 25, 26], correctAnswer: 1 },
+  { id: 14, question: '19 × 12 = ?', options: [227, 228, 229], correctAnswer: 1 },
+  { id: 15, question: '225 ÷ 15 = ?', options: [14, 15, 16], correctAnswer: 1 }
 ]
 
 const getLevelSlice = (level: number) => {
@@ -81,10 +71,10 @@ class MathArcherScene extends Phaser.Scene {
   private qText?: Phaser.GameObjects.Text
 
   private targets: Phaser.GameObjects.Container[] = []
-  private arrows: Phaser.GameObjects.Rectangle[] = []
-  private aimAngle: number = -70 // degrees
-  private bowX: number = 120
-  private bowY: number = 460
+  private arrows: Phaser.GameObjects.Container[] = []
+  private aimAngle: number = -90 // degrees (upwards)
+  private bowX: number = 0
+  private bowY: number = 0
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
   private shootKey?: Phaser.Input.Keyboard.Key
 
@@ -99,10 +89,14 @@ class MathArcherScene extends Phaser.Scene {
   create() {
     const w = 900
     const h = 600
-    this.add.rectangle(0, 0, w, h, 0x0b1526).setOrigin(0)
+    // green board-like background
+    this.add.rectangle(0, 0, w, h, 0x214d33).setOrigin(0)
 
-    // ground
-    this.add.rectangle(0, h - 40, w, 40, 0x111827).setOrigin(0)
+    // ground (brown)
+    this.add.rectangle(0, h - 60, w, 60, 0x7a3f10).setOrigin(0)
+
+    this.bowX = w / 2
+    this.bowY = h - 90
 
     // HUD
     this.createHUD()
@@ -110,9 +104,12 @@ class MathArcherScene extends Phaser.Scene {
     // Question
     this.qText = this.add.text(w / 2, 70, this.currentQ ? this.currentQ.question : 'Loading…', { fontSize: '28px', color: '#ffffff' }).setOrigin(0.5)
 
-    // Bow (simple triangle)
-    const bow = this.add.triangle(this.bowX, this.bowY, 0, 0, 0, -60, 10, 0, 0x22c55e)
+    // Green aim arrow indicator at bottom center
+    const bow = this.add.container(this.bowX, this.bowY)
     bow.setName('bow')
+    const aimShaft = this.add.rectangle(-28, 0, 40, 5, 0x22c55e).setOrigin(0, 0.5)
+    const aimHead = this.add.triangle(0, 0, 0, 0, -10, -7, -10, 7, 0x22c55e)
+    bow.add([aimShaft, aimHead])
     bow.rotation = Phaser.Math.DegToRad(this.aimAngle)
 
     // Targets with options
@@ -122,7 +119,20 @@ class MathArcherScene extends Phaser.Scene {
     this.cursors = this.input.keyboard?.createCursorKeys()
     this.shootKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
-    this.input.on('pointerdown', () => this.shootArrow())
+    // Pointer: aim toward pointer and tap to shoot
+    this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - this.bowX
+      const dy = p.y - this.bowY
+      const ang = Phaser.Math.RadToDeg(Math.atan2(dy, dx))
+      this.aimAngle = Phaser.Math.Clamp(ang, -160, -20)
+    })
+    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - this.bowX
+      const dy = p.y - this.bowY
+      const ang = Phaser.Math.RadToDeg(Math.atan2(dy, dx))
+      this.aimAngle = Phaser.Math.Clamp(ang, -160, -20)
+      this.shootArrow()
+    })
 
     this.events.on('updateHUD', () => this.updateHUD())
   }
@@ -151,16 +161,18 @@ class MathArcherScene extends Phaser.Scene {
       const label = this.add.text(0, 0, String(opt), { fontSize: '16px', color: '#e5e7eb' }).setOrigin(0.5)
       container.add([body, label])
 
-      // give it velocity side-to-side
-      const dir = idx % 2 === 0 ? 1 : -1
-      this.tweens.add({
-        targets: container,
-        x: container.x + dir * 120,
-        yoyo: true,
-        repeat: -1,
-        duration: 1200 + idx * 200,
-        ease: 'Sine.easeInOut'
-      })
+      // Distance-aware parameters (easier to shoot):
+      const dx0 = container.x - this.bowX
+      const dy0 = container.y - this.bowY
+      const dist = Math.sqrt(dx0 * dx0 + dy0 * dy0)
+      const maxDist = 900
+      const norm = Phaser.Math.Clamp(dist / maxDist, 0, 1)
+      const amplitude = Phaser.Math.Linear(80, 40, norm) // closer → wider swing
+      const speed = Phaser.Math.Linear(0.0022, 0.0012, norm) // closer → slightly faster
+      ;(container as any).baseX = container.x
+      ;(container as any).phase = Math.PI * 0.6 * idx
+      ;(container as any).amp = amplitude
+      ;(container as any).spd = speed
 
       // attach metadata
       ;(container as any).answerIndex = idx
@@ -177,32 +189,42 @@ class MathArcherScene extends Phaser.Scene {
   update(_t: number, dt: number) {
     if (!this.cursors || !this.shootKey) return
 
-    if (this.cursors.left?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle - 0.2 * (dt / 16), -110, -20)
-    if (this.cursors.right?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle + 0.2 * (dt / 16), -110, -20)
-
-    const bow = this.children.getByName('bow') as Phaser.GameObjects.Triangle | null
-    if (bow) bow.rotation = Phaser.Math.DegToRad(this.aimAngle)
-
     if (Phaser.Input.Keyboard.JustDown(this.shootKey)) this.shootArrow()
 
-    // move arrows
-    this.arrows.forEach((a) => {
-      a.y += Math.sin(Phaser.Math.DegToRad(this.aimAngle)) * 10
-      a.x += Math.cos(Phaser.Math.DegToRad(this.aimAngle)) * 10
+    // Move targets with distance-aware sine motion
+    const now = this.time.now
+    this.targets.forEach((tgt: any) => {
+      const baseX = tgt.baseX as number
+      const amp = tgt.amp as number
+      const spd = tgt.spd as number
+      const phase = tgt.phase as number
+      tgt.x = baseX + Math.sin(now * spd + phase) * amp
+    })
 
-      // collision test with targets
-      this.targets.forEach((tgt) => {
-        const dx = a.x - tgt.x
-        const dy = a.y - tgt.y
+    // move arrows using their own velocity; rotate to flight direction
+    this.arrows.forEach((a: any) => {
+      const vx = a.vx as number
+      const vy = a.vy as number
+      a.x += vx
+      a.y += vy
+      a.rotation = Math.atan2(vy, vx)
+
+      // tip-origin collision (container origin is at tip 0,0)
+      const tipX = a.x
+      const tipY = a.y
+      for (const tgt of this.targets) {
+        const dx = tipX - tgt.x
+        const dy = tipY - tgt.y
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < 36) {
           this.handleHit(tgt, (tgt as any).answerIndex)
           a.destroy()
+          break
         }
-      })
+      }
 
       // cleanup offscreen
-      if (a.x < -20 || a.x > 920 || a.y < -20 || a.y > 620) {
+      if (a.x < -40 || a.x > 940 || a.y < -40 || a.y > 640) {
         a.destroy()
       }
     })
@@ -210,10 +232,19 @@ class MathArcherScene extends Phaser.Scene {
   }
 
   private shootArrow() {
-    // create a slim rectangle as an arrow
-    const arrow = this.add.rectangle(this.bowX, this.bowY, 24, 3, 0xf59e0b)
-    arrow.rotation = Phaser.Math.DegToRad(this.aimAngle)
-    this.arrows.push(arrow)
+    // Archer arrow as a container with tip at (0,0) for precise collision
+    const cont = this.add.container(this.bowX, this.bowY)
+    const shaft = this.add.rectangle(-28, 0, 40, 3, 0xcbd5e1).setOrigin(0, 0.5)
+    const head = this.add.triangle(0, 0, 0, 0, -8, -5, -8, 5, 0xf59e0b)
+    const fletch = this.add.triangle(-36, 0, 0, 0, 8, -4, 8, 4, 0x22c55e)
+    cont.add([shaft, head, fletch])
+    const rad = Phaser.Math.DegToRad(this.aimAngle)
+    cont.rotation = rad
+    // store per-arrow velocity
+    const speed = 14
+    ;(cont as any).vx = Math.cos(rad) * speed
+    ;(cont as any).vy = Math.sin(rad) * speed
+    this.arrows.push(cont)
   }
 
   private handleHit(target: Phaser.GameObjects.Container, idx: number) {

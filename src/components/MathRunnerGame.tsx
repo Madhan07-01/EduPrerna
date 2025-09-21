@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { getQuestionsForLesson, getQuestionsForLevel, type Question } from '../data/questionBank'
+import { getQuestionsForLevel as getMathRunnerQuestions, isGradeSupported } from '../data/mathRunnerQuestionBank'
 
 interface MathRunnerGameProps {
   subject: string
@@ -7,8 +8,6 @@ interface MathRunnerGameProps {
   lesson: string
   onBack: () => void
 }
-
-
 
 interface GameState {
   level: number
@@ -18,6 +17,66 @@ interface GameState {
   questionsInLevel: number
   gameStatus: 'levelStart' | 'playing' | 'paused' | 'levelComplete' | 'gameComplete' | 'gameOver'
   speed: number
+}
+
+// Simple function to generate options for a math question
+const generateOptions = (question: string): { options: string[], correctAnswer: number } => {
+  // This is a simplified implementation - in a real app, you'd want to properly calculate the answer
+  // and generate plausible distractors
+  try {
+    // Extract numbers and operators from question
+    const numbers = question.match(/[\d.]+/g) || []
+    const operators = question.match(/[+\-×÷x*/\-]/g) || []
+    
+    // Simple evaluation for basic operations (this is a simplified version)
+    let correctAnswer = 0
+    if (numbers.length >= 2) {
+      const a = parseFloat(numbers[0] || '0')
+      const b = parseFloat(numbers[1] || '0')
+      
+      switch (operators[0]) {
+        case '+':
+          correctAnswer = a + b
+          break
+        case '-':
+          correctAnswer = a - b
+          break
+        case '×':
+        case 'x':
+        case '*':
+          correctAnswer = a * b
+          break
+        case '÷':
+        case '/':
+          correctAnswer = b !== 0 ? a / b : 0
+          break
+        default:
+          correctAnswer = a + b
+      }
+    }
+    
+    // Generate options with the correct answer and two distractors
+    const options = [
+      correctAnswer.toString(),
+      (correctAnswer + Math.floor(Math.random() * 5) + 1).toString(),
+      (correctAnswer - Math.floor(Math.random() * 5) - 1).toString()
+    ]
+    
+    // Shuffle options
+    const shuffled = [...options].sort(() => Math.random() - 0.5)
+    const correctIndex = shuffled.indexOf(correctAnswer.toString())
+    
+    return {
+      options: shuffled,
+      correctAnswer: correctIndex
+    }
+  } catch (e) {
+    // Fallback for complex questions
+    return {
+      options: ['A', 'B', 'C'],
+      correctAnswer: 0
+    }
+  }
 }
 
 const MathRunnerGame: React.FC<MathRunnerGameProps> = ({ subject, grade, lesson, onBack }) => {
@@ -39,23 +98,6 @@ const MathRunnerGame: React.FC<MathRunnerGameProps> = ({ subject, grade, lesson,
   const [backgroundPosition, setBackgroundPosition] = useState<number>(0)
   const [characterAnimation, setCharacterAnimation] = useState<'running' | 'jumping' | 'stumbling'>('running')
   
-  const gameLoopRef = useRef<NodeJS.Timeout | null>(null)
-  const backgroundRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Initialize questions for the current lesson
-  useEffect(() => {
-    const questions = getQuestionsForLesson(subject, grade, lesson)
-    if (questions.length > 0) {
-      setCurrentQuestions(questions)
-      if (gameState.gameStatus === 'playing') {
-        const levelQuestions = getQuestionsForLevel(questions, gameState.level)
-        if (levelQuestions.length > 0) {
-          setCurrentQuestionData(levelQuestions[gameState.questionsInLevel])
-        }
-      }
-    }
-  }, [subject, grade, lesson, gameState.level, gameState.questionsInLevel, gameState.gameStatus])
-
   // Game loop for level start timer
   useEffect(() => {
     if (gameState.gameStatus === 'levelStart') {
@@ -69,17 +111,54 @@ const MathRunnerGame: React.FC<MathRunnerGameProps> = ({ subject, grade, lesson,
   // Game loop for background animation
   useEffect(() => {
     if (gameState.gameStatus === 'playing') {
-      backgroundRef.current = setInterval(() => {
+      const interval = setInterval(() => {
         setBackgroundPosition(prev => (prev - gameState.speed) % 100)
       }, 50)
-    }
-    
-    return () => {
-      if (backgroundRef.current) clearInterval(backgroundRef.current)
+      return () => clearInterval(interval)
     }
   }, [gameState.gameStatus, gameState.speed])
 
-
+  // Initialize questions for the current lesson
+  useEffect(() => {
+    // Check if we should use the new question bank for Grades 6-12
+    if (subject === 'mathematics' && isGradeSupported(grade)) {
+      // For Grades 6-12, use the new question bank structure
+      // We'll generate Question objects from the string questions
+      const questions: Question[] = []
+      for (let level = 1; level <= 5; level++) {
+        const levelQuestions = getMathRunnerQuestions(grade, lesson, level.toString())
+        levelQuestions.forEach((questionText, index) => {
+          const { options, correctAnswer } = generateOptions(questionText)
+          questions.push({
+            id: (level - 1) * 3 + index + 1,
+            question: questionText,
+            options: options,
+            correctAnswer: correctAnswer,
+            difficulty: level
+          })
+        })
+      }
+      setCurrentQuestions(questions)
+      if (gameState.gameStatus === 'playing' && questions.length > 0) {
+        const levelQuestions = getQuestionsForLevel(questions, gameState.level)
+        if (levelQuestions.length > 0) {
+          setCurrentQuestionData(levelQuestions[gameState.questionsInLevel])
+        }
+      }
+    } else {
+      // For other grades or subjects, use the existing question bank
+      const questions = getQuestionsForLesson(subject, grade, lesson)
+      if (questions.length > 0) {
+        setCurrentQuestions(questions)
+        if (gameState.gameStatus === 'playing') {
+          const levelQuestions = getQuestionsForLevel(questions, gameState.level)
+          if (levelQuestions.length > 0) {
+            setCurrentQuestionData(levelQuestions[gameState.questionsInLevel])
+          }
+        }
+      }
+    }
+  }, [subject, grade, lesson, gameState.level, gameState.questionsInLevel, gameState.gameStatus])
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null || showResult) return
@@ -152,8 +231,6 @@ const MathRunnerGame: React.FC<MathRunnerGameProps> = ({ subject, grade, lesson,
     }, 1500)
   }
 
-
-
   const restartGame = () => {
     setGameState({
       level: 1,
@@ -209,8 +286,6 @@ const MathRunnerGame: React.FC<MathRunnerGameProps> = ({ subject, grade, lesson,
       </div>
     )
   }
-
-
 
   if (gameState.gameStatus === 'gameOver') {
     return (

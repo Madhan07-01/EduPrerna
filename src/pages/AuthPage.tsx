@@ -67,7 +67,7 @@ export default function AuthPage() {
       </div>
       
       <button
-        onClick={signInWithGoogle}
+        onClick={() => signInWithGoogle()}
         disabled={loading}
         className="w-full flex items-center justify-center gap-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
       >

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useLanguage } from '../contexts/LanguageContext'
 
 // Basic Information Component
 const BasicInformation = () => {
