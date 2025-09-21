@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage'
 import TeacherPage from './pages/TeacherPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
+import QuizPage from './pages/QuizPage'
 import SettingsPage from './pages/SettingsPage'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
@@ -80,6 +81,7 @@ function AppContent() {
               <Route path="/teacher/*" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
+              <Route path="/quiz/:subject/:grade/:lesson" element={<PrivateRoute><QuizPage /></PrivateRoute>} />
               <Route path="/module/:lessonId" element={<PrivateRoute><ModulePage /></PrivateRoute>} />
               <Route path="/mcq/:lessonId" element={<PrivateRoute><MCQPage /></PrivateRoute>} />
               <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />

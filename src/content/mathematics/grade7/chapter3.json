@@ -1,0 +1,109 @@
+{
+  "title": "Chapter 3 - Data Handling",
+  "subtopics": [
+    {
+      "title": "Introduction",
+      "content": "<h2>📘 Learning Module – Data Handling (Grade 7)</h2><h3>🌟 Introduction</h3><p>In our daily lives, we come across lots of information in the form of numbers—such as the scores in a cricket match, marks obtained by students, or daily temperatures. This collection of information is called data.</p><p>To make sense of data, we must collect, organize, and represent it in a simple and meaningful way. This process is known as Data Handling.</p>"
+    },
+    {
+      "title": "Data",
+      "content": "<h3>1. Data</h3><p>Data is a collection of facts, numbers, or observations.</p><p><strong>Example:</strong> Marks of 5 students = 12, 15, 18, 10, 20.</p>"
+    },
+    {
+      "title": "Organization of Data",
+      "content": "<h3>2. Organization of Data</h3><ul><li>Raw data can be confusing.</li><li>We use tables, tallies, and charts to organize data.</li><li>Frequency: The number of times a value occurs.</li></ul><p><strong>Example:</strong><br>Marks scored: 10, 12, 15, 10, 12, 10<br>→ Frequency of 10 = 3, frequency of 12 = 2, frequency of 15 = 1</p>"
+    },
+    {
+      "title": "Pictograph",
+      "content": "<h3>3. Pictograph</h3><p>A pictograph uses pictures or symbols to represent data.</p><p><strong>Example:</strong> If 🍎 = 5 apples, then 🍎🍎 = 10 apples.</p>"
+    },
+    {
+      "title": "Bar Graph",
+      "content": "<h3>4. Bar Graph</h3><ul><li>A bar graph shows data using rectangular bars.</li><li>The length of the bar represents the value.</li><li>Bars can be drawn vertically or horizontally.</li></ul>"
+    },
+    {
+      "title": "Double Bar Graph",
+      "content": "<h4>5. Double Bar Graph</h4><p>Used to compare two sets of data together.</p><p><strong>Example:</strong> Marks of boys and girls in a class.</p>"
+    },
+    {
+      "title": "Arithmetic Mean (Average)",
+      "content": "<h3>6. Arithmetic Mean (Average)</h3><p>The mean is the sum of observations divided by the number of observations.</p><p><strong>Mean = Sum of values / Number of values</strong></p><p><strong>Example:</strong> Numbers = 4, 6, 10<br>Mean = (4+6+10)/3 = 20/3 ≈ 6.67</p>"
+    },
+    {
+      "title": "Median",
+      "content": "<h3>7. Median</h3><p>Median is the middle value when data is arranged in order.</p><p>If there are two middle values, take their average.</p><p><strong>Example:</strong><br>Data = 2, 5, 7 → Median = 5<br>Data = 4, 6, 8, 10 → Median = (6+8)/2 = 7</p>"
+    },
+    {
+      "title": "Mode",
+      "content": "<h3>8. Mode</h3><p>Mode is the value that occurs most frequently.</p><p><strong>Example:</strong> Data = 3, 4, 4, 5, 6 → Mode = 4</p>"
+    },
+    {
+      "title": "Probability (Introduction)",
+      "content": "<h3>9. Probability (Introduction)</h3><p>Probability tells us the likelihood of an event.</p><p><strong>P(E) = Number of favourable outcomes / Total number of outcomes</strong></p><p><strong>Example:</strong> Tossing a coin → Probability of getting Heads = 1/2.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "In the data: 2, 4, 6, 4, 3, 4, 5 → The mode is:",
+        "options": ["2", "4", "5", "6"],
+        "answer": "4",
+        "explanation": "The mode is the value that occurs most frequently in a data set. In the data 2, 4, 6, 4, 3, 4, 5, the number 4 appears three times, which is more frequent than any other number. Therefore, the mode is 4."
+      },
+      {
+        "question": "The mean of numbers 5, 10, 15 is:",
+        "options": ["10", "15", "12.5", "30"],
+        "answer": "10",
+        "explanation": "The mean (average) is calculated by adding all the numbers and dividing by the count of numbers. Mean = (5 + 10 + 15) / 3 = 30 / 3 = 10."
+      },
+      {
+        "question": "Which of these is the middle value of 7, 9, 5, 12, 8 when arranged in order?",
+        "options": ["7", "8", "9", "12"],
+        "answer": "8",
+        "explanation": "To find the median, first arrange the data in ascending order: 5, 7, 8, 9, 12. The middle value is 8, so the median is 8."
+      },
+      {
+        "question": "In a tally chart, |||| represents:",
+        "options": ["10", "1", "5", "4"],
+        "answer": "5",
+        "explanation": "In a tally chart, each vertical line represents 1, and every fifth line is drawn diagonally across the previous four lines to represent 5. So |||| represents 5."
+      },
+      {
+        "question": "Which graph is best suited to show comparison of two different groups?",
+        "options": ["Pictograph", "Double Bar Graph", "Line Graph", "Pie Chart"],
+        "answer": "Double Bar Graph",
+        "explanation": "A double bar graph is specifically designed to compare two sets of data side by side. It uses two bars for each category to make comparisons easy."
+      },
+      {
+        "question": "If 🍎 = 2 apples, then 🍎🍎🍎🍎 represents:",
+        "options": ["4 apples", "6 apples", "8 apples", "2 apples"],
+        "answer": "8 apples",
+        "explanation": "If one 🍎 symbol represents 2 apples, then four 🍎 symbols represent 4 × 2 = 8 apples."
+      },
+      {
+        "question": "The probability of getting a 3 when a die is rolled is:",
+        "options": ["1/2", "1/3", "1/6", "1/4"],
+        "answer": "1/6",
+        "explanation": "A standard die has 6 faces numbered 1 through 6. There is only one favorable outcome (getting a 3) out of 6 possible outcomes. So the probability is 1/6."
+      },
+      {
+        "question": "In the data 10, 20, 30, 40, 50, the median is:",
+        "options": ["20", "30", "40", "25"],
+        "answer": "30",
+        "explanation": "To find the median, arrange the data in order (already done) and find the middle value. Since there are 5 values, the middle one is the third value, which is 30."
+      },
+      {
+        "question": "A bar graph has bars of different ______.",
+        "options": ["colours", "lengths", "widths", "shapes"],
+        "answer": "lengths",
+        "explanation": "In a bar graph, the length (or height) of each bar represents the value of the data it represents. Bars of different lengths show different values."
+      },
+      {
+        "question": "In the data: 12, 14, 16, 18, 20, the mean is:",
+        "options": ["14", "15", "16", "17"],
+        "answer": "16",
+        "explanation": "The mean is calculated by adding all values and dividing by the number of values. Mean = (12 + 14 + 16 + 18 + 20) / 5 = 80 / 5 = 16."
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "title": "Chapter 1 - Integers",
+  "subtopics": [
+    {
+      "title": "Introduction",
+      "content": "<h2>📘 Learning Module – Integers (Grade 7)</h2><h3>🌟 Introduction</h3><p>In mathematics, we often deal with numbers greater than zero, like 1, 2, 3, etc., which are called natural numbers. However, in real life, we also encounter numbers that are less than zero. For example:</p><ul><li>The temperature in some places can be -5°C.</li><li>In a game, if you lose 10 points, your score may become negative.</li><li>When withdrawing money from a bank, your account balance might drop below zero, showing negative balance.</li></ul><p>To handle such situations, we use integers. Integers include both positive numbers, negative numbers, and zero.</p>"
+    },
+    {
+      "title": "Definition of Integers",
+      "content": "<h3>1. Definition of Integers</h3><p>Integers are the set of whole numbers and their negatives.</p><p>Written as:</p><p><strong>Integers = {..., −4, −3, −2, −1, 0, 1, 2, 3, 4, ...}</strong></p><p><strong>Zero (0) is neither positive nor negative.</strong></p>"
+    },
+    {
+      "title": "Number Line Representation",
+      "content": "<h3>2. Number Line Representation</h3><ul><li>Integers can be shown on a number line.</li><li>To the right of 0 → positive integers.</li><li>To the left of 0 → negative integers.</li><li>The further right a number is, the greater it is.</li></ul><p><strong>Example:</strong> On the number line, +3 > -2 because +3 lies to the right of -2.</p>"
+    },
+    {
+      "title": "Comparing Integers",
+      "content": "<h3>3. Comparing Integers</h3><ul><li>Positive numbers are always greater than negative numbers.</li><li>Among positive integers, the larger value is greater (e.g., 7 > 3).</li><li>Among negative integers, the one with a smaller absolute value is greater (e.g., -2 > -5).</li></ul>"
+    },
+    {
+      "title": "Operations with Integers - Addition and Subtraction",
+      "content": "<h3>4. Operations with Integers</h3><h4>(a) Addition</h4><ul><li>If both integers have the same sign, add their absolute values and keep the sign.</li><li>If they have different signs, subtract smaller absolute value from larger absolute value, and keep the sign of the larger.</li></ul><p><strong>Examples:</strong></p><ul><li>(+7) + (+3) = +10</li><li>(-8) + (-4) = -12</li><li>(+9) + (-5) = +4</li></ul><h4>(b) Subtraction</h4><ul><li>To subtract, change the sign of the second number and then add.</li></ul><p><strong>Examples:</strong></p><ul><li>(+7) – (+3) = (+7) + (-3) = +4</li><li>(-5) – (+4) = (-5) + (-4) = -9</li><li>(-6) – (-2) = (-6) + (+2) = -4</li></ul>"
+    },
+    {
+      "title": "Operations with Integers - Multiplication and Division",
+      "content": "<h4>(c) Multiplication & Division</h4><p>Rules for multiplication/division of integers:</p><ul><li>(+) × (+) = +</li><li>(-) × (-) = +</li><li>(+) × (-) = -</li><li>(-) × (+) = -</li></ul><p><strong>Examples:</strong></p><ul><li>(+3) × (+4) = +12</li><li>(-5) × (+6) = -30</li><li>(-8) ÷ (-2) = +4</li></ul>"
+    },
+    {
+      "title": "Absolute Value",
+      "content": "<h3>5. Absolute Value</h3><p>The absolute value of an integer is its distance from zero on the number line, always positive.</p><p><strong>Example:</strong> |+5| = 5, |–7| = 7</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of the following is an integer?",
+        "options": ["3.5", "–2", "2/3", "√5"],
+        "answer": "–2",
+        "explanation": "Integers include positive numbers, negative numbers, and zero. They do not include fractions or decimals. –2 is a negative integer."
+      },
+      {
+        "question": "Which number is greater?",
+        "options": ["–7", "–4"],
+        "answer": "–4",
+        "explanation": "Among negative integers, the one with a smaller absolute value is greater. Since |-4| = 4 and |-7| = 7, and 4 < 7, -4 is greater than -7."
+      },
+      {
+        "question": "The opposite of –8 is:",
+        "options": ["–8", "0", "+8", "–1"],
+        "answer": "+8",
+        "explanation": "The opposite of a number is the number with the opposite sign. The opposite of -8 is +8."
+      },
+      {
+        "question": "The sum of (+9) and (–6) is:",
+        "options": ["+15", "–3", "+3", "–15"],
+        "answer": "+3",
+        "explanation": "To add integers with different signs, subtract the smaller absolute value from the larger one and keep the sign of the number with the larger absolute value. |+9| = 9, |-6| = 6. Since 9 > 6, we subtract: 9 - 6 = 3, and take the positive sign: +3."
+      },
+      {
+        "question": "The result of (–5) – (–2) is:",
+        "options": ["–7", "–3", "+3", "+7"],
+        "answer": "–3",
+        "explanation": "To subtract integers, change the sign of the second number and then add. (–5) – (–2) = (–5) + (+2) = –3."
+      },
+      {
+        "question": "Which of the following is true?",
+        "options": ["–3 > +2", "–2 < –5", "–7 < –2", "+4 < 0"],
+        "answer": "–7 < –2",
+        "explanation": "Negative numbers are less than positive numbers, so –3 > +2 is false. Among negative numbers, the one with the larger absolute value is smaller, so –2 < –5 is false. –7 < –2 is true because |-7| = 7 and |-2| = 2, and 7 > 2, so –7 < –2. Positive numbers are greater than zero, so +4 < 0 is false."
+      },
+      {
+        "question": "(–12) ÷ (+3) = ?",
+        "options": ["–36", "–4", "+4", "+36"],
+        "answer": "–4",
+        "explanation": "When dividing integers with different signs, the result is negative. (–12) ÷ (+3) = –4."
+      },
+      {
+        "question": "The product of (–6) × (–5) is:",
+        "options": ["–30", "+30", "–1", "+11"],
+        "answer": "+30",
+        "explanation": "When multiplying integers with the same sign, the result is positive. (–6) × (–5) = +30."
+      },
+      {
+        "question": "If |x| = 9, then x can be:",
+        "options": ["+9 only", "–9 only", "+9 or –9", "0"],
+        "answer": "+9 or –9",
+        "explanation": "The absolute value of a number is its distance from zero on the number line. Both +9 and –9 are 9 units away from zero, so if |x| = 9, then x can be either +9 or –9."
+      },
+      {
+        "question": "On a number line, which number is farthest to the left?",
+        "options": ["–10", "–3", "0", "+5"],
+        "answer": "–10",
+        "explanation": "On a number line, numbers decrease as we move to the left. Among the given options, –10 is the smallest number, so it is farthest to the left."
+      }
+    ]
+  }
+}

@@ -83,8 +83,9 @@ export default function Login() {
       await signInWithGoogle('student')
       navigate('/dashboard')
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || 'Google sign-in failed'
+      const msg = (err as { message?: string })?.message || 'Google sign-in failed. Please check browser console for details.'
       setError(msg)
+      console.error('Google Sign-In Error:', err)
     }
   }
 

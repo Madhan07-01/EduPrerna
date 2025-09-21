@@ -1,0 +1,93 @@
+{
+  "title": "Chapter 2 - Operations on Whole Numbers",
+  "subtopics": [
+    {
+      "title": "Introduction",
+      "content": "<h2>📘 EduPrerna Module – Operations on Whole Numbers (Grade 6)</h2><h3>🌟 Introduction</h3><p>Whole numbers are numbers that start from 0 and go on without end: 0, 1, 2, 3, 4, …</p><p>We use them for counting, measuring, and solving real-life problems. To work with them, we perform operations like addition, subtraction, multiplication, and division. These operations make numbers meaningful in daily life — from adding money, subtracting expenses, multiplying quantities, to dividing things equally.</p>"
+    },
+    {
+      "title": "Addition of Whole Numbers",
+      "content": "<h3>1. Addition of Whole Numbers</h3><p>To combine or put together numbers.</p><p>Example: 35 + 28 = 63.</p><p>Properties of Addition:</p><ul><li><strong>Closure:</strong> Sum of two whole numbers is always a whole number.</li><li><strong>Commutative:</strong> a + b = b + a.</li><li><strong>Associative:</strong> (a + b) + c = a + (b + c).</li><li><strong>Identity:</strong> a + 0 = a.</li></ul>"
+    },
+    {
+      "title": "Subtraction of Whole Numbers",
+      "content": "<h3>2. Subtraction of Whole Numbers</h3><p>To find the difference between numbers.</p><p>Example: 82 – 47 = 35.</p><p>Properties of Subtraction:</p><ul><li><strong>Not commutative</strong> → a – b ≠ b – a.</li><li><strong>Not associative.</strong></li><li>If a ≥ b, then a – b is a whole number.</li></ul>"
+    },
+    {
+      "title": "Multiplication of Whole Numbers",
+      "content": "<h3>3. Multiplication of Whole Numbers</h3><p>Repeated addition.</p><p>Example: 12 × 5 = 60.</p><p>Properties of Multiplication:</p><ul><li><strong>Closure:</strong> Product is always a whole number.</li><li><strong>Commutative:</strong> a × b = b × a.</li><li><strong>Associative:</strong> (a × b) × c = a × (b × c).</li><li><strong>Identity:</strong> a × 1 = a.</li><li><strong>Multiplication by zero:</strong> a × 0 = 0.</li></ul>"
+    },
+    {
+      "title": "Division of Whole Numbers",
+      "content": "<h3>4. Division of Whole Numbers</h3><p>Splitting into equal parts.</p><p>Example: 20 ÷ 4 = 5.</p><p>Properties of Division:</p><ul><li><strong>Not commutative.</strong></li><li><strong>Not associative.</strong></li><li>Division by zero is not defined.</li><li>a ÷ 1 = a.</li></ul>"
+    },
+    {
+      "title": "Order of Operations (BODMAS Rule)",
+      "content": "<h3>5. Order of Operations (BODMAS Rule)</h3><p>Brackets → Orders (powers) → Division → Multiplication → Addition → Subtraction.</p><p>Example: 15 – (3 × 2) + 4 = 15 – 6 + 4 = 13.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of these is a whole number?",
+        "options": ["–4", "3.5", "0"],
+        "answer": "0",
+        "explanation": "Whole numbers start from 0 and include all natural numbers: {0, 1, 2, 3, …}. They do not include negative numbers or decimals."
+      },
+      {
+        "question": "45 + 27 = ?",
+        "options": ["62", "72", "73"],
+        "answer": "72",
+        "explanation": "Adding 45 and 27: 45 + 27 = 72."
+      },
+      {
+        "question": "Which property is shown by 23 + 0 = 23?",
+        "options": ["Commutative", "Identity", "Closure"],
+        "answer": "Identity",
+        "explanation": "The identity property of addition states that adding zero to any number gives the same number. Here, 23 + 0 = 23."
+      },
+      {
+        "question": "81 – 46 = ?",
+        "options": ["45", "35", "36"],
+        "answer": "35",
+        "explanation": "Subtracting 46 from 81: 81 - 46 = 35."
+      },
+      {
+        "question": "Which of these is true for subtraction?",
+        "options": ["a – b = b – a", "(a – b) – c = a – (b – c)", "a – b ≠ b – a"],
+        "answer": "a – b ≠ b – a",
+        "explanation": "Subtraction is not commutative, meaning the order matters. For example, 5 - 3 = 2, but 3 - 5 = -2. So a - b ≠ b - a."
+      },
+      {
+        "question": "12 × 9 = ?",
+        "options": ["101", "108", "109"],
+        "answer": "108",
+        "explanation": "Multiplying 12 by 9: 12 × 9 = 108."
+      },
+      {
+        "question": "Which property is shown by (4 × 5) × 2 = 4 × (5 × 2)?",
+        "options": ["Closure", "Associative", "Commutative"],
+        "answer": "Associative",
+        "explanation": "The associative property of multiplication states that the grouping of numbers does not change the product. (4 × 5) × 2 = 20 × 2 = 40, and 4 × (5 × 2) = 4 × 10 = 40."
+      },
+      {
+        "question": "0 × 245 = ?",
+        "options": ["1", "0", "245"],
+        "answer": "0",
+        "explanation": "Any number multiplied by zero equals zero. This is the multiplication property of zero."
+      },
+      {
+        "question": "56 ÷ 7 = ?",
+        "options": ["8", "9", "7"],
+        "answer": "8",
+        "explanation": "Dividing 56 by 7: 56 ÷ 7 = 8."
+      },
+      {
+        "question": "Apply BODMAS: 20 – (3 × 4) + 5 = ?",
+        "options": ["13", "17", "9"],
+        "answer": "13",
+        "explanation": "Using BODMAS rule: First solve brackets (3 × 4 = 12), then subtraction and addition from left to right: 20 - 12 + 5 = 8 + 5 = 13."
+      }
+    ]
+  }
+}

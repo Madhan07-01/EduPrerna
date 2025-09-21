@@ -3,17 +3,18 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics'
 
-// ✅ Fixed config with correct storageBucket
+// Use environment variables for Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDAESRjN11EuOeLlkFlGGX5DNJoqbgHZl4",
-  authDomain: "eduprerna-43718.firebaseapp.com",
-  projectId: "eduprerna-43718",
-  storageBucket: "eduprerna-43718.appspot.com", // fixed here
-  messagingSenderId: "75188580452",
-  appId: "1:75188580452:web:bcefb1d76beac55e092f71",
-  measurementId: "G-GD1YFQFHYB"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 }
 
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
@@ -34,7 +35,7 @@ if (typeof window !== 'undefined') {
 
 // Log config once at startup (hide sensitive parts)
 console.log("Firebase config check", {
-  apiKey: firebaseConfig.apiKey.slice(0, 6) + "...",
+  apiKey: firebaseConfig.apiKey?.slice(0, 6) + "...",
   authDomain: firebaseConfig.authDomain,
   projectId: firebaseConfig.projectId,
   storageBucket: firebaseConfig.storageBucket,

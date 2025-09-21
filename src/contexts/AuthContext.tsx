@@ -166,6 +166,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     try {
       const provider = new GoogleAuthProvider()
+      // Add scopes for better user information
+      provider.addScope('profile')
+      provider.addScope('email')
+      
       const result = await signInWithPopup(auth, provider)
       const user = result.user
 
@@ -236,9 +240,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       console.log('User signed in with Google:', user)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during Google sign-in:', error)
-      throw error
+      
+      // Provide more specific error messages
+      let errorMessage = 'Google sign-in failed'
+      
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/popup-blocked':
+            errorMessage = 'Popup blocked by browser. Please allow popups for this site and try again.'
+            break
+          case 'auth/cancelled-popup-request':
+            errorMessage = 'Sign-in popup was closed before completing sign-in. Please try again.'
+            break
+          case 'auth/popup-closed-by-user':
+            errorMessage = 'Sign-in popup was closed. Please try again.'
+            break
+          case 'auth/network-request-failed':
+            errorMessage = 'Network error. Please check your internet connection and try again.'
+            break
+          case 'auth/internal-error':
+            errorMessage = 'Internal error occurred. Please try again later.'
+            break
+          case 'auth/operation-not-allowed':
+            errorMessage = 'Google sign-in is not enabled. Please contact the administrator.'
+            break
+          default:
+            errorMessage = error.message || 'Google sign-in failed. Please try again.'
+        }
+      }
+      
+      throw new Error(errorMessage)
     } finally {
       setLoading(false)
     }

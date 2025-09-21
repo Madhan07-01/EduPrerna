@@ -1,0 +1,101 @@
+{
+  "title": "Chapter 1 - Number System",
+  "subtopics": [
+    {
+      "title": "Introduction",
+      "content": "<h2>📘 EduPrerna Module – Number System (Grade 6)</h2><h3>🌟 Introduction</h3><p>Numbers are part of our daily life — we use them to count, measure, and compare. Whether it's knowing the time, checking the temperature, or scoring marks in an exam, numbers are always there.</p><p>But numbers come in different types: whole numbers, integers, fractions, and decimals. Together, these types form the Number System — the foundation of all mathematics.</p>"
+    },
+    {
+      "title": "Natural Numbers (N)",
+      "content": "<h3>1. Natural Numbers (N)</h3><ul><li>These are the <strong>basic counting numbers</strong>: 1, 2, 3, 4, …</li><li>We use them to <strong>count things</strong> like books, pens, or students.</li><li>Example: There are <strong>5 oranges</strong> on the table.</li><li><strong>Important Note:</strong> Natural numbers <strong>do not include zero</strong>.</li></ul>"
+    },
+    {
+      "title": "Whole Numbers (W)",
+      "content": "<h3>2. Whole Numbers (W)</h3><ul><li>Whole numbers = <strong>Natural numbers + Zero</strong>.</li><li>So, W = {0, 1, 2, 3, …}.</li><li>Example: Number of chocolates left in a box can be <strong>0</strong>.</li><li>Whole numbers are useful when we need to represent \"nothing\" (like 0 pencils).</li></ul>"
+    },
+    {
+      "title": "Integers (Z)",
+      "content": "<h3>3. Integers (Z)</h3><ul><li>Integers include <strong>positive numbers, negative numbers, and zero</strong>.</li><li>Example:<ul><li>+10 = You gained 10 marks bonus.</li><li>-5 = You lost 5 points in a game.</li><li>0 = No change.</li></ul></li><li>Integers are very useful in <strong>real life</strong>:<ul><li>Temperature (–3°C, +30°C).</li><li>Bank accounts (–₹500 means you owe money).</li><li>Lifts in a building (Basement = –1, Ground = 0, First floor = +1).</li></ul></li></ul>"
+    },
+    {
+      "title": "Fractions",
+      "content": "<h3>4. Fractions</h3><ul><li>A fraction represents a <strong>part of a whole</strong>.</li><li>Written as a/b where a = numerator (part), b = denominator (whole).</li><li>Example:<ul><li>½ → Half of a cake.</li><li>¾ → Three slices out of four.</li></ul></li><li>Fractions are widely used in:<ul><li>Cooking (½ teaspoon of salt).</li><li>Time (¼ of an hour = 15 minutes).</li><li>Sharing (dividing a pizza among friends).</li></ul></li></ul>"
+    },
+    {
+      "title": "Decimals",
+      "content": "<h3>5. Decimals</h3><ul><li>Fractions can also be written using a <strong>dot (.)</strong>, called a decimal point.</li><li>Example:<ul><li>½ = 0.5</li><li>¾ = 0.75</li></ul></li><li>Real-life uses of decimals:<ul><li>Money (₹2.50).</li><li>Length (1.75 meters).</li><li>Marks (8.25 out of 10).</li></ul></li></ul>"
+    },
+    {
+      "title": "Number Line",
+      "content": "<h3>6. Number Line</h3><ul><li>A <strong>number line</strong> helps us visualize numbers.</li><li>Zero is at the center, positive numbers go to the right, and negative numbers go to the left.</li><li>Example: –3, –2, –1, 0, 1, 2, 3.</li><li>Useful for addition, subtraction, and comparing numbers.</li></ul>"
+    },
+    {
+      "title": "Place Value System",
+      "content": "<h3>7. Place Value System</h3><ul><li>Every digit in a number has a <strong>place</strong> (ones, tens, hundreds, thousands).</li><li>Example: In 4,562:<ul><li>2 → Ones place.</li><li>6 → Tens place.</li><li>5 → Hundreds place.</li><li>4 → Thousands place.</li></ul></li><li>This system helps us read and write <strong>large numbers</strong>.</li></ul>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of these is a natural number?",
+        "options": ["0", "–2", "5"],
+        "answer": "5",
+        "explanation": "Natural numbers are the basic counting numbers: 1, 2, 3, 4, … They start from 1 and do not include zero or negative numbers."
+      },
+      {
+        "question": "Whole numbers start from:",
+        "options": ["–1", "0", "1"],
+        "answer": "0",
+        "explanation": "Whole numbers include all natural numbers plus zero. So they start from 0: {0, 1, 2, 3, …}."
+      },
+      {
+        "question": "Which of the following is an integer?",
+        "options": ["4.5", "–7", "½"],
+        "answer": "–7",
+        "explanation": "Integers include positive numbers, negative numbers, and zero. They do not include fractions or decimals. –7 is a negative integer."
+      },
+      {
+        "question": "Which of the following is a fraction?",
+        "options": ["25", "–3", "¾"],
+        "answer": "¾",
+        "explanation": "A fraction represents a part of a whole and is written as a/b where a is the numerator and b is the denominator. ¾ is a fraction."
+      },
+      {
+        "question": "The temperature changed from 5°C to –3°C. How much did it fall?",
+        "options": ["5°C", "8°C", "3°C"],
+        "answer": "8°C",
+        "explanation": "To find the temperature fall, calculate the difference: 5 - (–3) = 5 + 3 = 8°C."
+      },
+      {
+        "question": "What is ½ written as a decimal?",
+        "options": ["0.25", "0.5", "0.75"],
+        "answer": "0.5",
+        "explanation": "½ is equal to 1 divided by 2, which equals 0.5 in decimal form."
+      },
+      {
+        "question": "In the number 7,452, the digit at the hundreds place is:",
+        "options": ["5", "4", "2"],
+        "answer": "4",
+        "explanation": "In the number 7,452: 2 is in the ones place, 5 is in the tens place, 4 is in the hundreds place, and 7 is in the thousands place."
+      },
+      {
+        "question": "On a number line, which number is to the left of –1?",
+        "options": ["0", "–2", "1"],
+        "answer": "–2",
+        "explanation": "On a number line, numbers decrease as we move to the left. Since –2 is less than –1, it is to the left of –1."
+      },
+      {
+        "question": "You ate 3 out of 8 equal slices of cake. What fraction of the cake did you eat?",
+        "options": ["3/8", "5/8", "8/3"],
+        "answer": "3/8",
+        "explanation": "If you ate 3 slices out of 8 total slices, the fraction is 3/8."
+      },
+      {
+        "question": "Which is greater?",
+        "options": ["0.75", "¾", "Both are equal"],
+        "answer": "Both are equal",
+        "explanation": "0.75 and ¾ are different representations of the same value. ¾ = 3÷4 = 0.75."
+      }
+    ]
+  }
+}
