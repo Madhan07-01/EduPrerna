@@ -47,6 +47,13 @@ export default function TeacherSidebar() {
           <span className="text-lg">📚</span>
           <span className="text-sm">Resources 📚</span>
         </button>
+        <button
+          onClick={() => navigate('/teacher/resources/manage')}
+          className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${isActive('/teacher/resources/manage')}`}
+        >
+          <span className="text-lg">🗂️</span>
+          <span className="text-sm">Manage Drive Mappings</span>
+        </button>
         
         <button
           onClick={() => navigate('/teacher/communication')}

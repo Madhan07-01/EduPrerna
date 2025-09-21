@@ -4,10 +4,13 @@ import { useLanguage } from '../contexts/LanguageContext'
 import CommunicationSection from '../components/CommunicationSection'
 import AssignmentsSection from '../components/AssignmentsSection'
 import AnalyticsSection from '../components/AnalyticsSection'
+import TeacherActivityFeed from '../components/TeacherActivityFeed'
 import ProfileSection from '../components/ProfileSection'
+import TeacherDriveManager from '../components/TeacherDriveManager'
 import GeneralSettings from '../components/GeneralSettings'
 import ContextualUploadForm from '../components/ContextualUploadForm'
 import ResourceListTable from '../components/ResourceListTable'
+import TeacherDriveManagePage from './TeacherDriveManagePage'
 import ResourceFilter from '../components/ResourceFilter'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import { Doughnut } from 'react-chartjs-2'
@@ -71,8 +74,9 @@ const ResourcesSection = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Resources 📚</h1>
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          Manage your teaching resources
+        <div className="flex items-center gap-3">
+          <a href="/teacher/resources/manage" className="text-sm text-blue-600 dark:text-blue-400 underline">Manage Drive Mappings</a>
+          <div className="text-sm text-gray-500 dark:text-gray-400">Manage your teaching resources</div>
         </div>
       </div>
       
@@ -280,6 +284,12 @@ const DashboardSection = () => {
           </div>
         </div>
 
+        {/* Today's Activity Feed */}
+        <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-6">
+          <div className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4">Today's Activity</div>
+          <TeacherActivityFeed />
+        </div>
+
         {/* Alerts Section */}
         <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-6">
           <div className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4">Alerts</div>
@@ -336,9 +346,11 @@ export default function TeacherDashboard() {
         <Route index element={<DashboardSection />} />
         <Route path="assignments" element={<AssignmentsSection />} />
         <Route path="resources" element={<ResourcesSection />} />
+        <Route path="resources/manage" element={<TeacherDriveManagePage />} />
         <Route path="communication" element={<CommunicationSection />} />
         <Route path="analytics" element={<AnalyticsSection />} />
         <Route path="profile" element={<ProfileSection />} />
+        <Route path="drive" element={<TeacherDriveManager />} />
         <Route path="settings" element={<SettingsSection />} />
       </Routes>
     </div>

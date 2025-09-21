@@ -54,8 +54,31 @@ export default function Login() {
       await signInEmail(email, password, 'student')
       navigate('/dashboard')
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || 'Login failed'
-      setError(msg)
+      const firebaseError = err as { code?: string; message?: string }
+      let errorMessage = firebaseError?.message || 'Login failed'
+      
+      // Handle specific Firebase Auth error codes
+      switch (firebaseError?.code) {
+        case 'auth/invalid-password':
+        case 'auth/wrong-password':
+          errorMessage = 'Wrong password'
+          break
+        case 'auth/user-not-found':
+        case 'auth/user-disabled':
+          errorMessage = 'Account does not exist'
+          break
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many failed attempts. Please try again later.'
+          break
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address'
+          break
+        default:
+          // Keep the original error message for other cases
+          break
+      }
+      
+      setError(errorMessage)
     }
   }
 
@@ -79,9 +102,14 @@ export default function Login() {
     try {
       setError('')
       setMessage('')
-      // Pass 'student' as expectedRole to ensure only students can log in
-      await signInWithGoogle('student')
-      navigate('/dashboard')
+      // Allow auto role assignment; redirect based on domain/role
+      await signInWithGoogle()
+      const email = auth.currentUser?.email || ''
+      if (email.endsWith('@teacher.eduprerna.org')) {
+        navigate('/admin')
+      } else {
+        navigate('/dashboard')
+      }
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Google sign-in failed. Please check browser console for details.'
       setError(msg)

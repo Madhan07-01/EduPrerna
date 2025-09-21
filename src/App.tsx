@@ -19,6 +19,8 @@ import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } f
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
+import { BadgeProvider } from './contexts/BadgeContext'
+import { ToastProvider } from './components/ToastProvider'
 import { useAuth } from './hooks/useAuth'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
@@ -46,7 +48,7 @@ function AppContent() {
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
-  const isTeacherPage = location.pathname.startsWith('/teacher')
+  const isTeacherPage = location.pathname.startsWith('/teacher') || location.pathname.startsWith('/admin')
   const showStudentSidebar = currentUser && !isTeacherPage
   const showTeacherSidebar = currentUser && isTeacherPage
 
@@ -79,6 +81,7 @@ function AppContent() {
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/teacher" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/teacher/*" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
+              <Route path="/admin/*" element={<PrivateRoute><TeacherPage /></PrivateRoute>} />
               <Route path="/lessons/:subject/:grade" element={<PrivateRoute><LessonsPage /></PrivateRoute>} />
               <Route path="/lesson/:subject/:grade/:lesson" element={<PrivateRoute><LessonDetailPage /></PrivateRoute>} />
               <Route path="/quiz/:subject/:grade/:lesson" element={<PrivateRoute><QuizPage /></PrivateRoute>} />
@@ -104,9 +107,13 @@ function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
+          <BadgeProvider>
+            <ToastProvider>
+              <BrowserRouter>
+                <AppContent />
+              </BrowserRouter>
+            </ToastProvider>
+          </BadgeProvider>
         </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>

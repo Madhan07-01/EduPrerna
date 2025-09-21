@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users: each user can read/write their own profile
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Students: XP, streaks, badges
+    match /students/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Leaderboard: all students can read, but only self can write
+    match /leaderboard/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Drive mappings: students can read, only teachers/admins can write
+    match /driveMappings/{gradeKey} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.token.role in ['teacher','admin'];
+    }
+
+    // Activity logs: students log their own events, teachers/admins can read all
+    match /activity/{day}/{eventId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && request.auth.token.role in ['teacher','admin'];
+    }
+  }
+}

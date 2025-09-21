@@ -8,8 +8,11 @@ import {
   signOut, 
   GoogleAuthProvider,
   signInWithPopup,
+  fetchSignInMethodsForEmail,
+  linkWithCredential,
   type User as FirebaseUser 
 } from 'firebase/auth'
+
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../firebase/firebaseConfig'
 
@@ -112,6 +115,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               
               const todayTimestamp = today.getTime()
               let streakCount = 1 // Default for first login
+              let xp = 0 // Default XP
+              let username = user.displayName || 'Anonymous' // Default username
               
               if (studentDoc.exists()) {
                 const studentData = studentDoc.data()
@@ -132,12 +137,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   // Streak broken, reset to 1
                   streakCount = 1
                 }
+                
+                // Get current XP
+                xp = studentData.xp || 0
+                username = studentData.name || studentData.username || user.displayName || 'Anonymous'
               }
               
               // Update streak data
               await setDoc(studentRef, {
                 lastLoginDate: today,
-                streakCount
+                streakCount,
+                name: username,
+                username
+              }, { merge: true })
+              
+              // Update leaderboard
+              const leaderboardRef = doc(db, 'leaderboard', user.uid)
+              await setDoc(leaderboardRef, {
+                username,
+                streak: streakCount,
+                xp,
+                lastUpdated: Date.now(),
               }, { merge: true })
             } catch (error) {
               console.error('Error updating streak:', error)
@@ -173,17 +193,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const result = await signInWithPopup(auth, provider)
       const user = result.user
 
+      // Domain restriction: allow @eduprerna.org and @teacher.eduprerna.org
+      const email = user.email || ''
+      const allowedDomains = ['@eduprerna.org', '@teacher.eduprerna.org']
+      if (!allowedDomains.some((d) => email.endsWith(d))) {
+        await signOut(auth)
+        throw new Error('Please sign in with your EduPrerna email.')
+      }
+
       // Check if user document exists in Firestore
       const userDoc = await getDoc(doc(db, 'users', user.uid))
       
+      // Auto-assign role based on email if creating for first time
+      let finalRole: string | undefined
+      let username = user.displayName || 'Anonymous'
       if (!userDoc.exists()) {
-        // Create user document if it doesn't exist
-        const role = expectedRole || 'student'
+        const autoRole = (email.endsWith('@teacher.eduprerna.org') ? 'teacher' : 'student')
+        finalRole = autoRole
+        username = user.displayName || email.split('@')[0] || 'Anonymous'
         await setDoc(doc(db, 'users', user.uid), {
           uid: user.uid,
           name: user.displayName ?? null,
           email: user.email,
-          role: role, // Use expected role or default to student
+          role: finalRole,
           createdAt: serverTimestamp(),
         })
       } else if (expectedRole) {
@@ -193,10 +225,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           await signOut(auth)
           throw new Error(`This account is not authorized to log in as a ${expectedRole === 'teacher' ? 'Teacher' : 'Student'}`)
         }
+        finalRole = userData.role
+        username = userData.name || userData.username || user.displayName || email.split('@')[0] || 'Anonymous'
+      } else if (userDoc.exists()) {
+        finalRole = userDoc.data()?.role
+        const userData = userDoc.data()
+        username = userData.name || userData.username || user.displayName || email.split('@')[0] || 'Anonymous'
       }
 
-      // Update streak for student accounts only
-      if (expectedRole === 'student') {
+      // Update streak for student accounts only (based on resolved role)
+      if (finalRole === 'student') {
         try {
           const studentRef = doc(db, 'students', user.uid)
           const studentDoc = await getDoc(studentRef)
@@ -206,6 +244,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           
           const todayTimestamp = today.getTime()
           let streakCount = 1 // Default for first login
+          let xp = 0 // Default XP
           
           if (studentDoc.exists()) {
             const studentData = studentDoc.data()
@@ -226,12 +265,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               // Streak broken, reset to 1
               streakCount = 1
             }
+            
+            // Get current XP
+            xp = studentData.xp || 0
+            username = studentData.name || studentData.username || user.displayName || email.split('@')[0] || 'Anonymous'
           }
           
           // Update streak data
           await setDoc(studentRef, {
             lastLoginDate: today,
-            streakCount
+            streakCount,
+            name: username,
+            username
+          }, { merge: true })
+          
+          // Update leaderboard
+          const leaderboardRef = doc(db, 'leaderboard', user.uid)
+          await setDoc(leaderboardRef, {
+            username,
+            streak: streakCount,
+            xp,
+            lastUpdated: Date.now(),
           }, { merge: true })
         } catch (error) {
           console.error('Error updating streak:', error)
@@ -245,6 +299,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Provide more specific error messages
       let errorMessage = 'Google sign-in failed'
+      // Handle account linking if account exists with different credential
+      if (error?.code === 'auth/account-exists-with-different-credential') {
+        try {
+          const pendingCred = GoogleAuthProvider.credentialFromError(error)
+          const email = error?.customData?.email as string | undefined
+          if (email && pendingCred) {
+            const methods = await fetchSignInMethodsForEmail(auth, email)
+            if (methods.includes('password')) {
+              // Ask user for their password to link automatically
+              const pwd = window.prompt('An account already exists with this email. Enter your password to link your Google account:')
+              if (pwd) {
+                await signInWithEmailAndPassword(auth, email, pwd)
+                if (auth.currentUser) {
+                  await linkWithCredential(auth.currentUser, pendingCred)
+                  // Linked successfully; treat as success
+                  setLoading(false)
+                  return
+                }
+              } else {
+                throw new Error('Linking cancelled by user')
+              }
+            } else {
+              // Other providers: notify user to sign in with that provider first
+              errorMessage = 'Please sign in with your existing method for this email, then link Google in your profile.'
+            }
+          }
+        } catch (linkErr: any) {
+          console.error('Linking flow failed:', linkErr)
+          errorMessage = linkErr?.message || 'Could not link Google account.'
+        }
+      }
       
       if (error.code) {
         switch (error.code) {

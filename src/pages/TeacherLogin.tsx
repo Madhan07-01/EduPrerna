@@ -40,10 +40,33 @@ export default function TeacherLogin() {
       setMessage('')
       // Pass 'teacher' as expectedRole to ensure only teachers can log in
       await signInEmail(email, password, 'teacher')
-      navigate('/teacher')
+      navigate('/admin')
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || 'Login failed'
-      setError(msg)
+      const firebaseError = err as { code?: string; message?: string }
+      let errorMessage = firebaseError?.message || 'Login failed'
+      
+      // Handle specific Firebase Auth error codes
+      switch (firebaseError?.code) {
+        case 'auth/invalid-password':
+        case 'auth/wrong-password':
+          errorMessage = 'Wrong password'
+          break
+        case 'auth/user-not-found':
+        case 'auth/user-disabled':
+          errorMessage = 'Account does not exist'
+          break
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many failed attempts. Please try again later.'
+          break
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address'
+          break
+        default:
+          // Keep the original error message for other cases
+          break
+      }
+      
+      setError(errorMessage)
     }
   }
 
@@ -69,7 +92,7 @@ export default function TeacherLogin() {
       setMessage('')
       // Pass 'teacher' as expectedRole to ensure only teachers can log in
       await signInWithGoogle('teacher')
-      navigate('/teacher')
+      navigate('/admin')
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'Google sign-in failed'
       setError(msg)

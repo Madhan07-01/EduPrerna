@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
+
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getLessonsForSubjectAndGrade, type Subject, type Grade } from '../data/lessonsData';
 import { useAuth } from '../hooks/useAuth';
 import { loadLessonContent, type LessonContent, isOldFormat, isNewFormat } from '../utils/lessonContentLoader';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
+import { awardXPAndStreak, describeBadge, type QueuedBadge } from '../services/gamification';
+import { useBadgeQueue } from '../contexts/BadgeContext';
+
 import { 
   NumberLine, 
   FractionVisualizer, 
@@ -53,6 +57,8 @@ export function LessonDetailPage() {
   const [activeSubtopic, setActiveSubtopic] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
+  const [pendingBadges, setPendingBadges] = useState<QueuedBadge[]>([]);
+  const { queueBadge } = useBadgeQueue();
   const [gamificationData, setGamificationData] = useState<GamificationData>({
     points: 0,
     streak: 0,
@@ -196,54 +202,33 @@ export function LessonDetailPage() {
       
       localStorage.setItem(progressKey, JSON.stringify(progressData));
       
-      // Update gamification data if completing a subtopic
+      // Update gamification via service if completing a subtopic
       if (completed) {
-        const today = new Date().toISOString().split('T')[0];
-        let newPoints = gamificationData.points;
-        let newStreak = gamificationData.streak;
-        let newBadges = [...gamificationData.badges];
-        
-        // Award points for completing a subtopic
-        newPoints += 10;
-        
-        // Check if streak continues
-        if (gamificationData.lastActivityDate !== today) {
-          if (gamificationData.lastActivityDate === new Date(Date.now() - 86400000).toISOString().split('T')[0]) {
-            // Consecutive day, increase streak
-            newStreak += 1;
-          } else {
-            // Break in streak, reset to 1
-            newStreak = 1;
-          }
+        const res = await awardXPAndStreak(currentUser.uid, 10);
+        setGamificationData((prev) => ({
+          points: res.newXP,
+          streak: res.newStreak,
+          badges: Array.from(new Set([...(prev.badges || []), ...res.earnedBadges])),
+          lastActivityDate: new Date().toISOString().split('T')[0]
+        }));
+        if (res.earnedBadges.length > 0) {
+          const earned = res.earnedBadges.map((id) => describeBadge(id));
+          // Delay showing if lesson not completed screen yet
+          setPendingBadges((pb) => [...pb, ...earned]);
         }
-        
-        // Award badges for milestones
-        if (newPoints >= 100 && !newBadges.includes('100 Points')) {
-          newBadges.push('100 Points');
-        }
-        
-        if (newStreak >= 7 && !newBadges.includes('7-Day Streak')) {
-          newBadges.push('7-Day Streak');
-        }
-        
-        // Update gamification data
-        const updatedGamificationData = {
-          points: newPoints,
-          streak: newStreak,
-          badges: newBadges,
-          lastActivityDate: today
-        };
-        
-        setGamificationData(updatedGamificationData);
-        
-        // Save to Firestore
-        const gamificationDoc = doc(db, 'users', currentUser.uid, 'gamification', 'data');
-        await setDoc(gamificationDoc, updatedGamificationData);
       }
     } catch (err) {
       console.error('Error saving lesson progress:', err);
     }
   };
+
+  // When completion screen is shown, flush queued badge popups
+  useEffect(() => {
+    if (showCompletion && pendingBadges.length > 0) {
+      pendingBadges.forEach((b) => queueBadge(b));
+      setPendingBadges([]);
+    }
+  }, [showCompletion, pendingBadges, queueBadge]);
 
   const getSubjectIcon = (subject: Subject) => {
     const icons = {

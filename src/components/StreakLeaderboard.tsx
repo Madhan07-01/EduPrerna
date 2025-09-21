@@ -6,9 +6,11 @@ import { useAuth } from '../hooks/useAuth'
 type LeaderboardEntry = {
   id: string
   username: string
+  xp: number
   streak: number
   rank: number
   isCurrentUser: boolean
+  lastUpdated?: number
   pinnedBadges?: {id: string, name: string, icon: string}[]
 }
 
@@ -35,14 +37,14 @@ export function StreakLeaderboard({
       try {
         setLoading(true)
         
-        // Query to get top streaks
-        const studentsQuery = query(
-          collection(db, 'students'),
-          orderBy('streakCount', 'desc'),
+        // Query to get top XP entries
+        const leaderboardQuery = query(
+          collection(db, 'leaderboard'),
+          orderBy('xp', 'desc'),
           limit(maxEntries * 2) // Get more entries to ensure we can find current user
         )
         
-        const querySnapshot = await getDocs(studentsQuery)
+        const querySnapshot = await getDocs(leaderboardQuery)
         const entries: LeaderboardEntry[] = []
         
         let currentUserEntry: LeaderboardEntry | null = null
@@ -53,13 +55,17 @@ export function StreakLeaderboard({
           const data = doc.data()
           const userId = doc.id
           const username = data.username || data.name || 'Anonymous'
-          const streak = data.streakCount || 0
+          const xp = data.xp || 0
+          const streak = data.streak || 0
+          const lastUpdated = data.lastUpdated || 0
           const pinnedBadges = data.pinnedBadgesData || []
           
           const entry: LeaderboardEntry = {
             id: userId,
             username,
+            xp,
             streak,
+            lastUpdated,
             rank,
             isCurrentUser: userId === currentUser.uid,
             pinnedBadges
@@ -74,10 +80,10 @@ export function StreakLeaderboard({
           rank++
         }
         
-        // Sort by streak (desc) then by username (asc) for tie-breaking
+        // Sort by XP (desc) then by username (asc) for tie-breaking
         entries.sort((a, b) => {
-          if (b.streak !== a.streak) {
-            return b.streak - a.streak
+          if (b.xp !== a.xp) {
+            return b.xp - a.xp
           }
           return a.username.localeCompare(b.username)
         })
@@ -104,8 +110,8 @@ export function StreakLeaderboard({
             finalEntries.push(currentUserEntry)
             // Sort again to maintain order
             finalEntries.sort((a, b) => {
-              if (b.streak !== a.streak) {
-                return b.streak - a.streak
+              if (b.xp !== a.xp) {
+                return b.xp - a.xp
               }
               return a.username.localeCompare(b.username)
             })
@@ -121,9 +127,14 @@ export function StreakLeaderboard({
         })
         
         setLeaderboard(finalEntries)
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching leaderboard:', err)
-        setError('Failed to load leaderboard')
+        const code = err?.code || err?.message || ''
+        if (typeof code === 'string' && code.includes('permission') || err?.code === 'permission-denied') {
+          setError("You don’t have access to view the leaderboard. Please contact admin.")
+        } else {
+          setError('Failed to load leaderboard')
+        }
       } finally {
         setLoading(false)
       }
@@ -225,6 +236,10 @@ export function StreakLeaderboard({
             )}
             <div className="flex items-center gap-1">
               <span className={`font-bold ${entry.isCurrentUser ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                {entry.xp} XP
+              </span>
+              <span className="mx-1">•</span>
+              <span className={`font-bold ${entry.isCurrentUser ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                 {entry.streak}
               </span>
               <span className={entry.isCurrentUser ? 'text-white/80' : 'text-gray-500 dark:text-slate-400'}>🔥</span>
@@ -244,10 +259,10 @@ function getRankDisplay(rank: number) {
 }
 
 function getBadgeForRank(rank: number) {
-  if (rank === 1) return 'Legendary Streak Champion'
-  if (rank <= 3) return 'Platinum Streak Holder'
-  if (rank <= 10) return 'Consistent Learner'
-  return 'Streak Enthusiast'
+  if (rank === 1) return '🏆 Champion'
+  if (rank <= 3) return '🏅 Top Performer'
+  if (rank <= 10) return '🌟 High Achiever'
+  return '🚀 Learner'
 }
 
 export default StreakLeaderboard

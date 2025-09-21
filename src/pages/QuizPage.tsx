@@ -6,6 +6,9 @@ import { loadLessonContent, type LessonContent, isOldFormat, isNewFormat } from 
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import { showConfetti, playSound, showShakeEffect } from '../utils/animations';
+import { awardXPAndStreak, describeBadge } from '../services/gamification';
+import { logActivity } from '../services/activity';
+import { useBadgeQueue } from '../contexts/BadgeContext';
 
 
 // Define types for gamification data
@@ -40,6 +43,7 @@ export function QuizPage() {
   const [questionOrder, setQuestionOrder] = useState<number[]>([]); // For randomizing questions
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const quizCardRef = useRef<HTMLDivElement>(null);
+  const { queueBadge } = useBadgeQueue();
 
   // Parse URL params
   const subjectParam = subject as Subject;
@@ -441,49 +445,19 @@ export function QuizPage() {
       showConfetti();
     }
     
-    // Update gamification data
+    // Update gamification via service: award XP based on score and update streak; queue earned badges
     try {
-      const today = new Date().toISOString().split('T')[0];
-      let newPoints = gamificationData.points;
-      let newStreak = gamificationData.streak;
-      let newBadges = [...gamificationData.badges];
-      
-      // Award points for quiz completion
-      newPoints += Math.floor(finalScore / 10) * 5; // 5 points per 10% score
-      
-      // Check if streak continues
-      if (gamificationData.lastActivityDate !== today) {
-        if (gamificationData.lastActivityDate === new Date(Date.now() - 86400000).toISOString().split('T')[0]) {
-          // Consecutive day, increase streak
-          newStreak += 1;
-        } else {
-          // Break in streak, reset to 1
-          newStreak = 1;
-        }
+      const deltaXP = Math.floor(finalScore / 10) * 5; // 5 XP per 10% score
+      const res = await awardXPAndStreak(currentUser.uid, deltaXP);
+      setGamificationData((prev) => ({
+        points: res.newXP,
+        streak: res.newStreak,
+        badges: Array.from(new Set([...(prev.badges || []), ...res.earnedBadges])),
+        lastActivityDate: new Date().toISOString().split('T')[0]
+      }));
+      if (res.earnedBadges.length > 0) {
+        res.earnedBadges.map((id) => describeBadge(id)).forEach((b) => queueBadge(b));
       }
-      
-      // Award badges for achievements
-      if (finalScore >= 80 && !newBadges.includes('Quiz Master')) {
-        newBadges.push('Quiz Master');
-      }
-      
-      if (newStreak >= 7 && !newBadges.includes('7-Day Streak')) {
-        newBadges.push('7-Day Streak');
-      }
-      
-      // Update gamification data
-      const updatedGamificationData = {
-        points: newPoints,
-        streak: newStreak,
-        badges: newBadges,
-        lastActivityDate: today
-      };
-      
-      setGamificationData(updatedGamificationData);
-      
-      // Save to Firestore
-      const gamificationDoc = doc(db, 'users', currentUser.uid, 'gamification', 'data');
-      await setDoc(gamificationDoc, updatedGamificationData);
     } catch (err) {
       console.error('Error updating gamification data:', err);
     }
@@ -507,6 +481,11 @@ export function QuizPage() {
       const resultDoc = doc(db, 'users', currentUser.uid, 'progress', `quiz_${subjectParam}_${gradeParam}_${lesson}`);
       await setDoc(resultDoc, quizResult);
       
+      // Log activity for teacher analytics
+      try {
+        await logActivity({ uid: currentUser.uid, type: 'quiz_completed', grade: gradeParam, lesson: lessonIndex + 1, subject: subjectParam, score: finalScore })
+      } catch {}
+
       console.log('Quiz result saved successfully to Firestore');
     } catch (err) {
       console.error('Error saving quiz result to Firestore:', err);

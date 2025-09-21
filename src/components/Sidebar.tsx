@@ -119,7 +119,7 @@ export function Sidebar({ active, isCollapsed = true, onToggle }: SidebarProps) 
           bg-white/95 dark:bg-slate-950/90 
           text-gray-900 dark:text-slate-100 
           p-4 gap-4
-          transition-all duration-300 ease-in-out
+          transition-all duration-300 ease-in-out animate-sidebar-appear
           ${collapsed ? 'md:translate-x-0 md:w-20' : ''}
           ${isMobile ? (collapsed ? '-translate-x-full' : 'translate-x-0') : ''}
           md:flex md:flex-col
@@ -252,6 +252,12 @@ export function Sidebar({ active, isCollapsed = true, onToggle }: SidebarProps) 
           onClick={toggleSidebar}
         ></div>
       )}
+
+      {/* Local styles for smooth appear animation */}
+      <style>{`
+        @keyframes sidebarAppear { from { opacity: 0; transform: translateX(-12px) } to { opacity: 1; transform: translateX(0) } }
+        .animate-sidebar-appear { animation: sidebarAppear 280ms ease-out; }
+      `}</style>
     </>
   )
 }

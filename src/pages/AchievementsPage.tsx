@@ -213,6 +213,31 @@ export function AchievementsPage() {
           if (userData.pinnedBadges) {
             setPinnedBadges(userData.pinnedBadges)
           }
+          // Reflect Download Master badge if present
+          if (userData.downloadMaster) {
+            setBadges((prev) => {
+              const exists = prev.some(b => b.id === 'download-master')
+              if (exists) {
+                return prev.map(b => b.id === 'download-master' ? { ...b, earned: true, progress: 100 } : b)
+              }
+              return [
+                {
+                  id: 'download-master',
+                  name: 'Download Master',
+                  icon: '📥',
+                  rarity: 'rookie',
+                  earned: true,
+                  progress: 100,
+                  description: 'Download 3 or more files',
+                  color: 'from-green-500 to-emerald-600',
+                  glow: 'shadow-green-500/50',
+                  borderColor: 'border-green-500',
+                  unlockCondition: 'Download 3+ files from the Download page'
+                },
+                ...prev
+              ]
+            })
+          }
         }
       } catch (error) {
         console.error('Error loading pinned badges:', error)
@@ -221,6 +246,33 @@ export function AchievementsPage() {
     
     loadPinnedBadges()
   }, [currentUser])
+
+  // Fallback: if not yet saved to Firestore but present in localStorage, show the badge
+  useEffect(() => {
+    const localEarned = localStorage.getItem('ep_download_master') === '1'
+    if (localEarned) {
+      setBadges((prev) => {
+        const exists = prev.some(b => b.id === 'download-master')
+        if (exists) return prev
+        return [
+          {
+            id: 'download-master',
+            name: 'Download Master',
+            icon: '📥',
+            rarity: 'rookie',
+            earned: true,
+            progress: 100,
+            description: 'Download 3 or more files',
+            color: 'from-green-500 to-emerald-600',
+            glow: 'shadow-green-500/50',
+            borderColor: 'border-green-500',
+            unlockCondition: 'Download 3+ files from the Download page'
+          },
+          ...prev
+        ]
+      })
+    }
+  }, [])
 
   // Function to pin/unpin a badge
   const togglePinBadge = async (badgeId: string) => {
