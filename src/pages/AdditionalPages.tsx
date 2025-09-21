@@ -10,6 +10,12 @@ import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
 import LogicBuilder from '../mini-games/logic-builder/LogicBuilder'
 import CircuitConnect from '../mini-games/circuit-connect/CircuitConnect'
 import MagnetMania from '../mini-games/magnet-mania/MagnetMania'
+import PeriodicTableQuest from '../mini-games/periodic-table-quest/PeriodicTableQuest'
+import ReactionTime from '../mini-games/reaction-time/ReactionTime'
+import MoleculeBuilder from '../mini-games/molecule-builder/MoleculeBuilder'
+import CellExplorer from '../mini-games/cell-explorer/CellExplorer'
+import HumanBodyQuest from '../mini-games/human-body-quest/HumanBodyQuest'
+import EcoSurvival from '../mini-games/eco-survival/EcoSurvival'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -142,6 +148,78 @@ export function MiniGamePlayPage() {
     return (
       <MagnetMania
         subject={subject || 'physics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Periodic Table Quest (Chemistry)
+  if (game === 'periodic-table-quest') {
+    return (
+      <PeriodicTableQuest
+        subject={subject || 'chemistry'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Reaction Time (Chemistry)
+  if (game === 'reaction-time') {
+    return (
+      <ReactionTime
+        subject={subject || 'chemistry'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Molecule Builder (Chemistry)
+  if (game === 'molecule-builder') {
+    return (
+      <MoleculeBuilder
+        subject={subject || 'chemistry'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Cell Explorer (Biology)
+  if (game === 'cell-explorer') {
+    return (
+      <CellExplorer
+        subject={subject || 'biology'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Eco-Survival (Biology)
+  if (game === 'eco-survival') {
+    return (
+      <EcoSurvival
+        subject={subject || 'biology'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Human Body Quest (Biology)
+  if (game === 'human-body-quest') {
+    return (
+      <HumanBodyQuest
+        subject={subject || 'biology'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
         onBack={handleBack}
