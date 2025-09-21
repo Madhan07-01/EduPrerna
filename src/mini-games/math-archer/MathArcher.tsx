@@ -81,10 +81,10 @@ class MathArcherScene extends Phaser.Scene {
   private qText?: Phaser.GameObjects.Text
 
   private targets: Phaser.GameObjects.Container[] = []
-  private arrows: Phaser.GameObjects.Rectangle[] = []
-  private aimAngle: number = -70 // degrees
-  private bowX: number = 120
-  private bowY: number = 460
+  private arrows: Phaser.GameObjects.Container[] = []
+  private aimAngle: number = -90 // degrees (upwards from bottom center)
+  private bowX: number = 0
+  private bowY: number = 0
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
   private shootKey?: Phaser.Input.Keyboard.Key
 
@@ -104,6 +104,10 @@ class MathArcherScene extends Phaser.Scene {
     // ground
     this.add.rectangle(0, h - 40, w, 40, 0x111827).setOrigin(0)
 
+    // position bow at bottom center
+    this.bowX = w / 2
+    this.bowY = h - 70
+
     // HUD
     this.createHUD()
 
@@ -111,7 +115,7 @@ class MathArcherScene extends Phaser.Scene {
     this.qText = this.add.text(w / 2, 70, this.currentQ ? this.currentQ.question : 'Loading…', { fontSize: '28px', color: '#ffffff' }).setOrigin(0.5)
 
     // Bow (simple triangle)
-    const bow = this.add.triangle(this.bowX, this.bowY, 0, 0, 0, -60, 10, 0, 0x22c55e)
+    const bow = this.add.triangle(this.bowX, this.bowY, 0, 0, 0, -60, 10, 0, 0x6b4f2a)
     bow.setName('bow')
     bow.rotation = Phaser.Math.DegToRad(this.aimAngle)
 
@@ -122,7 +126,20 @@ class MathArcherScene extends Phaser.Scene {
     this.cursors = this.input.keyboard?.createCursorKeys()
     this.shootKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
-    this.input.on('pointerdown', () => this.shootArrow())
+    // Pointer: aim toward pointer and tap to shoot
+    this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - this.bowX
+      const dy = p.y - this.bowY
+      const ang = Phaser.Math.RadToDeg(Math.atan2(dy, dx))
+      this.aimAngle = Phaser.Math.Clamp(ang, -160, -20)
+    })
+    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - this.bowX
+      const dy = p.y - this.bowY
+      const ang = Phaser.Math.RadToDeg(Math.atan2(dy, dx))
+      this.aimAngle = Phaser.Math.Clamp(ang, -160, -20)
+      this.shootArrow()
+    })
 
     this.events.on('updateHUD', () => this.updateHUD())
   }
@@ -147,20 +164,27 @@ class MathArcherScene extends Phaser.Scene {
 
     q.options.forEach((opt, idx) => {
       const container = this.add.container(startX + idx * spacing, baseY)
-      const body = this.add.circle(0, 0, 34, 0x1f2937).setStrokeStyle(2, 0x60a5fa)
-      const label = this.add.text(0, 0, String(opt), { fontSize: '16px', color: '#e5e7eb' }).setOrigin(0.5)
-      container.add([body, label])
+      const ringOuter = this.add.circle(0, 0, 36, idx === 1 ? 0xff6b6b : 0x60a5fa).setStrokeStyle(2, 0xffffff)
+      const ringMid = this.add.circle(0, 0, 24, 0xffffff)
+      const ringInner = this.add.circle(0, 0, 12, idx === 1 ? 0xff6b6b : 0x60a5fa)
+      const labelBg = this.add.rectangle(0, 44, 86, 22, 0x111827, 1).setStrokeStyle(1, 0xffffff)
+      const abcs = ['A', 'B', 'C']
+      const label = this.add.text(0, 44, `${abcs[idx]}: ${String(opt)}`, { fontSize: '12px', color: '#e5e7eb' }).setOrigin(0.5)
+      container.add([ringOuter, ringMid, ringInner, labelBg, label])
 
-      // give it velocity side-to-side
-      const dir = idx % 2 === 0 ? 1 : -1
-      this.tweens.add({
-        targets: container,
-        x: container.x + dir * 120,
-        yoyo: true,
-        repeat: -1,
-        duration: 1200 + idx * 200,
-        ease: 'Sine.easeInOut'
-      })
+      // Distance-aware motion parameters (easier to hit):
+      // farther targets move with smaller amplitude and slower speed
+      const dx0 = container.x - this.bowX
+      const dy0 = container.y - this.bowY
+      const dist = Math.sqrt(dx0 * dx0 + dy0 * dy0)
+      const maxDist = 800
+      const norm = Phaser.Math.Clamp(dist / maxDist, 0, 1)
+      const amplitude = Phaser.Math.Linear(80, 40, norm) // closer → wider swing
+      const speed = Phaser.Math.Linear(0.0022, 0.0012, norm) // closer → a bit faster
+      ;(container as any).baseX = container.x
+      ;(container as any).phase = Math.PI * 0.5 * idx
+      ;(container as any).amp = amplitude
+      ;(container as any).spd = speed
 
       // attach metadata
       ;(container as any).answerIndex = idx
@@ -177,32 +201,52 @@ class MathArcherScene extends Phaser.Scene {
   update(_t: number, dt: number) {
     if (!this.cursors || !this.shootKey) return
 
-    if (this.cursors.left?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle - 0.2 * (dt / 16), -110, -20)
-    if (this.cursors.right?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle + 0.2 * (dt / 16), -110, -20)
+    if (this.cursors.left?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle - 0.2 * (dt / 16), -160, -20)
+    if (this.cursors.right?.isDown) this.aimAngle = Phaser.Math.Clamp(this.aimAngle + 0.2 * (dt / 16), -160, -20)
 
     const bow = this.children.getByName('bow') as Phaser.GameObjects.Triangle | null
     if (bow) bow.rotation = Phaser.Math.DegToRad(this.aimAngle)
 
     if (Phaser.Input.Keyboard.JustDown(this.shootKey)) this.shootArrow()
 
+    // move targets with distance-aware sine motion
+    const t = this.time.now
+    this.targets.forEach((tgt: any) => {
+      const baseX = tgt.baseX as number
+      const amp = tgt.amp as number
+      const spd = tgt.spd as number
+      const phase = tgt.phase as number
+      tgt.x = baseX + Math.sin(t * spd + phase) * amp
+    })
+
     // move arrows
     this.arrows.forEach((a) => {
-      a.y += Math.sin(Phaser.Math.DegToRad(this.aimAngle)) * 10
-      a.x += Math.cos(Phaser.Math.DegToRad(this.aimAngle)) * 10
+      const rad = a.rotation
+      const step = 14
+      a.y += Math.sin(rad) * step
+      a.x += Math.cos(rad) * step
 
-      // collision test with targets
-      this.targets.forEach((tgt) => {
-        const dx = a.x - tgt.x
-        const dy = a.y - tgt.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 36) {
-          this.handleHit(tgt, (tgt as any).answerIndex)
-          a.destroy()
+      // since origin is at tip, use (a.x, a.y) directly
+      const tipX = a.x
+      const tipY = a.y
+
+      // collision test with targets (radius ≈ 36)
+      for (const tgt of this.targets) {
+        if (!(a as any).hit) {
+          const dx = tipX - tgt.x
+          const dy = tipY - tgt.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 36) {
+            ;(a as any).hit = true
+            this.handleHit(tgt, (tgt as any).answerIndex)
+            a.destroy()
+            break
+          }
         }
-      })
+      }
 
       // cleanup offscreen
-      if (a.x < -20 || a.x > 920 || a.y < -20 || a.y > 620) {
+      if (a.x < -40 || a.x > 940 || a.y < -40 || a.y > 640) {
         a.destroy()
       }
     })
@@ -210,10 +254,14 @@ class MathArcherScene extends Phaser.Scene {
   }
 
   private shootArrow() {
-    // create a slim rectangle as an arrow
-    const arrow = this.add.rectangle(this.bowX, this.bowY, 24, 3, 0xf59e0b)
-    arrow.rotation = Phaser.Math.DegToRad(this.aimAngle)
-    this.arrows.push(arrow)
+    // Archer arrow as a container, with tip at container origin for precise collision
+    const cont = this.add.container(this.bowX, this.bowY)
+    const shaft = this.add.rectangle(-28, 0, 40, 3, 0xcbd5e1).setOrigin(0, 0.5)
+    const head = this.add.triangle(0, 0, 0, 0, -8, -5, -8, 5, 0xf59e0b)
+    const fletch1 = this.add.triangle(-36, 0, 0, 0, 8, -4, 8, 4, 0x22c55e)
+    cont.add([shaft, head, fletch1])
+    cont.rotation = Phaser.Math.DegToRad(this.aimAngle)
+    this.arrows.push(cont)
   }
 
   private handleHit(target: Phaser.GameObjects.Container, idx: number) {
