@@ -8,6 +8,7 @@ import GenericGame from '../components/GenericGame'
 import CodeBreaker from '../mini-games/code-breaker/CodeBreaker'
 import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
 import LogicBuilder from '../mini-games/logic-builder/LogicBuilder'
+import CircuitConnect from '../mini-games/circuit-connect/CircuitConnect'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -115,6 +116,18 @@ export function MiniGamePlayPage() {
   if (game === 'physics-lab-escape') {
     return (
       <PhysicsLabEscapeGame
+        subject={subject || 'physics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Circuit Connect (Physics)
+  if (game === 'circuit-connect') {
+    return (
+      <CircuitConnect
         subject={subject || 'physics'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
