@@ -1,11 +1,12 @@
 // using automatic JSX runtime; no React default import needed
-import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { SectionCard } from './Pages'
 import MathRunnerGame from '../components/MathRunnerGame'
 import EquationBuilderGame from '../components/EquationBuilderGame'
-import MathBalloonPopGame from '../components/MathBalloonPopGame'
+import MathArcherGame from '../components/MathArcherGame'
 import GenericGame from '../components/GenericGame'
+import CodeBreakerGame from '../components/CodeBreakerGame'
+import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -33,7 +34,7 @@ export function MiniGamePlayPage() {
   const gameIconMap: Record<string, string> = {
     'math-runner': '🏃‍♂️',
     'equation-builder-puzzle': '🧩',
-    'math-balloon-pop': '🎈',
+    'math-archer': '🏹',
     'code-breaker': '🐛',
     'debugging-quest': '🔍',
     'logic-maze': '🧠',
@@ -72,11 +73,35 @@ export function MiniGamePlayPage() {
     )
   }
 
-  // For Math Balloon Pop
-  if (game === 'math-balloon-pop') {
+  // For Math Archer
+  if (game === 'math-archer') {
     return (
-      <MathBalloonPopGame
+      <MathArcherGame
         subject={subject || 'mathematics'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Code Breaker (Computer Science)
+  if (game === 'code-breaker') {
+    return (
+      <CodeBreakerGame
+        subject={subject || 'computer-science'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Physics Lab Escape (Physics)
+  if (game === 'physics-lab-escape') {
+    return (
+      <PhysicsLabEscapeGame
+        subject={subject || 'physics'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
         onBack={handleBack}
@@ -188,34 +213,6 @@ export function MiniGamesPage() {
     }
   ]
 
-  // Games data organized by subject - All 15 games
-  const gamesBySubject = {
-    mathematics: [
-      { name: 'Math Runner', description: 'Run through levels solving math problems to avoid obstacles.', icon: '🏃‍♂️', color: 'from-blue-500 to-indigo-600', hoverColor: 'hover:from-blue-600 hover:to-indigo-700' },
-      { name: 'Equation Builder Puzzle', description: 'Drag and drop numbers/operators to form correct equations.', icon: '🧩', color: 'from-purple-500 to-blue-600', hoverColor: 'hover:from-purple-600 hover:to-blue-700' },
-      { name: 'Math Balloon Pop', description: 'Pop the balloons with correct answers before they float away.', icon: '🎈', color: 'from-indigo-500 to-purple-600', hoverColor: 'hover:from-indigo-600 hover:to-purple-700' }
-    ],
-    'computer-science': [
-      { name: 'Code Breaker', description: 'Solve coding challenges to unlock levels.', icon: '🐛', color: 'from-green-500 to-teal-600', hoverColor: 'hover:from-green-600 hover:to-teal-700' },
-      { name: 'Debugging Quest', description: 'Find and fix bugs in simple programs.', icon: '🔍', color: 'from-teal-500 to-cyan-600', hoverColor: 'hover:from-teal-600 hover:to-cyan-700' },
-      { name: 'Logic Maze', description: 'Use logic to navigate through mazes and puzzles.', icon: '🧠', color: 'from-emerald-500 to-green-600', hoverColor: 'hover:from-emerald-600 hover:to-green-700' }
-    ],
-    physics: [
-      { name: 'Physics Lab Escape', description: 'Solve physics puzzles to escape a virtual lab.', icon: '⚗️', color: 'from-purple-500 to-pink-600', hoverColor: 'hover:from-purple-600 hover:to-pink-700' },
-      { name: 'Circuit Connect', description: 'Build working circuits by connecting components correctly.', icon: '🔌', color: 'from-violet-500 to-purple-600', hoverColor: 'hover:from-violet-600 hover:to-purple-700' },
-      { name: 'Gravity Drop', description: 'Experiment with gravity and motion challenges.', icon: '🌍', color: 'from-indigo-500 to-violet-600', hoverColor: 'hover:from-indigo-600 hover:to-violet-700' }
-    ],
-    chemistry: [
-      { name: 'Periodic Table Quest', description: 'Match elements and discover their properties.', icon: '⚛️', color: 'from-orange-500 to-red-600', hoverColor: 'hover:from-orange-600 hover:to-red-700' },
-      { name: 'Reaction Time', description: 'Combine substances and predict reactions.', icon: '💥', color: 'from-red-500 to-pink-600', hoverColor: 'hover:from-red-600 hover:to-pink-700' },
-      { name: 'Molecule Builder', description: 'Construct molecules using atoms and bonds.', icon: '🧪', color: 'from-yellow-500 to-orange-600', hoverColor: 'hover:from-yellow-600 hover:to-orange-700' }
-    ],
-    biology: [
-      { name: 'Cell Explorer', description: 'Explore cell structures and match their functions.', icon: '🔬', color: 'from-teal-500 to-cyan-600', hoverColor: 'hover:from-teal-600 hover:to-cyan-700' },
-      { name: 'Human Body Quest', description: 'Identify body systems and organs to complete tasks.', icon: '🫀', color: 'from-cyan-500 to-blue-600', hoverColor: 'hover:from-cyan-600 hover:to-blue-700' },
-      { name: 'Eco-Survival', description: 'Balance ecosystems and keep species alive.', icon: '🌿', color: 'from-green-500 to-teal-600', hoverColor: 'hover:from-green-600 hover:to-teal-700' }
-    ]
-  }
 
   // Subject Selection Screen
   return (
