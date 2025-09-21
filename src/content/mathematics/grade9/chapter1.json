@@ -1,0 +1,105 @@
+{
+  "title": "Number Systems",
+  "subtopics": [
+    {
+      "title": "Introduction to Number Systems",
+      "content": "<h4>Introduction</h4><p>The number system is the foundation of mathematics. It includes natural numbers, whole numbers, integers, rational numbers, irrational numbers, and real numbers.</p>"
+    },
+    {
+      "title": "Natural Numbers (N)",
+      "content": "<h4>Natural Numbers</h4><p>These are the numbers we use for counting objects: 1, 2, 3, 4, …</p><p>They start from 1 and go on infinitely.</p><p><strong>Example:</strong> Counting apples → 1 apple, 2 apples, etc.</p>"
+    },
+    {
+      "title": "Whole Numbers (W)",
+      "content": "<h4>Whole Numbers</h4><p>Whole numbers include all natural numbers plus 0.</p><p>So, W = {0, 1, 2, 3, …}.</p><p><strong>Example:</strong> If there are zero chocolates in a box, we still represent it with a number (0).</p>"
+    },
+    {
+      "title": "Integers (Z)",
+      "content": "<h4>Integers</h4><p>Integers include all positive and negative whole numbers, along with zero.</p><p>Z = {…, –3, –2, –1, 0, 1, 2, 3, …}.</p><p><strong>Example:</strong> A lift moving 3 floors up (+3) or 2 floors down (–2).</p>"
+    },
+    {
+      "title": "Rational Numbers (Q)",
+      "content": "<h4>Rational Numbers</h4><p>Numbers that can be expressed in the form p/q, where p and q are integers and q ≠ 0.</p><p>Includes fractions, terminating decimals, and repeating decimals.</p><p><strong>Example:</strong> 2/3, –4/5, 0.25 (¼).</p>"
+    },
+    {
+      "title": "Irrational Numbers",
+      "content": "<h4>Irrational Numbers</h4><p>Numbers that cannot be expressed as p/q.</p><p>Their decimal expansion is non-terminating and non-repeating.</p><p><strong>Examples:</strong> √2, √3, π, e.</p>"
+    },
+    {
+      "title": "Real Numbers (R)",
+      "content": "<h4>Real Numbers</h4><p>The set of all rational and irrational numbers combined.</p><p>Every point on the number line represents a real number.</p>"
+    },
+    {
+      "title": "Properties of Real Numbers",
+      "content": "<h4>Properties of Real Numbers</h4><p><strong>Density Property:</strong> Between any two real numbers, there exists another real number.</p><h4>Decimal Representation:</h4><ul><li>Rational → terminating or repeating decimals.</li><li>Irrational → non-terminating, non-repeating decimals.</li></ul>"
+    },
+    {
+      "title": "Laws of Exponents",
+      "content": "<h4>Laws of Exponents</h4><ul><li>a^m × a^n = a^(m+n)</li><li>a^m / a^n = a^(m-n)</li><li>(a^m)^n = a^(mn)</li><li>a^0 = 1 (a ≠ 0)</li><li>a^(-m) = 1/a^m</li></ul>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of the following is the smallest set containing 0?",
+        "options": ["Natural numbers", "Whole numbers", "Integers", "Rational numbers"],
+        "answer": "Whole numbers",
+        "explanation": "0 is included in whole numbers, not natural numbers. Whole numbers = {0, 1, 2, 3, ...}"
+      },
+      {
+        "question": "The decimal expansion of a rational number is always:",
+        "options": ["Terminating only", "Non-terminating, repeating or terminating", "Non-terminating, non-repeating", "Cannot be determined"],
+        "answer": "Non-terminating, repeating or terminating",
+        "explanation": "Rational numbers can be either terminating (like 1/2 = 0.5) or repeating (like 1/3 = 0.333...)"
+      },
+      {
+        "question": "Which of the following is an irrational number?",
+        "options": ["22/7", "0.121212…", "√5", "–3"],
+        "answer": "√5",
+        "explanation": "√5 cannot be expressed as p/q and has a non-terminating, non-repeating decimal expansion, making it irrational."
+      },
+      {
+        "question": "Every integer is:",
+        "options": ["Rational", "Irrational", "Real but not rational", "None"],
+        "answer": "Rational",
+        "explanation": "Any integer n can be written as n/1, which fits the definition of a rational number (p/q where q≠0)."
+      },
+      {
+        "question": "The value of 2^(-3) is:",
+        "options": ["–8", "8", "1/8", "–1/8"],
+        "answer": "1/8",
+        "explanation": "By the negative exponent rule, a^(-m) = 1/a^m. So 2^(-3) = 1/2^3 = 1/8."
+      },
+      {
+        "question": "The square root of 2 is:",
+        "options": ["Rational", "Irrational", "Whole number", "Integer"],
+        "answer": "Irrational",
+        "explanation": "√2 is non-terminating and non-repeating, which makes it an irrational number."
+      },
+      {
+        "question": "Which of the following has a terminating decimal expansion?",
+        "options": ["1/3", "7/8", "2/11", "22/7"],
+        "answer": "7/8",
+        "explanation": "7/8 = 0.875, which is a terminating decimal. 1/3 = 0.333... and 2/11 = 0.181818... are repeating decimals."
+      },
+      {
+        "question": "Between 1 and 2, how many rational numbers exist?",
+        "options": ["None", "One", "Two", "Infinitely many"],
+        "answer": "Infinitely many",
+        "explanation": "Due to the density property of rational numbers, there are infinitely many rational numbers between any two rational numbers."
+      },
+      {
+        "question": "The product of two irrational numbers is always:",
+        "options": ["Rational", "Irrational", "Either rational or irrational", "Whole number"],
+        "answer": "Either rational or irrational",
+        "explanation": "The product can be either. For example, √2 × √2 = 2 (rational), but √2 × √3 = √6 (irrational)."
+      },
+      {
+        "question": "Which of the following statements is true?",
+        "options": ["Every real number is rational", "Every rational number is real", "Every irrational number is rational", "Every integer is irrational"],
+        "answer": "Every rational number is real",
+        "explanation": "Real numbers include both rational and irrational numbers, so every rational number is also a real number."
+      }
+    ]
+  }
+}

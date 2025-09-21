@@ -1,0 +1,97 @@
+{
+  "title": "Rational Numbers",
+  "subtopics": [
+    {
+      "title": "Introduction to Rational Numbers",
+      "content": "<h4>Introduction</h4><p>In earlier classes, you learned about natural numbers, whole numbers, and integers. But sometimes, integers are not enough to express certain values. For example, when you share a chocolate bar equally among 3 friends, you get fractions like 1/3. These are not integers, but they are still numbers we use in daily life. Such numbers are called rational numbers. They help us represent parts of a whole, ratios, and values between integers.</p>"
+    },
+    {
+      "title": "Definition of Rational Numbers",
+      "content": "<h4>Definition</h4><p>A rational number is any number that can be expressed in the form: p/q, where p and q are integers, and q ≠ 0.</p><p><strong>Examples:</strong></p><p>2/3, -7/4, 0, 5, -11/9 are all rational numbers.</p>"
+    },
+    {
+      "title": "Properties of Rational Numbers",
+      "content": "<h4>Closure Property</h4><p>Rational numbers are closed under addition, subtraction, and multiplication.</p><p><strong>Example:</strong> 2/3 + 5/6 = 9/6 = 3/2 (still rational).</p><p>Not closed under square root in general (e.g., √2 is not rational).</p><h4>Commutative Property</h4><p>a + b = b + a, a × b = b × a.</p><p><strong>Example:</strong> 2/3 + 1/4 = 1/4 + 2/3.</p><h4>Associative Property</h4><p>Addition and multiplication are associative.</p><p><strong>Example:</strong> (1/2 + 1/3) + 1/4 = 1/2 + (1/3 + 1/4).</p><h4>Distributive Property</h4><p>a × (b + c) = a × b + a × c.</p>"
+    },
+    {
+      "title": "Representation on a Number Line",
+      "content": "<h4>Number Line Representation</h4><p>Rational numbers can be plotted on a number line like integers and fractions.</p><p><strong>Example:</strong> 3/4 lies between 0 and 1.</p><p>Negative rationals are placed to the left of zero.</p>"
+    },
+    {
+      "title": "Standard Form of Rational Numbers",
+      "content": "<h4>Standard Form</h4><p>A rational number is said to be in standard form when:</p><ul><li>Denominator is positive.</li><li>Numerator and denominator have no common factors other than 1.</li></ul><p><strong>Example:</strong> -4/-6 = 2/3 (standard form).</p>"
+    },
+    {
+      "title": "Comparison of Rational Numbers",
+      "content": "<h4>Comparing Rational Numbers</h4><p>To compare, bring them to a common denominator.</p><p><strong>Example:</strong> Compare 2/3 and 3/5.</p><p>LCM of 3 and 5 = 15.</p><p>2/3 = 10/15, 3/5 = 9/15.</p><p>Thus, 2/3 > 3/5.</p>"
+    },
+    {
+      "title": "Operations on Rational Numbers",
+      "content": "<h4>Addition/Subtraction</h4><p>Convert to common denominator, then add/subtract numerators.</p><p><strong>Example:</strong> 5/12 - 7/18 = 15-14/36 = 1/36.</p><h4>Multiplication</h4><p>Multiply numerators and denominators.</p><p><strong>Example:</strong> 2/3 × 5/7 = 10/21.</p><h4>Division</h4><p>Multiply by the reciprocal.</p><p><strong>Example:</strong> 4/5 ÷ 2/3 = 4/5 × 3/2 = 12/10 = 6/5.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of the following is a rational number?",
+        "options": ["√2", "π", "–7/3", "None of these"],
+        "answer": "–7/3",
+        "explanation": "A rational number is any number that can be expressed as p/q where p and q are integers and q ≠ 0. –7/3 fits this definition."
+      },
+      {
+        "question": "The standard form of –15/–35 is:",
+        "options": ["15/35", "3/7", "–3/7", "7/15"],
+        "answer": "3/7",
+        "explanation": "To get the standard form, we simplify –15/–35 = 15/35 = 3/7. In standard form, the denominator must be positive."
+      },
+      {
+        "question": "Which property is shown by 2/3 + 4/5 = 4/5 + 2/3?",
+        "options": ["Closure", "Commutative", "Associative", "Distributive"],
+        "answer": "Commutative",
+        "explanation": "The commutative property states that the order of addition does not affect the result: a + b = b + a."
+      },
+      {
+        "question": "The reciprocal of –7/9 is:",
+        "options": ["7/9", "–9/7", "–7/9", "9/7"],
+        "answer": "–9/7",
+        "explanation": "The reciprocal of a fraction a/b is b/a. So the reciprocal of –7/9 is 9/–7 = –9/7."
+      },
+      {
+        "question": "Which of the following is NOT a rational number?",
+        "options": ["0/5", "–11/7", "5", "All are rational numbers"],
+        "answer": "All are rational numbers",
+        "explanation": "All the given options are rational numbers. 0/5 = 0, –11/7, 5 = 5/1, and 9/–3 = –3 are all rational numbers."
+      },
+      {
+        "question": "The sum of 3/4 + 5/6 is:",
+        "options": ["8/10", "19/12", "23/24", "1/2"],
+        "answer": "19/12",
+        "explanation": "To add 3/4 + 5/6, we find the LCM of denominators (12). 3/4 = 9/12 and 5/6 = 10/12. So 9/12 + 10/12 = 19/12."
+      },
+      {
+        "question": "On the number line, the rational number –5/8 lies between:",
+        "options": ["–1 and 0", "0 and 1", "–2 and –1", "1 and 2"],
+        "answer": "–1 and 0",
+        "explanation": "Since –5/8 is negative but greater than –1 (because 5/8 < 1), it lies between –1 and 0 on the number line."
+      },
+      {
+        "question": "Which is greater: 7/12 or 5/8?",
+        "options": ["7/12", "5/8", "Both equal", "Cannot be compared"],
+        "answer": "5/8",
+        "explanation": "To compare, we convert to common denominator. LCM of 12 and 8 is 24. 7/12 = 14/24 and 5/8 = 15/24. Since 15/24 > 14/24, 5/8 is greater."
+      },
+      {
+        "question": "The product of 2/3 × –9/4 is:",
+        "options": ["–3/2", "3/2", "–18/12", "–9/8"],
+        "answer": "–3/2",
+        "explanation": "2/3 × –9/4 = (2 × –9)/(3 × 4) = –18/12 = –3/2."
+      },
+      {
+        "question": "The result of 5/9 ÷ 10/27 is:",
+        "options": ["3/2", "5/27", "9/10", "27/50"],
+        "answer": "3/2",
+        "explanation": "5/9 ÷ 10/27 = 5/9 × 27/10 = (5 × 27)/(9 × 10) = 135/90 = 3/2."
+      }
+    ]
+  }
+}

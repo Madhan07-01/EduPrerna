@@ -141,9 +141,9 @@ export function QuizPage() {
                   }
                 } as LessonContent);
               } else {
-                // Fallback to local content for Grade 6 chapters 1-3
-                if (gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-                  const content = loadLessonContent(lessonIndex + 1);
+                // Fallback to local content for Grade 6-9 chapters 1-3
+                if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+                  const content = loadLessonContent(lessonIndex + 1, gradeParam);
                   if (content) {
                     setLessonContent(content);
                   } else {
@@ -154,17 +154,9 @@ export function QuizPage() {
                 }
               }
             } else {
-              // Fallback to local content for Grade 6 chapters 1-3
-              if (gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-                const content = loadLessonContent(lessonIndex + 1, 6);
-                if (content) {
-                  setLessonContent(content);
-                } else {
-                  setError('Quiz content not found');
-                }
-              } else if (gradeParam === 7 && lessonIndex >= 0 && lessonIndex <= 2) {
-                // Fallback to local content for Grade 7 chapters 1-3
-                const content = loadLessonContent(lessonIndex + 1, 7);
+              // Fallback to local content for Grade 6-9 chapters 1-3
+              if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+                const content = loadLessonContent(lessonIndex + 1, gradeParam);
                 if (content) {
                   setLessonContent(content);
                 } else {
@@ -173,21 +165,12 @@ export function QuizPage() {
               } else {
                 setError('Quiz not available for this lesson yet');
               }
-
             }
           } catch (firestoreError) {
             console.error('Error fetching from Firestore:', firestoreError);
-            // Fallback to local content for Grade 6 chapters 1-3
-            if (gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-              const content = loadLessonContent(lessonIndex + 1, 6);
-              if (content) {
-                setLessonContent(content);
-              } else {
-                setError('Quiz content not found');
-              }
-            } else if (gradeParam === 7 && lessonIndex >= 0 && lessonIndex <= 2) {
-              // Fallback to local content for Grade 7 chapters 1-3
-              const content = loadLessonContent(lessonIndex + 1, 7);
+            // Fallback to local content for Grade 6-9 chapters 1-3
+            if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+              const content = loadLessonContent(lessonIndex + 1, gradeParam);
               if (content) {
                 setLessonContent(content);
               } else {
@@ -199,16 +182,8 @@ export function QuizPage() {
           }
         } else {
           // For other subjects/grades, try local content first
-          if (subjectParam === 'Mathematics' && gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-            const content = loadLessonContent(lessonIndex + 1, 6);
-            if (content) {
-              setLessonContent(content);
-            } else {
-              setError('Quiz content not found');
-            }
-          } else if (subjectParam === 'Mathematics' && gradeParam === 7 && lessonIndex >= 0 && lessonIndex <= 2) {
-            // Try local content for Grade 7 chapters 1-3
-            const content = loadLessonContent(lessonIndex + 1, 7);
+          if (subjectParam === 'Mathematics' && gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+            const content = loadLessonContent(lessonIndex + 1, gradeParam);
             if (content) {
               setLessonContent(content);
             } else {
@@ -719,11 +694,13 @@ export function QuizPage() {
               </h2>
               <p className="text-lg text-gray-600 dark:text-slate-400">
                 {score >= 80 
-                  ? currentLesson.includes('Integers') 
-                    ? '🌟 Outstanding! You are an Integers Champion!' 
-                    : currentLesson.includes('Fractions') 
-                      ? '🌟 Outstanding! You are a Fraction & Decimal Master!' 
-                      : '🌟 Outstanding! You are a Data Wizard!'
+                  ? currentLesson.includes('Rational') 
+                    ? '🌟 Outstanding! You are a Rational Numbers Master!' 
+                    : currentLesson.includes('Linear') 
+                      ? '🌟 Outstanding! You are an Equation Solver!' 
+                      : currentLesson.includes('Quadrilateral') 
+                        ? '🌟 Outstanding! You are a Geometry Explorer!' 
+                        : '🌟 Outstanding! Great job!'
                   : score >= 60 
                     ? '👏 Good job! You understood most of the material.' 
                     : '📖 Keep studying! Review the lesson content and try again.'}
@@ -937,6 +914,7 @@ export function QuizPage() {
                   </p>
                 </div>
               )}
+
             </div>
           )}
 

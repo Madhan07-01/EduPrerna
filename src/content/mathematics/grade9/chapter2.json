@@ -1,0 +1,101 @@
+{
+  "title": "Polynomials",
+  "subtopics": [
+    {
+      "title": "Introduction to Polynomials",
+      "content": "<h4>Introduction</h4><p>Polynomials are algebraic expressions formed by variables, coefficients, and powers of variables. They are fundamental in algebra and are used to solve equations and model real-life problems.</p>"
+    },
+    {
+      "title": "Definition of a Polynomial",
+      "content": "<h4>Definition</h4><p>An expression of the form:</p><p>p(x) = aₙxⁿ + aₙ₋₁xⁿ⁻¹ + … + a₁x + a₀</p><p>where coefficients aₙ, aₙ₋₁, …, a₀ are real numbers and n is a non-negative integer.</p>"
+    },
+    {
+      "title": "Types of Polynomials (Based on Terms)",
+      "content": "<h4>Types Based on Terms</h4><ul><li><strong>Monomial:</strong> one term (e.g., 7x)</li><li><strong>Binomial:</strong> two terms (e.g., x² + 5)</li><li><strong>Trinomial:</strong> three terms (e.g., x² + 3x + 2)</li></ul>"
+    },
+    {
+      "title": "Degree of a Polynomial",
+      "content": "<h4>Degree of a Polynomial</h4><p>The highest power of the variable in the polynomial.</p><p><strong>Example:</strong> In 4x⁵ – 3x² + x, the degree is 5.</p>"
+    },
+    {
+      "title": "Types of Polynomials (Based on Degree)",
+      "content": "<h4>Types Based on Degree</h4><ul><li><strong>Constant polynomial:</strong> degree 0 (e.g., 7)</li><li><strong>Linear:</strong> degree 1 (e.g., 3x + 2)</li><li><strong>Quadratic:</strong> degree 2 (e.g., x² – 4x + 4)</li><li><strong>Cubic:</strong> degree 3 (e.g., x³ + x² + 1)</li></ul>"
+    },
+    {
+      "title": "Zeros of a Polynomial",
+      "content": "<h4>Zeros of a Polynomial</h4><p>A number k is a zero of p(x) if p(k) = 0.</p><p><strong>Example:</strong> For p(x) = x² – 4, zeros are ±2.</p>"
+    },
+    {
+      "title": "Remainder Theorem",
+      "content": "<h4>Remainder Theorem</h4><p>If a polynomial p(x) is divided by (x – a), the remainder is p(a).</p>"
+    },
+    {
+      "title": "Factor Theorem",
+      "content": "<h4>Factor Theorem</h4><p>If p(a) = 0, then (x – a) is a factor of p(x).</p><p><strong>Example:</strong> For p(x) = x² – 5x + 6, p(2)=0, so (x–2) is a factor.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "Which of the following is a polynomial?",
+        "options": ["x² + 1/x", "3x³ – 7x + 2", "x + 2", "5/x"],
+        "answer": "3x³ – 7x + 2",
+        "explanation": "3x³ – 7x + 2 is a polynomial because it has no negative powers or division by variable. x² + 1/x and 5/x have variables in the denominator, which is not allowed."
+      },
+      {
+        "question": "The degree of 2x⁴ + 7x² – 3 is:",
+        "options": ["2", "3", "4", "7"],
+        "answer": "4",
+        "explanation": "The degree of a polynomial is the highest power of the variable. Here, the highest power is 4."
+      },
+      {
+        "question": "The number of terms in x³ + 2x² – 5x + 7 is:",
+        "options": ["2", "3", "4", "5"],
+        "answer": "4",
+        "explanation": "The polynomial x³ + 2x² – 5x + 7 has four terms: x³, 2x², -5x, and 7."
+      },
+      {
+        "question": "Which of the following is a cubic polynomial?",
+        "options": ["x² + 3x + 2", "x³ – 7", "5x + 1", "7"],
+        "answer": "x³ – 7",
+        "explanation": "A cubic polynomial has degree 3. x³ – 7 has the highest power of 3, making it cubic."
+      },
+      {
+        "question": "If p(x) = x² – 4, then one of its zeros is:",
+        "options": ["4", "–4", "2", "0"],
+        "answer": "2",
+        "explanation": "A zero of p(x) is a value that makes p(x) = 0. p(2) = 2² – 4 = 4 – 4 = 0, so 2 is a zero."
+      },
+      {
+        "question": "Which theorem states that if p(a)=0, then (x–a) is a factor?",
+        "options": ["Remainder theorem", "Division theorem", "Factor theorem", "Multiplication theorem"],
+        "answer": "Factor theorem",
+        "explanation": "The Factor Theorem states that if p(a) = 0, then (x – a) is a factor of p(x)."
+      },
+      {
+        "question": "What is the remainder when p(x) = x² – 3x + 2 is divided by (x–1)?",
+        "options": ["1", "0", "–1", "2"],
+        "answer": "0",
+        "explanation": "By the Remainder Theorem, the remainder when p(x) is divided by (x–1) is p(1). p(1) = 1² – 3(1) + 2 = 1 – 3 + 2 = 0."
+      },
+      {
+        "question": "A polynomial of degree 1 is called:",
+        "options": ["Quadratic", "Cubic", "Linear", "Constant"],
+        "answer": "Linear",
+        "explanation": "A polynomial of degree 1 is called a linear polynomial. Example: 3x + 2."
+      },
+      {
+        "question": "The zero of polynomial p(x) = x + 7 is:",
+        "options": ["–7", "7", "0", "1"],
+        "answer": "–7",
+        "explanation": "The zero is the value that makes p(x) = 0. Setting x + 7 = 0 gives x = –7."
+      },
+      {
+        "question": "Which of the following is NOT a polynomial?",
+        "options": ["x² + 3x + 1", "2x + 5", "x⁻¹ + 4", "7"],
+        "answer": "x⁻¹ + 4",
+        "explanation": "x⁻¹ + 4 is not a polynomial because it contains a negative exponent (x⁻¹ = 1/x), which is not allowed in polynomials."
+      }
+    ]
+  }
+}

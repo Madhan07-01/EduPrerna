@@ -13,7 +13,13 @@ import {
   BarGraph,
   Pictograph,
   CoinToss,
-  DiceRoll
+  DiceRoll,
+  RationalNumberWheel,
+  BalanceScale,
+  QuadrilateralBuilder,
+  NumberSystemVisualization,
+  PolynomialGraph,
+  CoordinateGeometry
 } from '../components/InteractiveLearning';
 
 // Define types for our lesson content structure
@@ -115,17 +121,9 @@ export function LessonDetailPage() {
                 quiz: data.quiz
               } as LessonContent);
             } else {
-              // Fallback to local content for Grade 6 chapters 1-3
-              if (gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-                const content = loadLessonContent(lessonIndex + 1, 6);
-                if (content) {
-                  setLessonContent(content);
-                } else {
-                  setError('Lesson content not found');
-                }
-              } else if (gradeParam === 7 && lessonIndex >= 0 && lessonIndex <= 2) {
-                // Fallback to local content for Grade 7 chapters 1-3
-                const content = loadLessonContent(lessonIndex + 1, 7);
+              // Fallback to local content for Grade 6-9 chapters 1-3
+              if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+                const content = loadLessonContent(lessonIndex + 1, gradeParam);
                 if (content) {
                   setLessonContent(content);
                 } else {
@@ -137,17 +135,9 @@ export function LessonDetailPage() {
             }
           } catch (firestoreError) {
             console.error('Error fetching from Firestore:', firestoreError);
-            // Fallback to local content for Grade 6 chapters 1-3
-            if (gradeParam === 6 && lessonIndex >= 0 && lessonIndex <= 2) {
-              const content = loadLessonContent(lessonIndex + 1, 6);
-              if (content) {
-                setLessonContent(content);
-              } else {
-                setError('Lesson content not found');
-              }
-            } else if (gradeParam === 7 && lessonIndex >= 0 && lessonIndex <= 2) {
-              // Fallback to local content for Grade 7 chapters 1-3
-              const content = loadLessonContent(lessonIndex + 1, 7);
+            // Fallback to local content for Grade 6-9 chapters 1-3
+            if (gradeParam >= 6 && gradeParam <= 9 && lessonIndex >= 0 && lessonIndex <= 2) {
+              const content = loadLessonContent(lessonIndex + 1, gradeParam);
               if (content) {
                 setLessonContent(content);
               } else {
@@ -639,6 +629,54 @@ export function LessonDetailPage() {
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Dice Roll</h3>
                 <DiceRoll />
+              </div>
+            )}
+            
+            {/* Rational Numbers - Number Wheel */}
+            {containsMathConcept(currentContent, 'rational') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Rational Number Wheel</h3>
+                <RationalNumberWheel />
+              </div>
+            )}
+            
+            {/* Linear Equations - Balance Scale */}
+            {containsMathConcept(currentContent, 'linear equation') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Balance Scale</h3>
+                <BalanceScale />
+              </div>
+            )}
+            
+            {/* Quadrilaterals - Shape Builder */}
+            {containsMathConcept(currentContent, 'quadrilateral') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Quadrilateral Builder</h3>
+                <QuadrilateralBuilder />
+              </div>
+            )}
+            
+            {/* Grade 9 Number Systems - Number System Visualization */}
+            {gradeParam === 9 && containsMathConcept(currentContent, 'number system') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Number System Visualization</h3>
+                <NumberSystemVisualization />
+              </div>
+            )}
+            
+            {/* Grade 9 Polynomials - Polynomial Graph */}
+            {gradeParam === 9 && containsMathConcept(currentContent, 'polynomial') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Polynomial Graph</h3>
+                <PolynomialGraph />
+              </div>
+            )}
+            
+            {/* Grade 9 Coordinate Geometry - Coordinate Geometry */}
+            {gradeParam === 9 && containsMathConcept(currentContent, 'coordinate geometry') && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Interactive Coordinate Geometry</h3>
+                <CoordinateGeometry />
               </div>
             )}
           </div>

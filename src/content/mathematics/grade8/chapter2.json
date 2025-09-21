@@ -1,0 +1,97 @@
+{
+  "title": "Linear Equations",
+  "subtopics": [
+    {
+      "title": "Introduction to Linear Equations",
+      "content": "<h4>Introduction</h4><p>Equations are like balance scales — both sides must be equal. When an equation contains only first power of the variable (like x, not x² or x³), it is called a linear equation. Linear equations are very useful in solving real-life problems such as calculating costs, comparing quantities, or finding unknown values.</p>"
+    },
+    {
+      "title": "Definition of Linear Equations",
+      "content": "<h4>Definition</h4><p>A linear equation in one variable is an equation that can be written in the form: ax + b = 0 where a and b are real numbers, and a ≠ 0.</p><p><strong>Example:</strong> 2x + 5 = 11.</p>"
+    },
+    {
+      "title": "Solving Linear Equations in One Variable",
+      "content": "<h4>Solving Linear Equations</h4><p><strong>Steps:</strong></p><ol><li>Remove brackets (if any).</li><li>Simplify both sides.</li><li>Collect variable terms on one side and constants on the other.</li><li>Simplify to get the value of the variable.</li></ol><p><strong>Example:</strong> Solve 3x + 7 = 16.</p><p>3x = 16 - 7 ⇒ 3x = 9 ⇒ x = 3</p>"
+    },
+    {
+      "title": "Linear Equations in Two Variables",
+      "content": "<h4>Two Variable Linear Equations</h4><p>A linear equation in two variables has the form: ax + by + c = 0 where a, b, c are real numbers, and a, b are not both zero.</p><p><strong>Example:</strong> 2x + 3y = 6.</p><p>Solution of such equations is a pair (x, y) that satisfies the equation.</p>"
+    },
+    {
+      "title": "Graphical Representation",
+      "content": "<h4>Graphing Linear Equations</h4><p>The graph of a linear equation in two variables is always a straight line.</p><p><strong>Example:</strong> For x + y = 4, possible solutions are (0,4), (1,3), (2,2), (3,1). Plotting these points gives a straight line.</p>"
+    },
+    {
+      "title": "Properties of Linear Equations",
+      "content": "<h4>Key Properties</h4><ul><li>Linear equations in one variable have a unique solution.</li><li>Linear equations in two variables have infinitely many solutions (all points on the line).</li><li>If two lines intersect, the point of intersection is the common solution.</li></ul>"
+    },
+    {
+      "title": "Applications of Linear Equations",
+      "content": "<h4>Word Problems</h4><p><strong>Age problems:</strong> If a person's age is 3 years more than twice his son's age, form and solve the equation.</p><p><strong>Cost problems:</strong> If 2 pens and 3 pencils cost ₹15, write the equation.</p><p><strong>Geometry problems:</strong> Angles of a triangle can be solved using linear equations.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "The solution of 2x + 5 = 15 is:",
+        "options": ["5", "10", "15", "20"],
+        "answer": "5",
+        "explanation": "Solving 2x + 5 = 15: 2x = 15 - 5 = 10, so x = 5."
+      },
+      {
+        "question": "Which of the following is a linear equation in one variable?",
+        "options": ["2x² + 3 = 0", "x + 7 = 12", "xy = 10", "y² – 4 = 0"],
+        "answer": "x + 7 = 12",
+        "explanation": "A linear equation in one variable has the form ax + b = 0 where the variable is only to the first power. x + 7 = 12 fits this definition."
+      },
+      {
+        "question": "The equation 3x – 7 = 11 has solution:",
+        "options": ["x = 6", "x = –6", "x = 2/3", "x = 3"],
+        "answer": "x = 6",
+        "explanation": "Solving 3x - 7 = 11: 3x = 11 + 7 = 18, so x = 6."
+      },
+      {
+        "question": "Which of these points is a solution of 2x + y = 7?",
+        "options": ["(2,3)", "(1,2)", "(3,2)", "(4,2)"],
+        "answer": "(2,3)",
+        "explanation": "Substituting (2,3) into 2x + y = 7: 2(2) + 3 = 4 + 3 = 7. This satisfies the equation."
+      },
+      {
+        "question": "The equation of a line parallel to x + y = 4 is:",
+        "options": ["x + y = 2", "x – y = 4", "y = 2x", "x = 4"],
+        "answer": "x + y = 2",
+        "explanation": "Lines are parallel if they have the same coefficients for x and y. x + y = 2 has the same coefficients (1,1) as x + y = 4, so they are parallel."
+      },
+      {
+        "question": "If 5x = 20, then x is:",
+        "options": ["25", "5", "4", "0"],
+        "answer": "4",
+        "explanation": "Solving 5x = 20: x = 20/5 = 4."
+      },
+      {
+        "question": "The graph of a linear equation in two variables is always:",
+        "options": ["Straight line", "Curve", "Circle", "Parabola"],
+        "answer": "Straight line",
+        "explanation": "By definition, the graph of a linear equation in two variables is always a straight line."
+      },
+      {
+        "question": "Which equation represents a line parallel to the x-axis?",
+        "options": ["x = 3", "y = 2", "x + y = 0", "2x + 3y = 6"],
+        "answer": "y = 2",
+        "explanation": "A line parallel to the x-axis has a constant y-value, so its equation is of the form y = c, where c is a constant."
+      },
+      {
+        "question": "Solve: x/3 + 2 = 5.",
+        "options": ["6", "9", "3", "12"],
+        "answer": "9",
+        "explanation": "Solving x/3 + 2 = 5: x/3 = 5 - 2 = 3, so x = 3 × 3 = 9."
+      },
+      {
+        "question": "Which of the following has infinitely many solutions?",
+        "options": ["2x + 3 = 7", "x + y = 5", "5x = 25", "x – 2 = 0"],
+        "answer": "x + y = 5",
+        "explanation": "A linear equation in two variables has infinitely many solutions, as each point on the line is a solution. x + y = 5 is such an equation."
+      }
+    ]
+  }
+}

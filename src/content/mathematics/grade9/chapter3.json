@@ -1,0 +1,101 @@
+{
+  "title": "Coordinate Geometry",
+  "subtopics": [
+    {
+      "title": "Introduction to Coordinate Geometry",
+      "content": "<h4>Introduction</h4><p>Coordinate Geometry helps us locate points and analyze shapes using numbers (coordinates).</p>"
+    },
+    {
+      "title": "Cartesian Plane",
+      "content": "<h4>Cartesian Plane</h4><p>Formed by two perpendicular lines:</p><ul><li>x-axis (horizontal)</li><li>y-axis (vertical)</li></ul><p>Intersection point → Origin (0,0).</p>"
+    },
+    {
+      "title": "Coordinates of a Point",
+      "content": "<h4>Coordinates of a Point</h4><p>Each point is represented as (x, y).</p><p>x = abscissa (distance from y-axis), y = ordinate (distance from x-axis).</p><p><strong>Example:</strong> (3, –2) means 3 units right, 2 units down.</p>"
+    },
+    {
+      "title": "Quadrants",
+      "content": "<h4>Quadrants</h4><p>Divided into 4 regions:</p><ul><li>Quadrant I → (+, +)</li><li>Quadrant II → (–, +)</li><li>Quadrant III → (–, –)</li><li>Quadrant IV → (+, –)</li></ul>"
+    },
+    {
+      "title": "Distance Formula",
+      "content": "<h4>Distance Formula</h4><p>Distance between (x₁, y₁) and (x₂, y₂):</p><p>d = √[(x₂ – x₁)² + (y₂ – y₁)²]</p>"
+    },
+    {
+      "title": "Midpoint Formula",
+      "content": "<h4>Midpoint Formula</h4><p>Midpoint of (x₁, y₁) and (x₂, y₂):</p><p>((x₁ + x₂)/2, (y₁ + y₂)/2)</p>"
+    },
+    {
+      "title": "Section Formula",
+      "content": "<h4>Section Formula</h4><p>If P(x, y) divides the line joining (x₁, y₁) & (x₂, y₂) in ratio m:n:</p><p>P = ((mx₂ + nx₁)/(m+n), (my₂ + ny₁)/(m+n))</p>"
+    },
+    {
+      "title": "Collinearity of Points",
+      "content": "<h4>Collinearity of Points</h4><p>Three points are collinear if they lie on the same line.</p><p>Condition: Area of the triangle formed = 0.</p>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "The coordinates of the origin are:",
+        "options": ["(1,1)", "(0,1)", "(0,0)", "(1,0)"],
+        "answer": "(0,0)",
+        "explanation": "The origin is the point where the x-axis and y-axis intersect, and its coordinates are (0,0)."
+      },
+      {
+        "question": "The abscissa of (7, –3) is:",
+        "options": ["–3", "7", "10", "3"],
+        "answer": "7",
+        "explanation": "The abscissa is the x-coordinate of a point. For (7, –3), the abscissa is 7."
+      },
+      {
+        "question": "The ordinate of (–5, 4) is:",
+        "options": ["–5", "5", "4", "–4"],
+        "answer": "4",
+        "explanation": "The ordinate is the y-coordinate of a point. For (–5, 4), the ordinate is 4."
+      },
+      {
+        "question": "In which quadrant does (–2, –5) lie?",
+        "options": ["Quadrant I", "Quadrant II", "Quadrant III", "Quadrant IV"],
+        "answer": "Quadrant III",
+        "explanation": "In Quadrant III, both x and y coordinates are negative. Since (–2, –5) has both coordinates negative, it lies in Quadrant III."
+      },
+      {
+        "question": "Distance between (0,0) and (6,8) is:",
+        "options": ["10", "12", "8", "6"],
+        "answer": "10",
+        "explanation": "Using the distance formula: d = √[(6–0)² + (8–0)²] = √[36 + 64] = √100 = 10."
+      },
+      {
+        "question": "Midpoint of (2,3) and (4,7) is:",
+        "options": ["(2,5)", "(3,5)", "(4,6)", "(3,7)"],
+        "answer": "(3,5)",
+        "explanation": "Using the midpoint formula: ((2+4)/2, (3+7)/2) = (6/2, 10/2) = (3,5)."
+      },
+      {
+        "question": "The point (0, –4) lies on:",
+        "options": ["x-axis", "y-axis", "origin", "Quadrant II"],
+        "answer": "y-axis",
+        "explanation": "Any point with x-coordinate 0 lies on the y-axis. Since (0, –4) has x=0, it lies on the y-axis."
+      },
+      {
+        "question": "A point dividing (2, –2) and (8, 10) in ratio 1:2 is:",
+        "options": ["(4,2)", "(6,6)", "(5,6)", "(3,4)"],
+        "answer": "(4,2)",
+        "explanation": "Using the section formula with m=1, n=2: P = ((1×8 + 2×2)/(1+2), (1×10 + 2×(–2))/(1+2)) = ((8+4)/3, (10–4)/3) = (12/3, 6/3) = (4,2)."
+      },
+      {
+        "question": "If A(1,1), B(2,2), C(3,3) → they are:",
+        "options": ["Not collinear", "Collinear", "Form a triangle", "None"],
+        "answer": "Collinear",
+        "explanation": "All three points lie on the line y=x, so they are collinear."
+      },
+      {
+        "question": "The point equidistant from (2,3) and (–2,3) is:",
+        "options": ["(0,3)", "(2,0)", "(0,0)", "(3,0)"],
+        "answer": "(0,3)",
+        "explanation": "Since both points have the same y-coordinate (3), the point equidistant from them will have the same y-coordinate and an x-coordinate that is the average of their x-coordinates: (2 + (–2))/2 = 0. So the point is (0,3)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "title": "Understanding Quadrilaterals",
+  "subtopics": [
+    {
+      "title": "Introduction to Quadrilaterals",
+      "content": "<h4>Introduction</h4><p>In geometry, polygons are closed figures formed by line segments. A quadrilateral is a special polygon with four sides, four vertices, and four angles. Quadrilaterals are everywhere around us — in windows, tables, books, tiles, and even in playing cards. Studying quadrilaterals helps us understand their shapes, properties, and how they are classified.</p>"
+    },
+    {
+      "title": "Polygons",
+      "content": "<h4>Polygon Basics</h4><p>A polygon is a closed figure made up of line segments.</p><p><strong>Examples:</strong> triangle (3 sides), quadrilateral (4 sides), pentagon (5 sides), hexagon (6 sides), etc.</p><p><strong>Convex Polygon:</strong> All interior angles < 180°.</p><p><strong>Concave Polygon:</strong> At least one angle > 180°.</p>"
+    },
+    {
+      "title": "Quadrilaterals Overview",
+      "content": "<h4>Quadrilateral Properties</h4><p>A quadrilateral has:</p><ul><li>4 sides</li><li>4 vertices</li><li>4 angles</li></ul><p><strong>Sum of interior angles = 360°</strong></p>"
+    },
+    {
+      "title": "Types of Quadrilaterals - Parallelogram",
+      "content": "<h4>Parallelogram</h4><ul><li>Opposite sides are parallel and equal.</li><li>Opposite angles are equal.</li><li>Diagonals bisect each other.</li></ul>"
+    },
+    {
+      "title": "Types of Quadrilaterals - Rectangle",
+      "content": "<h4>Rectangle</h4><ul><li>A parallelogram with all angles = 90°.</li><li>Diagonals are equal and bisect each other.</li></ul>"
+    },
+    {
+      "title": "Types of Quadrilaterals - Square",
+      "content": "<h4>Square</h4><ul><li>A rectangle with all sides equal.</li><li>Diagonals are equal and bisect at right angles.</li></ul>"
+    },
+    {
+      "title": "Types of Quadrilaterals - Rhombus",
+      "content": "<h4>Rhombus</h4><ul><li>A parallelogram with all sides equal.</li><li>Diagonals bisect at right angles (but not equal).</li></ul>"
+    },
+    {
+      "title": "Types of Quadrilaterals - Trapezium",
+      "content": "<h4>Trapezium (Trapezoid)</h4><ul><li>One pair of opposite sides is parallel.</li></ul>"
+    }
+  ],
+  "quiz": {
+    "questions": [
+      {
+        "question": "The sum of the interior angles of a quadrilateral is:",
+        "options": ["180°", "270°", "360°", "540°"],
+        "answer": "360°",
+        "explanation": "The sum of interior angles of any quadrilateral is always 360°."
+      },
+      {
+        "question": "A quadrilateral with one pair of parallel sides is:",
+        "options": ["Rhombus", "Parallelogram", "Trapezium", "Kite"],
+        "answer": "Trapezium",
+        "explanation": "A trapezium (or trapezoid) is defined as a quadrilateral with exactly one pair of parallel sides."
+      },
+      {
+        "question": "In a parallelogram, opposite angles are:",
+        "options": ["Equal", "Unequal", "Right angles", "None"],
+        "answer": "Equal",
+        "explanation": "One of the key properties of a parallelogram is that opposite angles are equal."
+      },
+      {
+        "question": "The diagonals of a rectangle are:",
+        "options": ["Equal and perpendicular", "Equal and bisect each other", "Unequal and bisect", "Perpendicular but not equal"],
+        "answer": "Equal and bisect each other",
+        "explanation": "In a rectangle, the diagonals are equal in length and bisect each other, but they are not necessarily perpendicular."
+      },
+      {
+        "question": "Which quadrilateral has all sides equal but angles not 90°?",
+        "options": ["Square", "Rectangle", "Rhombus", "Kite"],
+        "answer": "Rhombus",
+        "explanation": "A rhombus has all sides equal, but its angles are not necessarily 90°. A square has all sides equal and all angles 90°."
+      },
+      {
+        "question": "The diagonals of a square are:",
+        "options": ["Equal but not perpendicular", "Perpendicular but not equal", "Equal and bisect at right angles", "Unequal and bisect"],
+        "answer": "Equal and bisect at right angles",
+        "explanation": "In a square, the diagonals are equal in length and bisect each other at right angles (90°)."
+      },
+      {
+        "question": "A quadrilateral with two pairs of adjacent sides equal is:",
+        "options": ["Rectangle", "Kite", "Trapezium", "Parallelogram"],
+        "answer": "Kite",
+        "explanation": "A kite is defined as a quadrilateral with two pairs of adjacent sides equal."
+      },
+      {
+        "question": "If three angles are 80°, 100°, 90°, the fourth is:",
+        "options": ["80°", "90°", "100°", "120°"],
+        "answer": "90°",
+        "explanation": "The sum of interior angles of a quadrilateral is 360°. So the fourth angle = 360° - (80° + 100° + 90°) = 360° - 270° = 90°."
+      },
+      {
+        "question": "Which is NOT a property of a parallelogram?",
+        "options": ["Opposite sides are equal", "Opposite angles are equal", "Diagonals bisect each other", "Diagonals are always equal"],
+        "answer": "Diagonals are always equal",
+        "explanation": "In a parallelogram, diagonals bisect each other but are not necessarily equal. They are equal only in special cases like rectangles and squares."
+      },
+      {
+        "question": "In an isosceles trapezium:",
+        "options": ["Non-parallel sides are equal", "Parallel sides are equal", "All sides are equal", "Diagonals are perpendicular"],
+        "answer": "Non-parallel sides are equal",
+        "explanation": "An isosceles trapezium is a trapezium where the non-parallel sides (legs) are equal in length."
+      }
+    ]
+  }
+}
