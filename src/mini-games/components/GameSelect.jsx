@@ -14,8 +14,8 @@ const GameSelect = () => {
     ],
     'computer-science': [
       { name: 'Code Breaker', description: 'Solve coding challenges to unlock levels.', icon: '🐛', color: 'from-green-500 to-teal-600', hoverColor: 'hover:from-green-600 hover:to-teal-700' },
-      { name: 'Debugging Quest', description: 'Find and fix bugs in simple programs.', icon: '🔍', color: 'from-teal-500 to-cyan-600', hoverColor: 'hover:from-teal-600 hover:to-cyan-700' },
-      { name: 'Logic Maze', description: 'Use logic to navigate through mazes and puzzles.', icon: '🧠', color: 'from-emerald-500 to-green-600', hoverColor: 'hover:from-emerald-600 hover:to-green-700' }
+      { name: 'Logic Builder', description: 'Arrange jumbled steps into the correct logical order.', icon: '🧩', color: 'from-emerald-500 to-green-600', hoverColor: 'hover:from-emerald-600 hover:to-green-700' },
+      { name: 'Debugging Quest', description: 'Find and fix bugs in simple programs.', icon: '🔍', color: 'from-teal-500 to-cyan-600', hoverColor: 'hover:from-teal-600 hover:to-cyan-700' }
     ],
     physics: [
       { name: 'Physics Lab Escape', description: 'Solve physics puzzles to escape a virtual lab.', icon: '⚗️', color: 'from-purple-500 to-pink-600', hoverColor: 'hover:from-purple-600 hover:to-pink-700' },

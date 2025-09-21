@@ -67,23 +67,35 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
   const [score, setScore] = useState(0)
   const [qIdx, setQIdx] = useState(0)
   const [status, setStatus] = useState<Status>('levelStart')
+  const [feedback, setFeedback] = useState<{ type: 'correct' | 'wrong' | null; message: string }>({ type: null, message: '' })
+  const [locked, setLocked] = useState(false)
 
   const questions = useMemo(() => getLevelSlice(level), [level])
   const q = questions[qIdx]
 
   const handleOption = (idx: number) => {
-    if (!q) return
+    if (!q || locked) return
     const correct = idx === q.correctIndex
     if (correct) {
+      // Show success feedback and lock inputs for 1.5s before advancing
+      setFeedback({ type: 'correct', message: '✅ Correct!' })
+      setLocked(true)
       setScore(s => s + 10)
       const next = qIdx + 1
-      if (next >= QUESTIONS_PER_LEVEL) {
-        if (level >= MAX_LEVELS) setStatus('gameComplete')
-        else setStatus('levelComplete')
-      } else {
-        setQIdx(next)
-      }
+      window.setTimeout(() => {
+        if (next >= QUESTIONS_PER_LEVEL) {
+          if (level >= MAX_LEVELS) setStatus('gameComplete')
+          else setStatus('levelComplete')
+        } else {
+          setQIdx(next)
+          // Clear feedback on next question
+          setFeedback({ type: null, message: '' })
+        }
+        setLocked(false)
+      }, 1500)
     } else {
+      // Show error feedback, deduct a life, do not advance
+      setFeedback({ type: 'wrong', message: '❌ Wrong! Try again...' })
       setLives(h => {
         const left = Math.max(0, h - 1)
         if (left === 0) setStatus('gameOver')
@@ -96,6 +108,8 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
     setLevel(l => l + 1)
     setQIdx(0)
     setStatus('levelStart')
+    setFeedback({ type: null, message: '' })
+    setLocked(false)
   }
 
   const restart = () => {
@@ -104,6 +118,8 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
     setScore(0)
     setQIdx(0)
     setStatus('levelStart')
+    setFeedback({ type: null, message: '' })
+    setLocked(false)
   }
 
   if (status === 'levelStart') {
@@ -185,12 +201,22 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
           <div className="bg-slate-900/60 rounded-xl border border-slate-700 p-4 mb-4">
             <div className="text-slate-200 font-semibold mb-2">{q.title}</div>
             <pre className="bg-slate-900 rounded-lg p-3 overflow-auto text-slate-100"><code>{q.snippet}</code></pre>
+            {feedback.type && (
+              <div className={`mt-3 font-semibold ${feedback.type === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+                {feedback.message}
+              </div>
+            )}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {q?.options.map((opt, i) => (
-            <button key={i} onClick={() => handleOption(i)} className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg text-left shadow">
+            <button
+              key={i}
+              onClick={() => handleOption(i)}
+              disabled={locked}
+              className={`bg-blue-600 text-white py-3 px-4 rounded-lg text-left shadow ${locked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+            >
               {String.fromCharCode(65 + i)}. {opt}
             </button>
           ))}
@@ -201,3 +227,4 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
 }
 
 export default CodeBreaker
+

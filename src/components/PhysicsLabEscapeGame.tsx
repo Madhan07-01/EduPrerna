@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 
 // Game constants
 const QUESTIONS_PER_LEVEL = 5
-const MAX_LEVELS = 3
+const MAX_LEVELS = 5
 
 // Types
 interface Question {
@@ -35,26 +35,42 @@ const getLevelSlice = (questions: Question[], level: number) => {
   return questions.slice(start, start + QUESTIONS_PER_LEVEL)
 }
 
-// Hardcoded sample questions for Physics (as placeholders until DB integration)
+// Physics Lab Escape full puzzle bank (5 levels × 5 puzzles)
 const sampleQuestions: Question[] = [
-  // Level 1 (Motion & Measurement)
-  { id: 1, question: 'SI unit of force?', options: ['N', 'J', 'W'], correctAnswer: 0, difficulty: 1 },
-  { id: 2, question: '1 km = ? m', options: ['100', '1000', '10'], correctAnswer: 1, difficulty: 1 },
-  { id: 3, question: 'Speed formula?', options: ['distance/time', 'mass*acceleration', 'force*distance'], correctAnswer: 0, difficulty: 1 },
-  { id: 4, question: 'SI unit of length?', options: ['m', 'cm', 'km'], correctAnswer: 0, difficulty: 1 },
-  { id: 5, question: '1 cm = ? mm', options: ['1', '10', '100'], correctAnswer: 1, difficulty: 1 },
-  // Level 2 (Force & Energy)
-  { id: 6, question: 'Work = ?', options: ['Force × Distance', 'Mass × Acceleration', 'Power × Time'], correctAnswer: 0, difficulty: 2 },
-  { id: 7, question: 'Energy unit?', options: ['J', 'W', 'N'], correctAnswer: 0, difficulty: 2 },
-  { id: 8, question: 'Power = ?', options: ['Work/Time', 'Energy*Time', 'Force*Time'], correctAnswer: 0, difficulty: 2 },
-  { id: 9, question: 'Potential energy depends on?', options: ['Height & mass', 'Temperature', 'Color'], correctAnswer: 0, difficulty: 2 },
-  { id: 10, question: 'Friction is a force that?', options: ['Opposes motion', 'Increases speed', 'Creates energy'], correctAnswer: 0, difficulty: 2 },
-  // Level 3 (Machines)
-  { id: 11, question: 'A lever is an example of?', options: ['Simple Machine', 'Pulley', 'Complex Circuit'], correctAnswer: 0, difficulty: 3 },
-  { id: 12, question: 'Pulley helps by?', options: ['Changing direction of force', 'Increasing speed', 'Decreasing friction'], correctAnswer: 0, difficulty: 3 },
-  { id: 13, question: 'Inclined plane reduces?', options: ['Effort', 'Distance', 'Weight'], correctAnswer: 0, difficulty: 3 },
-  { id: 14, question: 'Wheel & axle is used to?', options: ['Reduce effort', 'Store energy', 'Measure mass'], correctAnswer: 0, difficulty: 3 },
-  { id: 15, question: 'Screw is a type of?', options: ['Inclined plane', 'Lever', 'Pulley'], correctAnswer: 0, difficulty: 3 }
+  // Level 1 – Measurement & Units
+  { id: 1, question: 'Which of these is a unit of length?', options: ['Kilogram', 'Meter', 'Second'], correctAnswer: 1, difficulty: 1 },
+  { id: 2, question: 'Which device is used to measure the thickness of a coin?', options: ['Ruler', 'Vernier caliper', 'Measuring tape'], correctAnswer: 1, difficulty: 1 },
+  { id: 3, question: 'Water rises from 75 ml to 90 ml after dropping a stone. Volume of stone = ?', options: ['15 ml', '75 ml', '90 ml'], correctAnswer: 0, difficulty: 1 },
+  { id: 4, question: 'Which is the SI unit of mass?', options: ['Gram', 'Kilogram', 'Pound'], correctAnswer: 1, difficulty: 1 },
+  { id: 5, question: 'What is the SI unit of time?', options: ['Minute', 'Second', 'Hour'], correctAnswer: 1, difficulty: 1 },
+
+  // Level 2 – Motion
+  { id: 6, question: 'A car travels 60 km in 2 hours. Average speed = ?', options: ['30 km/h', '60 km/h', '120 km/h'], correctAnswer: 0, difficulty: 2 },
+  { id: 7, question: 'The slope of a distance-time graph represents:', options: ['Acceleration', 'Speed', 'Distance'], correctAnswer: 1, difficulty: 2 },
+  { id: 8, question: 'A bus covers equal distance in equal time intervals. The motion is:', options: ['Uniform', 'Non-uniform', 'Rest'], correctAnswer: 0, difficulty: 2 },
+  { id: 9, question: 'If a car moves with changing speed, its motion is:', options: ['Uniform', 'Non-uniform', 'Stationary'], correctAnswer: 1, difficulty: 2 },
+  { id: 10, question: 'Which quantity is the rate of change of velocity?', options: ['Speed', 'Acceleration', 'Distance'], correctAnswer: 1, difficulty: 2 },
+
+  // Level 3 – Force & Laws
+  { id: 11, question: 'Newton’s 3rd law:', options: ['F = ma', 'Every action has equal and opposite reaction', 'Force = mass × velocity'], correctAnswer: 1, difficulty: 3 },
+  { id: 12, question: 'What is the SI unit of force?', options: ['Newton', 'Joule', 'Watt'], correctAnswer: 0, difficulty: 3 },
+  { id: 13, question: 'Which of these is a non-contact force?', options: ['Friction', 'Gravitational', 'Push'], correctAnswer: 1, difficulty: 3 },
+  { id: 14, question: 'A book on a table doesn’t move. Which forces balance?', options: ['Gravitational & Normal reaction', 'Friction & Gravity', 'Push & Pull'], correctAnswer: 0, difficulty: 3 },
+  { id: 15, question: 'When balanced forces act on an object:', options: ['Object moves faster', 'No change in motion', 'Object rotates'], correctAnswer: 1, difficulty: 3 },
+
+  // Level 4 – Work, Power, Energy
+  { id: 16, question: 'Work is done when:', options: ['Force is applied without displacement', 'Force causes displacement', 'No force is applied'], correctAnswer: 1, difficulty: 4 },
+  { id: 17, question: 'Which is the SI unit of work?', options: ['Joule', 'Newton', 'Watt'], correctAnswer: 0, difficulty: 4 },
+  { id: 18, question: 'Kinetic energy depends on:', options: ['Mass & velocity', 'Force & distance', 'Height only'], correctAnswer: 0, difficulty: 4 },
+  { id: 19, question: 'Lift 10 kg to 2 m (g = 10). Potential energy = ?', options: ['20 J', '200 J', '100 J'], correctAnswer: 1, difficulty: 4 },
+  { id: 20, question: 'Power is the rate of:', options: ['Doing work', 'Applying force', 'Producing energy'], correctAnswer: 0, difficulty: 4 },
+
+  // Level 5 – Challenge Mix
+  { id: 21, question: 'Which of these is NOT a unit of speed?', options: ['m/s', 'km/h', 'kg'], correctAnswer: 2, difficulty: 5 },
+  { id: 22, question: 'An object at rest has:', options: ['Kinetic energy', 'Potential energy', 'Both'], correctAnswer: 1, difficulty: 5 },
+  { id: 23, question: 'Which graph shows accelerated motion?', options: ['Straight line (distance-time)', 'Curved line', 'Horizontal line'], correctAnswer: 1, difficulty: 5 },
+  { id: 24, question: 'Force 50 N moves object 2 m. Work done = ?', options: ['25 J', '100 J', '200 J'], correctAnswer: 1, difficulty: 5 },
+  { id: 25, question: 'Which law explains rocket launch?', options: ['Newton’s 1st', 'Newton’s 2nd', 'Newton’s 3rd'], correctAnswer: 2, difficulty: 5 }
 ]
 
 class PhysicsLabScene extends Phaser.Scene {
@@ -154,16 +170,20 @@ class PhysicsLabScene extends Phaser.Scene {
       panel.on('pointerdown', () => {
         const correct = i === q.correctAnswer
         if (correct) {
-          // Door unlock animation
+          // Door unlock animation + feedback text
           this.playDoorUnlock()
+          const okText = this.add.text(this.scale.width/2, 130, '✅ Correct!', { fontSize: '26px', color: '#22c55e' }).setOrigin(0.5)
+          this.tweens.add({ targets: okText, alpha: 0, y: 100, duration: 900, onComplete: () => okText.destroy() })
           glow.fillAlpha = 0.25
           this.tweens.add({ targets: glow, alpha: 0, scale: 1.1, duration: 600 })
         } else {
-          // Error buzzer effect (red flash)
+          // Error buzzer effect + feedback text
           this.cameras.main.flash(150, 239, 68, 68)
+          const errText = this.add.text(this.scale.width/2, 130, '❌ Wrong! Try again...', { fontSize: '26px', color: '#ef4444' }).setOrigin(0.5)
+          this.tweens.add({ targets: errText, alpha: 0, y: 100, duration: 900, onComplete: () => errText.destroy() })
           this.shakeLives()
         }
-        this.time.delayedCall(650, () => this.onAnswer && this.onAnswer(correct))
+        this.time.delayedCall(800, () => this.onAnswer && this.onAnswer(correct))
       })
 
       this.panels.push(panel)
@@ -332,7 +352,7 @@ const PhysicsLabEscapeGame: React.FC<PhysicsLabEscapeProps> = ({ subject, grade,
       <div className="min-h-screen bg-gradient-to-b from-emerald-400 to-teal-500 flex items-center justify-center">
         <div className="bg-white rounded-2xl p-8 text-center max-w-md w-full mx-4 shadow-2xl">
           <div className="text-6xl mb-4">🔓</div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">Level {gameState.level} Complete!</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Door Unlocked!</h2>
           <p className="text-gray-600 mb-4">Score: {gameState.score}</p>
           <div className="space-y-3">
             <button onClick={nextLevel} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-lg font-semibold transition-colors">➡️ Next Level</button>
@@ -364,7 +384,7 @@ const PhysicsLabEscapeGame: React.FC<PhysicsLabEscapeProps> = ({ subject, grade,
       <div className="min-h-screen bg-gradient-to-b from-yellow-400 to-orange-500 flex items-center justify-center">
         <div className="bg-white rounded-2xl p-8 text-center max-w-md w-full mx-4 shadow-2xl">
           <div className="text-6xl mb-4">🏆</div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">You Escaped the Lab!</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">🎉 You escaped the Physics Lab!</h2>
           <p className="text-gray-600 mb-4">Total Score: {gameState.score}</p>
           <div className="space-y-3">
             <button onClick={restart} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors">🔄 Replay</button>

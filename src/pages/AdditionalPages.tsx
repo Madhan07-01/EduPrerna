@@ -7,6 +7,7 @@ import MathArcher from '../mini-games/math-archer/MathArcher'
 import GenericGame from '../components/GenericGame'
 import CodeBreaker from '../mini-games/code-breaker/CodeBreaker'
 import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
+import LogicBuilder from '../mini-games/logic-builder/LogicBuilder'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -36,6 +37,7 @@ export function MiniGamePlayPage() {
     'equation-builder-puzzle': '🧩',
     'math-archer': '🏹',
     'code-breaker': '🐛',
+    'logic-builder': '🧩',
     'debugging-quest': '🔍',
     'logic-maze': '🧠',
     'physics-lab-escape': '⚗️',
@@ -89,6 +91,18 @@ export function MiniGamePlayPage() {
   if (game === 'code-breaker') {
     return (
       <CodeBreaker
+        subject={subject || 'computer-science'}
+        grade={grade || 'grade-6'}
+        lesson={lessonName}
+        onBack={handleBack}
+      />
+    )
+  }
+
+  // For Logic Builder (Computer Science)
+  if (game === 'logic-builder') {
+    return (
+      <LogicBuilder
         subject={subject || 'computer-science'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
