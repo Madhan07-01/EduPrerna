@@ -9,7 +9,7 @@ import CodeBreaker from '../mini-games/code-breaker/CodeBreaker'
 import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
 import LogicBuilder from '../mini-games/logic-builder/LogicBuilder'
 import CircuitConnect from '../mini-games/circuit-connect/CircuitConnect'
-import GravityDrop from '../mini-games/gravity-drop/GravityDrop'
+import MagnetMania from '../mini-games/magnet-mania/MagnetMania'
 
 export function MiniGamePlayPage() {
   const { subject, grade, lesson, game } = useParams()
@@ -44,7 +44,7 @@ export function MiniGamePlayPage() {
     'logic-maze': '🧠',
     'physics-lab-escape': '⚗️',
     'circuit-connect': '🔌',
-    'gravity-drop': '🌍',
+    'magnet-mania': '🧲',
     'periodic-table-quest': '⚛️',
     'reaction-time': '💥',
     'molecule-builder': '🧪',
@@ -137,10 +137,10 @@ export function MiniGamePlayPage() {
     )
   }
 
-  // For Gravity Drop (Physics)
-  if (game === 'gravity-drop') {
+  // For Magnet Mania (Physics)
+  if (game === 'magnet-mania') {
     return (
-      <GravityDrop
+      <MagnetMania
         subject={subject || 'physics'}
         grade={grade || 'grade-6'}
         lesson={lessonName}

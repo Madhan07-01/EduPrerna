@@ -20,7 +20,7 @@ const GameSelect = () => {
     physics: [
       { name: 'Physics Lab Escape', description: 'Solve physics puzzles to escape a virtual lab.', icon: '⚗️', color: 'from-purple-500 to-pink-600', hoverColor: 'hover:from-purple-600 hover:to-pink-700' },
       { name: 'Circuit Connect', description: 'Build working circuits by connecting components correctly.', icon: '🔌', color: 'from-violet-500 to-purple-600', hoverColor: 'hover:from-violet-600 hover:to-purple-700' },
-      { name: 'Gravity Drop', description: 'Experiment with gravity and motion challenges.', icon: '🌍', color: 'from-indigo-500 to-violet-600', hoverColor: 'hover:from-indigo-600 hover:to-violet-700' }
+      { name: 'Magnet Mania', description: 'Experiment with magnets, poles, and materials to solve puzzles.', icon: '🧲', color: 'from-indigo-500 to-violet-600', hoverColor: 'hover:from-indigo-600 hover:to-violet-700' }
     ],
     chemistry: [
       { name: 'Periodic Table Quest', description: 'Match elements and discover their properties.', icon: '⚛️', color: 'from-orange-500 to-red-600', hoverColor: 'hover:from-orange-600 hover:to-red-700' },
