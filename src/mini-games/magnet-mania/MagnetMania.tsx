@@ -75,6 +75,36 @@ const MagnetMania: React.FC<MagnetManiaProps> = ({ onBack }) => {
 
   const levelSpec = useMemo(() => LEVELS.find(l => l.id === level)!, [level])
 
+  const palette = useMemo(() => {
+    switch (levelSpec.sim) {
+      case 'poles': return [
+        { icon: '🧲', label: 'Bar Magnet' },
+        { icon: 'N/S', label: 'Poles' }
+      ]
+      case 'materials': return [
+        { icon: '🧲', label: 'Magnet' },
+        { icon: '🪛', label: 'Iron Nail' },
+        { icon: '🧱', label: 'Wood' },
+        { icon: '🧸', label: 'Plastic' }
+      ]
+      case 'compass': return [
+        { icon: '🧭', label: 'Compass' },
+        { icon: '🧲', label: 'Magnetic Field' }
+      ]
+      case 'electromagnet': return [
+        { icon: '🪛', label: 'Iron Core' },
+        { icon: '🧵', label: 'Coil Turns' },
+        { icon: '⚡', label: 'Current' },
+        { icon: '📎', label: 'Pins' }
+      ]
+      case 'mixed': return [
+        { icon: '🧲', label: 'Magnet' },
+        { icon: '📎', label: 'Pins' },
+        { icon: '🪵', label: 'Wood Cover' }
+      ]
+    }
+  }, [levelSpec.sim])
+
   useEffect(() => {
     setSelected(null)
     setFeedback(null)
@@ -366,8 +396,27 @@ const MagnetMania: React.FC<MagnetManiaProps> = ({ onBack }) => {
       </div>
 
       <div className="max-w-6xl mx-auto p-4 grid grid-cols-12 gap-4">
+        {/* Left Palette */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="bg-slate-800/60 rounded-xl border border-slate-700 p-4 h-[560px] flex flex-col">
+            <div className="text-slate-200 font-semibold mb-2">Palette</div>
+            <div className="grid grid-cols-2 gap-2">
+              {palette.map((p, i) => (
+                <button key={i} className="bg-indigo-600/30 hover:bg-indigo-600/40 rounded-lg p-3 text-center">
+                  <div className="text-xl mb-1">{p.icon}</div>
+                  <div className="text-xs text-slate-200">{p.label}</div>
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 text-xs text-slate-400 space-y-1">
+              <div>• Drag magnets near objects (visualized in animation).</div>
+              <div>• Choose the correct option then press Test.</div>
+            </div>
+          </div>
+        </div>
+
         {/* Simulation area */}
-        <div className="col-span-12 md:col-span-8">
+        <div className="col-span-12 md:col-span-5">
           <div className="bg-slate-800/60 rounded-xl border border-slate-700 p-3 h-[560px] flex flex-col">
             <div className="text-slate-300 mb-2">Puzzle Simulation</div>
             <canvas ref={canvasRef} className="flex-1 rounded-lg border border-slate-700" />
