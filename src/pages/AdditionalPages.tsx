@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { SectionCard } from './Pages'
 import MathRunnerGame from '../components/MathRunnerGame'
 import EquationBuilderGame from '../components/EquationBuilderGame'
-import MathArcherGame from '../components/MathArcherGame'
+import MathArcher from '../mini-games/math-archer/MathArcher'
 import GenericGame from '../components/GenericGame'
 import CodeBreakerGame from '../components/CodeBreakerGame'
 import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
@@ -76,7 +76,7 @@ export function MiniGamePlayPage() {
   // For Math Archer
   if (game === 'math-archer') {
     return (
-      <MathArcherGame
+      <MathArcher
         subject={subject || 'mathematics'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
