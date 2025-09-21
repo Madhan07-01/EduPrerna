@@ -2,8 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../supabase/client'
 
 // IDs and constants for this lesson
-const SUBJECT = 'Mathematics'
-const GRADE = 6
 const LESSON_ID_TEXT = 'math-g6-number-system'
 
 // MCQ data model
@@ -21,14 +19,7 @@ type MCQ = {
   section: string
 }
 
-// DB types
-type ProgressRow = {
-  id?: string
-  user_uid: string
-  lesson_id: string
-  completed_sections: string[] | null
-  mcq_score: number | null
-}
+// (removed unused DB type ProgressRow)
 
 const MCQS: MCQ[] = [
   {
