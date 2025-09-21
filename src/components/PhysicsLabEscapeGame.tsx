@@ -183,7 +183,7 @@ class PhysicsLabScene extends Phaser.Scene {
           this.tweens.add({ targets: errText, alpha: 0, y: 100, duration: 900, onComplete: () => errText.destroy() })
           this.shakeLives()
         }
-        this.time.delayedCall(800, () => this.onAnswer && this.onAnswer(correct))
+        this.time.delayedCall(180, () => this.onAnswer && this.onAnswer(correct))
       })
 
       this.panels.push(panel)
@@ -396,16 +396,34 @@ const PhysicsLabEscapeGame: React.FC<PhysicsLabEscapeProps> = ({ subject, grade,
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 overflow-hidden relative">
+    <div className="min-h-screen overflow-hidden relative bg-slate-950">
+      {/* Decorative background layers */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black" />
+      <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-violet-600/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-28 -right-28 h-[28rem] w-[28rem] rounded-full bg-blue-600/20 blur-3xl" />
+
       {/* Top bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-black/20 backdrop-blur-sm p-4">
-        <div className="flex justify-between items-center max-w-6xl mx-auto">
-          <button onClick={onBack} className="flex items-center space-x-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors">
-            <span className="text-xl text-white">←</span>
-            <span className="text-white font-medium">Back</span>
+      <div className="absolute top-0 left-0 right-0 z-20 bg-black/30 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <button onClick={onBack} className="flex items-center gap-2 px-4 py-2 text-white/90 bg-white/10 hover:bg-white/15 rounded-lg transition">
+            <span className="text-xl">←</span>
+            <span className="font-medium">Back</span>
           </button>
+          <div className="hidden md:flex items-center gap-3 text-sm">
+            <span className="px-3 py-1 rounded-full bg-white/10 text-white/90 border border-white/10">
+              Level: {gameState.level}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-white/10 text-white/90 border border-white/10">
+              Lives: {'❤️'.repeat(gameState.lives)}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-white/10 text-white/90 border border-white/10">
+              Score: {gameState.score}
+            </span>
+          </div>
+          <div className="w-[84px] md:w-0" />
         </div>
       </div>
+
       {/* Phaser mount */}
       <div id="physics-lab-phaser" className="absolute inset-0 pt-16 flex items-center justify-center" />
     </div>

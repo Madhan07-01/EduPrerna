@@ -77,7 +77,7 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
     if (!q || locked) return
     const correct = idx === q.correctIndex
     if (correct) {
-      // Show success feedback and lock inputs for 1.5s before advancing
+      // Show success and advance quickly (no long lock)
       setFeedback({ type: 'correct', message: '✅ Correct!' })
       setLocked(true)
       setScore(s => s + 10)
@@ -88,11 +88,11 @@ const CodeBreaker: React.FC<CodeBreakerProps> = ({ onBack }) => {
           else setStatus('levelComplete')
         } else {
           setQIdx(next)
-          // Clear feedback on next question
+          // Clear feedback for next question
           setFeedback({ type: null, message: '' })
         }
         setLocked(false)
-      }, 1500)
+      }, 150)
     } else {
       // Show error feedback, deduct a life, do not advance
       setFeedback({ type: 'wrong', message: '❌ Wrong! Try again...' })

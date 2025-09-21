@@ -186,7 +186,7 @@ class MathArcherScene extends Phaser.Scene {
     this.hudScore?.setText(`Score: ${this.state.score}`)
   }
 
-  update(_t: number, dt: number) {
+  update(_t: number, _dt: number) {
     if (!this.cursors || !this.shootKey) return
 
     if (Phaser.Input.Keyboard.JustDown(this.shootKey)) this.shootArrow()
@@ -258,7 +258,7 @@ class MathArcherScene extends Phaser.Scene {
       this.tweens.add({ targets: target, x: target.x + 8, yoyo: true, repeat: 2, duration: 60 })
     }
 
-    this.time.delayedCall(350, () => this.onAnswer(isCorrect))
+    this.time.delayedCall(150, () => this.onAnswer(isCorrect))
   }
 
   public setQuestion(q: Question) {

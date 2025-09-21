@@ -100,7 +100,7 @@ const LogicBuilder: React.FC<LogicBuilderProps> = ({ onBack }) => {
         setFeedback({ type: 'correct', message: '✅ Correct sequence!' })
         setScore(s => s + 10)
         const next = pIdx + 1
-        // brief delay to show feedback
+        // brief delay to show feedback (faster)
         window.setTimeout(() => {
           setFeedback({ type: null, message: '' })
           setSelectedOrder([])
@@ -110,7 +110,7 @@ const LogicBuilder: React.FC<LogicBuilderProps> = ({ onBack }) => {
           } else {
             setPIdx(next)
           }
-        }, 800)
+        }, 200)
       } else {
         setFeedback({ type: 'wrong', message: '❌ Wrong order! Try again…' })
         setLives(h => {
