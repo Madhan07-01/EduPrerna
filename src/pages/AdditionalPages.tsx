@@ -5,7 +5,7 @@ import MathRunnerGame from '../components/MathRunnerGame'
 import EquationBuilderGame from '../components/EquationBuilderGame'
 import MathArcher from '../mini-games/math-archer/MathArcher'
 import GenericGame from '../components/GenericGame'
-import CodeBreakerGame from '../components/CodeBreakerGame'
+import CodeBreaker from '../mini-games/code-breaker/CodeBreaker'
 import PhysicsLabEscapeGame from '../components/PhysicsLabEscapeGame'
 
 export function MiniGamePlayPage() {
@@ -88,7 +88,7 @@ export function MiniGamePlayPage() {
   // For Code Breaker (Computer Science)
   if (game === 'code-breaker') {
     return (
-      <CodeBreakerGame
+      <CodeBreaker
         subject={subject || 'computer-science'}
         grade={grade || 'grade-6'}
         lesson={lessonName}
