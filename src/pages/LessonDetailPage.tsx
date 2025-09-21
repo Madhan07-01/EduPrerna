@@ -123,7 +123,7 @@ export function LessonDetailPage() {
         if (subjectParam === 'Mathematics' && gradeParam >= 6 && gradeParam <= 12) {
           try {
             // Try to load from Firestore
-            const lessonDoc = doc(db, 'courses', 'mathematics', 'lessons', `${gradeParam}`, `chapter${lessonIndex + 1}`);
+            const lessonDoc = doc(db, 'courses', 'mathematics', 'lessons', `${gradeParam}`, 'chapters', `chapter${lessonIndex + 1}`);
             const docSnap = await getDoc(lessonDoc);
             
             if (docSnap.exists()) {
@@ -204,7 +204,7 @@ export function LessonDetailPage() {
       
       // Update gamification via service if completing a subtopic
       if (completed) {
-        const res = await awardXPAndStreak(currentUser.uid, 10);
+        const res = await awardXPAndStreak(currentUser.uid, 5); // Reduced from 10 to 5 XP
         setGamificationData((prev) => ({
           points: res.newXP,
           streak: res.newStreak,
@@ -213,8 +213,8 @@ export function LessonDetailPage() {
         }));
         if (res.earnedBadges.length > 0) {
           const earned = res.earnedBadges.map((id) => describeBadge(id));
-          // Delay showing if lesson not completed screen yet
-          setPendingBadges((pb) => [...pb, ...earned]);
+          // Show badge popup immediately for lesson completion
+          earned.forEach((badge) => queueBadge(badge));
         }
       }
     } catch (err) {

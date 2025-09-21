@@ -11,10 +11,12 @@ import { useBadgeQueue } from '../contexts/BadgeContext'
 import type { DriveGradeEntry, ChapterEntry } from '../data/driveFiles'
 import type { GamificationSnapshot } from '../services/gamification'
 import { formatRelativeTime, formatDetailedTime } from '../utils/timeUtils'
+import { useNavigate } from 'react-router-dom'
 
 export default function DownloadPage() {
   const { currentUser, profile } = useAuth()
   const { queueBadge } = useBadgeQueue()
+  const navigate = useNavigate()
   const [grade, setGrade] = useState(6)
   const [driveData, setDriveData] = useState<DriveGradeEntry | null>(null)
   const [loading, setLoading] = useState(true)
@@ -26,6 +28,8 @@ export default function DownloadPage() {
   const [badgeAwarded, setBadgeAwarded] = useState(false)
   const [showLevelUp, setShowLevelUp] = useState(false)
   const [levelUpDetails, setLevelUpDetails] = useState({ from: 1, to: 1 })
+  const [showQuest, setShowQuest] = useState(false)
+  const [questChapter, setQuestChapter] = useState<number | null>(null)
 
   // Available grades (6-12)
   const availableGrades = [6, 7, 8, 9, 10, 11, 12]
@@ -46,6 +50,31 @@ export default function DownloadPage() {
     10: "from-indigo-400 to-blue-500",
     11: "from-purple-400 to-indigo-500",
     12: "from-pink-400 to-rose-500"
+  }
+
+  // Subject-themed backgrounds for each grade
+  const gradeBackgrounds: Record<number, string> = {
+    6: "bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20",
+    7: "bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20",
+    8: "bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20",
+    9: "bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20",
+    10: "bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20",
+    11: "bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20",
+    12: "bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20"
+  }
+
+  // Level badge names
+  const levelBadges: Record<number, string> = {
+    1: "Rookie",
+    2: "Learner",
+    3: "Pro",
+    4: "Master",
+    5: "Expert",
+    6: "Legend",
+    7: "Grandmaster",
+    8: "Champion",
+    9: "Hero",
+    10: "Legend"
   }
 
   useEffect(() => {
@@ -183,6 +212,25 @@ export default function DownloadPage() {
       
       // Check for badge eligibility
       const count = Object.values(next).filter(Boolean).length
+      
+      // First download badge
+      if (downloadHistory.length === 0) {
+        // Award first download badge
+        const studentRef = doc(db, 'students', currentUser.uid)
+        try {
+          const snap = await getDoc(studentRef)
+          const cur = snap.exists() ? (snap.data() as any) : {}
+          const badgesArr: string[] = Array.isArray(cur.badges) ? cur.badges : []
+          if (!badgesArr.includes('first-download')) {
+            const merged = Array.from(new Set([...badgesArr, 'first-download']))
+            await setDoc(studentRef, { badges: merged }, { merge: true })
+            queueBadge(describeBadge('first-download'))
+          }
+        } catch (e) {
+          console.error('Failed to award first download badge', e)
+        }
+      }
+      
       if (count >= 3 && !badgeAwarded) {
         setBadgeAwarded(true)
         
@@ -233,6 +281,12 @@ export default function DownloadPage() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+    
+    // Show quest after download
+    setTimeout(() => {
+      setQuestChapter(chapter)
+      setShowQuest(true)
+    }, 1500)
   }
 
   const getProgress = () => {
@@ -273,44 +327,70 @@ export default function DownloadPage() {
         </div>
       )}
 
-      {/* Header with personalized greeting and XP display */}
-      <div className="text-center space-y-6 animate-fade-in">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white shadow-xl">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">📚 Study Materials</h1>
-          <p className="text-lg md:text-xl opacity-90">
-            Welcome, {profile?.name || 'Student'}! Here are your Grade {grade} Downloads
-          </p>
-          
-          {/* XP and Level Display */}
-          {gamification && (
-            <div className="mt-6 bg-white/20 backdrop-blur-sm rounded-xl p-4 max-w-md mx-auto">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold">Level {gamification.level}</span>
-                <span className="font-semibold">{gamification.xp} XP</span>
-              </div>
-              <div className="h-3 bg-white/30 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-white rounded-full transition-all duration-1000 animate-shimmer"
-                  style={{ 
-                    width: `${((gamification.xp - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)) / 
-                              ((LEVEL_XP_THRESHOLDS[gamification.level] || LEVEL_XP_THRESHOLDS[gamification.level-1] + 100) - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0))) * 100}%` 
-                  }}
-                ></div>
-              </div>
-              <div className="mt-2 text-xs opacity-80">
-                {gamification.xp - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)} / 
-                {(LEVEL_XP_THRESHOLDS[gamification.level] || LEVEL_XP_THRESHOLDS[gamification.level-1] + 100) - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)} XP to next level
-              </div>
-              
-              {/* Streak Display */}
-              {gamification.streakDays > 0 && (
-                <div className="mt-3 flex items-center justify-center text-sm">
-                  <span className="mr-1">🔥</span>
-                  <span>{gamification.streakDays} day streak!</span>
+      {/* Header with personalized greeting, avatar, and XP display */}
+      <div className="text-center space-y-6 animate-fade-in relative">
+        {/* Floating decorative elements */}
+        <div className="absolute top-4 left-4 text-2xl animate-float">📚</div>
+        <div className="absolute top-8 right-8 text-2xl animate-float-delay">📖</div>
+        <div className="absolute bottom-4 left-8 text-2xl animate-float-slow">✏️</div>
+        <div className="absolute bottom-8 right-4 text-2xl animate-float-fast">📝</div>
+        
+        <div className={`rounded-2xl p-6 text-white shadow-xl ${gradeGradients[grade] || 'from-blue-500 to-purple-600'}`}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+                  {profile?.name ? profile.name.charAt(0).toUpperCase() : 'S'}
                 </div>
-              )}
+                {/* Badge showcase */}
+                {gamification && gamification.badges && gamification.badges.length > 0 && (
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-yellow-400 border-2 border-white dark:border-slate-800 flex items-center justify-center text-xs animate-pulse-slow">
+                    🏅
+                  </div>
+                )}
+              </div>
+              <div className="text-left">
+                <h1 className="text-2xl md:text-3xl font-bold">📚 Study Materials</h1>
+                <p className="text-lg opacity-90">
+                  Welcome, {profile?.name || 'Student'}!
+                </p>
+              </div>
             </div>
-          )}
+            
+            {/* XP and Level Display */}
+            {gamification && (
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 max-w-md w-full md:w-auto">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-semibold">Level {gamification.level} - {levelBadges[gamification.level] || 'Beginner'}</span>
+                  <span className="font-semibold">{gamification.xp} XP</span>
+                </div>
+                <div className="h-3 bg-white/30 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-white rounded-full transition-all duration-1000 animate-shimmer"
+                    style={{ 
+                      width: `${((gamification.xp - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)) / 
+                                ((LEVEL_XP_THRESHOLDS[gamification.level] || LEVEL_XP_THRESHOLDS[gamification.level-1] + 100) - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0))) * 100}%` 
+                    }}
+                  ></div>
+                </div>
+                <div className="mt-2 text-xs opacity-80">
+                  {gamification.xp - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)} / 
+                  {(LEVEL_XP_THRESHOLDS[gamification.level] || LEVEL_XP_THRESHOLDS[gamification.level-1] + 100) - (LEVEL_XP_THRESHOLDS[gamification.level-1] || 0)} XP to next level
+                </div>
+                
+                {/* Streak Display */}
+                {gamification.streakDays > 0 && (
+                  <div className="mt-3 flex items-center justify-center text-sm">
+                    <span className="mr-1">🔥</span>
+                    <span>{gamification.streakDays} day streak!</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <p className="text-lg md:text-xl opacity-90 mt-4">
+            Here are your Grade {grade} Downloads
+          </p>
         </div>
       </div>
 
@@ -322,7 +402,7 @@ export default function DownloadPage() {
               key={g}
               className={`m-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 ${
                 grade === g
-                  ? `bg-gradient-to-r ${gradeGradients[g]} text-white shadow-lg`
+                  ? `bg-gradient-to-r ${gradeGradients[g]} text-white shadow-lg animate-pulse-slow`
                   : 'text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
               }`}
               onClick={() => setGrade(g)}
@@ -333,17 +413,33 @@ export default function DownloadPage() {
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Gamified Progress Bar with XP markers and streak fire */}
       <div className="max-w-3xl mx-auto animate-fade-in">
         <div className="flex justify-between text-sm text-gray-600 dark:text-slate-400 mb-2">
           <span>Chapter Progress</span>
           <span>{progress}/3 chapters</span>
         </div>
-        <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner">
+        <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner relative">
           <div 
             className={`h-full bg-gradient-to-r ${gradeGradients[grade]} rounded-full transition-all duration-1000 ${progress > 0 ? 'animate-shimmer' : ''}`}
             style={{ width: `${progressPercentage}%` }}
           ></div>
+          {/* XP markers */}
+          <div className="absolute inset-0 flex items-center justify-between px-2">
+            {[0, 1, 2, 3].map((marker) => (
+              <div 
+                key={marker}
+                className={`w-3 h-3 rounded-full border-2 ${marker <= progress ? 'bg-white border-white' : 'bg-transparent border-gray-400 dark:border-slate-500'}`}
+                style={{ marginLeft: `${(marker / 3) * 100}%` }}
+              ></div>
+            ))}
+          </div>
+          {/* Streak fire icon */}
+          {gamification && gamification.streakDays > 0 && (
+            <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white shadow-lg animate-pulse">
+              🔥
+            </div>
+          )}
         </div>
         <div className="mt-2 text-center text-xs text-gray-500 dark:text-slate-400">
           Download all 3 chapters to earn badges!
@@ -357,21 +453,23 @@ export default function DownloadPage() {
         </div>
       )}
 
-      {/* Chapter Cards */}
+      {/* Chapter Cards with thematic backgrounds */}
       {!loading && driveData && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((chapter) => (
-            <ChapterCard
-              key={chapter}
-              chapter={chapter}
-              title={chapterTitles[chapter] || `Chapter ${chapter}`}
-              data={driveData[chapter as keyof DriveGradeEntry]}
-              onPreview={handlePreview}
-              onDownload={handleDownload}
-              isUnlocked={quizUnlocked[chapter as keyof typeof quizUnlocked]}
-              grade={grade}
-            />
-          ))}
+        <div className={`rounded-2xl p-6 ${gradeBackgrounds[grade] || 'bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((chapter) => (
+              <ChapterCard
+                key={chapter}
+                chapter={chapter}
+                title={chapterTitles[chapter] || `Chapter ${chapter}`}
+                data={driveData[chapter as keyof DriveGradeEntry]}
+                onPreview={handlePreview}
+                onDownload={handleDownload}
+                isUnlocked={quizUnlocked[chapter as keyof typeof quizUnlocked]}
+                grade={grade}
+              />
+            ))}
+          </div>
         </div>
       )}
 
@@ -386,19 +484,25 @@ export default function DownloadPage() {
         </div>
       )}
 
-      {/* Download History */}
+      {/* Download History with timeline view */}
       {downloadHistory.length > 0 && (
         <div className="mt-12 animate-fade-in">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <span className="mr-3">🕒</span> Your Downloads
+            <span className="mr-3">🕒</span> Your Download History
           </h2>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-lg">
             <ul className="divide-y divide-gray-200 dark:divide-slate-700">
-              {downloadHistory.map((download) => (
+              {downloadHistory.map((download, index) => (
                 <li 
                   key={download.id} 
-                  className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors duration-200 group"
+                  className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors duration-200 group relative pl-10 animate-shimmer"
                 >
+                  {/* Timeline dot */}
+                  <div className="absolute left-5 top-6 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800"></div>
+                  {/* Timeline line (except for last item) */}
+                  {index < downloadHistory.length - 1 && (
+                    <div className="absolute left-6 top-8 w-0.5 h-10 bg-blue-200 dark:bg-slate-700"></div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-semibold text-gray-900 dark:text-white flex items-center">
@@ -449,6 +553,37 @@ export default function DownloadPage() {
           url={previewUrl} 
           onClose={() => setPreviewUrl(null)} 
         />
+      )}
+      
+      {/* Quest Prompt */}
+      {showQuest && questChapter && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-6 w-[min(92vw,520px)] shadow-2xl animate-pop">
+            <div className="text-xl font-bold mb-2 flex items-center">
+              <span className="mr-2">🎯</span> Knowledge Quest
+            </div>
+            <div className="text-sm text-gray-600 dark:text-slate-400 mb-4">
+              Want to test yourself on Chapter {questChapter}? Take the Quiz for +20 XP!
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowQuest(false)
+                  navigate(`/quiz/Mathematics/${grade}/${questChapter}`)
+                }}
+                className="flex-1 rounded-lg px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
+              >
+                Take Quiz
+              </button>
+              <button
+                onClick={() => setShowQuest(false)}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                Later
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

@@ -77,6 +77,11 @@ export function QuizPage() {
   // Timer effect
   useEffect(() => {
     if (!quizSubmitted && lessonContent) {
+      // Clear any existing timer
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -112,7 +117,7 @@ export function QuizPage() {
         if (subjectParam === 'Mathematics' && gradeParam >= 6 && gradeParam <= 12) {
           try {
             // Try to load quiz from Firestore
-            const quizDoc = doc(db, 'courses', 'mathematics', 'lessons', `${gradeParam}`, `chapter${lessonIndex + 1}`);
+            const quizDoc = doc(db, 'courses', 'mathematics', 'lessons', `${gradeParam}`, 'chapters', `chapter${lessonIndex + 1}`);
             const docSnap = await getDoc(quizDoc);
             
             if (docSnap.exists()) {
@@ -309,9 +314,9 @@ export function QuizPage() {
     const currentQuestion = getCurrentQuestion();
     if (currentQuestion) {
       let correctAnswerText = '';
-      if (isOldFormat(lessonContent)) {
+      if (lessonContent && isOldFormat(lessonContent)) {
         correctAnswerText = (currentQuestion as any).answer;
-      } else if (isNewFormat(lessonContent)) {
+      } else if (lessonContent && isNewFormat(lessonContent)) {
         correctAnswerText = (currentQuestion as any).correctAnswer;
       }
       
@@ -329,6 +334,21 @@ export function QuizPage() {
       if (lessonContent && currentQuestionIndex < getTotalQuestions() - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
         setTimeLeft(30); // Reset timer
+        
+        // Restart timer for next question
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
+        timerRef.current = setInterval(() => {
+          setTimeLeft(prev => {
+            if (prev <= 1) {
+              // Time's up, move to next question or submit quiz
+              handleTimeUp();
+              return 30;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       } else {
         handleSubmitQuiz();
       }
@@ -385,6 +405,18 @@ export function QuizPage() {
       
       setCurrentQuestionIndex(prev => prev + 1);
       setTimeLeft(30); // Reset timer
+      
+      // Restart timer
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            // Time's up, move to next question or submit quiz
+            handleTimeUp();
+            return 30;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -397,6 +429,18 @@ export function QuizPage() {
       
       setCurrentQuestionIndex(prev => prev - 1);
       setTimeLeft(30); // Reset timer
+      
+      // Restart timer
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            // Time's up, move to next question or submit quiz
+            handleTimeUp();
+            return 30;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -415,12 +459,15 @@ export function QuizPage() {
       clearInterval(timerRef.current);
     }
     
+    setQuizSubmitted(true);
+    
     // Calculate score
     let correctAnswers = 0;
     const totalQuestions = getTotalQuestions();
     
     for (let i = 0; i < totalQuestions; i++) {
-      const question = lessonContent.quiz.questions[questionOrder[i]];
+      const questionIndex = questionOrder[i];
+      const question = lessonContent.quiz.questions[questionIndex];
       let correctAnswer = '';
       
       if (lessonContent && isOldFormat(lessonContent)) {
@@ -435,7 +482,6 @@ export function QuizPage() {
     }
     
     const finalScore = Math.round((correctAnswers / totalQuestions) * 100);
-    setQuizSubmitted(true);
     
     // Play sound effect based on score
     playSound(finalScore >= 80 ? 'correct' : 'incorrect');
@@ -447,7 +493,7 @@ export function QuizPage() {
     
     // Update gamification via service: award XP based on score and update streak; queue earned badges
     try {
-      const deltaXP = Math.floor(finalScore / 10) * 5; // 5 XP per 10% score
+      const deltaXP = Math.floor(finalScore / 10) * 3; // Reduced from 5 to 3 XP per 10% score
       const res = await awardXPAndStreak(currentUser.uid, deltaXP);
       setGamificationData((prev) => ({
         points: res.newXP,

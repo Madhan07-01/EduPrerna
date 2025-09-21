@@ -46,7 +46,14 @@ export function ProfilePage() {
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-fuchsia-600 p-6 text-white">
-        <div className="text-xl font-bold">{name}</div>
+        <div className="text-xl font-bold flex items-center gap-2">
+          {name}
+          {pinnedBadges.length > 0 && (
+            <div className="group relative" title="Your highest badge">
+              <span className="text-lg">{pinnedBadges[0].icon}</span>
+            </div>
+          )}
+        </div>
         <div className="text-sm">Grade 6 • English</div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

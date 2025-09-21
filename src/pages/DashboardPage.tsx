@@ -27,6 +27,7 @@ export function DashboardPage() {
   const [streakCount, setStreakCount] = useState(1)
   const [streakLoading, setStreakLoading] = useState(false)
   const [streakError, setStreakError] = useState<string | null>(null)
+  const [pinnedBadges, setPinnedBadges] = useState<{id: string, name: string, icon: string}[]>([])
 
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
   const name = profile?.name ?? currentUser?.displayName ?? currentUser?.email ?? 'Learner'
@@ -52,6 +53,11 @@ export function DashboardPage() {
           if (studentDoc.exists()) {
             const studentData = studentDoc.data()
             setStreakCount(studentData.streakCount || 1)
+            
+            // Set pinned badges if available
+            if (studentData.pinnedBadgesData) {
+              setPinnedBadges(studentData.pinnedBadgesData)
+            }
           }
         } catch (error: any) {
           console.error('Error fetching streak:', error)
@@ -78,7 +84,14 @@ export function DashboardPage() {
     <div className="space-y-4">
       {/* Single welcome message inside the purple card */}
       <div className="rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 p-6 text-white">
-        <div className="text-xl font-bold">Welcome back, {name}! 👋</div>
+        <div className="text-xl font-bold flex items-center gap-2">
+          Welcome back, {name}! 👋
+          {pinnedBadges.length > 0 && (
+            <div className="group relative" title="Your highest badge">
+              <span className="text-lg">{pinnedBadges[0].icon}</span>
+            </div>
+          )}
+        </div>
         <div className="text-sm opacity-90 mt-1">Every expert was once a beginner—keep going!</div>
 
         {/* Personalized streak/XP summary badge */}

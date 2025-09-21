@@ -11,6 +11,7 @@ import GeneralSettings from '../components/GeneralSettings'
 import ContextualUploadForm from '../components/ContextualUploadForm'
 import ResourceListTable from '../components/ResourceListTable'
 import TeacherDriveManagePage from './TeacherDriveManagePage'
+import TeacherResourcesPage from './TeacherResourcesPage'
 import ResourceFilter from '../components/ResourceFilter'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import { Doughnut } from 'react-chartjs-2'
@@ -345,7 +346,7 @@ export default function TeacherDashboard() {
       <Routes>
         <Route index element={<DashboardSection />} />
         <Route path="assignments" element={<AssignmentsSection />} />
-        <Route path="resources" element={<ResourcesSection />} />
+        <Route path="resources" element={<TeacherResourcesPage />} />
         <Route path="resources/manage" element={<TeacherDriveManagePage />} />
         <Route path="communication" element={<CommunicationSection />} />
         <Route path="analytics" element={<AnalyticsSection />} />

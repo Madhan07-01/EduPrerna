@@ -17,7 +17,7 @@ export type AwardResult = {
   levelUp: boolean
 }
 
-export const LEVEL_XP_THRESHOLDS = [0, 100, 250, 450, 700, 1000, 1400, 1850, 2350, 2900]
+export const LEVEL_XP_THRESHOLDS = [0, 50, 150, 300, 500, 750, 1050, 1400, 1800, 2250]
 
 export function levelForXP(xp: number): number {
   for (let i = LEVEL_XP_THRESHOLDS.length - 1; i >= 0; i--) {
@@ -43,7 +43,7 @@ export async function getGamification(uid: string): Promise<GamificationSnapshot
       badges: d.badges || [],
     }
   }
-  const init: GamificationSnapshot = { xp: 0, level: 1, streakDays: 0, badges: [] }
+  const init: GamificationSnapshot = { xp: 0, level: 1, streakDays: 0, badges: ['rookie'] }
   await setDoc(ref, { ...init, createdAt: serverTimestamp() }, { merge: true })
   return init
 }
@@ -100,11 +100,16 @@ export async function awardXPAndStreak(uid: string, deltaXP: number): Promise<Aw
   const levelUp = newLevel > currentLevel
   const earned: string[] = []
 
-  // Example badge rules (extendable)
-  if (xp >= 100 && !badges.includes('xp-100')) { earned.push('xp-100') }
-  if (streak >= 7 && !badges.includes('streak-7')) { earned.push('streak-7') }
-  if (xp >= 500 && !badges.includes('xp-500')) { earned.push('xp-500') }
-  if (streak >= 30 && !badges.includes('streak-30')) { earned.push('streak-30') }
+  // Example badge rules (extendable) - Increased thresholds to make badges harder to earn
+  if (xp >= 200 && !badges.includes('xp-100')) { earned.push('xp-100') } // Increased from 100 to 200
+  if (streak >= 14 && !badges.includes('streak-7')) { earned.push('streak-7') } // Increased from 7 to 14
+  if (xp >= 1000 && !badges.includes('xp-500')) { earned.push('xp-500') } // Increased from 500 to 1000
+  if (streak >= 60 && !badges.includes('streak-30')) { earned.push('streak-30') } // Increased from 30 to 60
+  
+  // Additional badge criteria
+  if (xp >= 50 && !badges.includes('first-download')) { earned.push('first-download') }
+  if (xp >= 500 && streak >= 7 && !badges.includes('dedicated-learner')) { earned.push('dedicated-learner') }
+  if (xp >= 1500 && streak >= 30 && !badges.includes('scholar')) { earned.push('scholar') }
 
   const updatedBadges = Array.from(new Set([...(badges || []), ...earned]))
 
@@ -158,6 +163,16 @@ export function describeBadge(id: string): QueuedBadge {
       return { id, name: 'Grade Champion', description: 'Downloaded all chapters in a grade!', quote: 'Mastery unlocked.', icon: '👑' }
     case 'knowledge-explorer':
       return { id, name: 'Knowledge Explorer', description: 'Completed downloads across multiple grades!', quote: 'Curiosity knows no bounds.', icon: '🧭' }
+    case 'first-download':
+      return { id, name: 'First Download', description: 'Downloaded your first study material!', quote: 'Great start to your learning journey!', icon: '🎯' }
+    case 'chapter-set':
+      return { id, name: 'Chapter Set Completed', description: 'Completed all chapters in a subject!', quote: 'You\'ve mastered this subject!', icon: '🏅' }
+    case 'dedicated-learner':
+      return { id, name: 'Dedicated Learner', description: '7-day streak with 500+ XP!', quote: 'Your dedication is inspiring!', icon: '🔥' }
+    case 'scholar':
+      return { id, name: 'Scholar', description: '30-day streak with 1500+ XP!', quote: 'True scholar in the making!', icon: '🎓' }
+    case 'rookie':
+      return { id, name: 'Rookie', description: 'Just started your learning journey!', quote: 'Every expert was once a beginner.', icon: '🌱' }
     default:
       return { id, name: 'New Badge', description: 'You unlocked a badge!', quote: 'Keep going—curiosity fuels discovery.', icon: '🎖️' }
   }

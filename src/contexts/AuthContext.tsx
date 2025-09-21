@@ -75,6 +75,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           createdAt: serverTimestamp(),
         })
 
+        // For student accounts, initialize gamification data with Rookie badge
+        if (role === 'student') {
+          const studentRef = doc(db, 'students', u.uid)
+          await setDoc(studentRef, {
+            xp: 0,
+            level: 1,
+            streakDays: 0,
+            streakCount: 0,
+            badges: ['rookie'],
+            pinnedBadges: ['rookie'],
+            pinnedBadgesData: [
+              {
+                id: 'rookie',
+                name: 'Rookie',
+                icon: '🌱'
+              }
+            ],
+            createdAt: serverTimestamp(),
+          }, { merge: true })
+          
+          // Update leaderboard with initial data
+          const leaderboardRef = doc(db, 'leaderboard', u.uid)
+          await setDoc(leaderboardRef, {
+            username: name || 'Anonymous',
+            xp: 0,
+            streak: 0,
+            lastUpdated: Date.now(),
+          }, { merge: true })
+        }
+
         setCurrentUser(u)
         setProfile({ name: name ?? null, email, role })
         return u

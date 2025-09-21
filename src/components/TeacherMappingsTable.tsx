@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { collection, deleteField, doc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore'
+import { collection, deleteField, doc, getDocs, serverTimestamp, setDoc, addDoc } from 'firebase/firestore'
 import { db, storage } from '../firebase/firebaseConfig'
 import { useToast } from './ToastProvider'
 import { ref as storageRefFromURL, deleteObject, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { driveDirectDownloadUrl } from '../data/driveFiles'
+import { useAuth } from '../hooks/useAuth'
 
 function isStorageUrl(url: string) {
   return typeof url === 'string' && url.startsWith('https://') && url.includes('firebasestorage.googleapis.com')
@@ -20,6 +21,7 @@ type Row = {
 }
 
 export default function TeacherMappingsTable() {
+  const { currentUser } = useAuth()
   const [rows, setRows] = useState<Row[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
@@ -94,10 +96,29 @@ export default function TeacherMappingsTable() {
   }
 
   const doDelete = async () => {
-    if (!deleteAsk) return
+    if (!deleteAsk || !currentUser?.uid) return
     try {
       const flatKey = `${deleteAsk.chapter}.${deleteAsk.kind}`
       await setDoc(doc(db, 'driveMappings', deleteAsk.gradeKey), { [flatKey]: deleteField(), updatedAt: serverTimestamp() }, { merge: true })
+      
+      // Log activity event for teacher deletes
+      try {
+        const day = new Date().toISOString().split('T')[0]
+        const eventsCol = collection(db, 'activity', day, 'events')
+        await addDoc(eventsCol, {
+          type: 'delete',
+          grade: deleteAsk.gradeKey.replace('grade', ''),
+          chapter: String(deleteAsk.chapter),
+          fileType: deleteAsk.kind,
+          deletedBy: currentUser.uid,
+          createdAt: serverTimestamp(),
+          source: 'teacherDelete',
+          details: { pathHint: 'driveMappings' }
+        })
+      } catch (logErr) {
+        console.warn('Failed to log activity event', logErr)
+      }
+      
       if (deleteStorage && isStorageUrl(deleteAsk.url)) {
         try {
           const r = storageRefFromURL(storage, deleteAsk.url)
