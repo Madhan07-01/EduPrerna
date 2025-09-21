@@ -105,12 +105,10 @@ class MathArcherScene extends Phaser.Scene {
     this.add.rectangle(0, h - 40, w, 40, 0x111827).setOrigin(0)
 
     // HUD
-    this.hudLevel = this.add.text(20, 16, `Level: ${this.state.level}`, { fontSize: '18px', color: '#cbd5e1' })
-    this.hudLives = this.add.text(20, 40, `Lives: ${'❤️'.repeat(this.state.lives)}`, { fontSize: '18px', color: '#fca5a5' })
-    this.hudScore = this.add.text(w - 20, 16, `Score: ${this.state.score}`, { fontSize: '18px', color: '#cbd5e1' }).setOrigin(1, 0)
+    this.createHUD()
 
     // Question
-    this.qText = this.add.text(w / 2, 70, this.currentQ.question, { fontSize: '28px', color: '#ffffff' }).setOrigin(0.5)
+    this.qText = this.add.text(w / 2, 70, this.currentQ ? this.currentQ.question : 'Loading…', { fontSize: '28px', color: '#ffffff' }).setOrigin(0.5)
 
     // Bow (simple triangle)
     const bow = this.add.triangle(this.bowX, this.bowY, 0, 0, 0, -60, 10, 0, 0x22c55e)
@@ -118,7 +116,7 @@ class MathArcherScene extends Phaser.Scene {
     bow.rotation = Phaser.Math.DegToRad(this.aimAngle)
 
     // Targets with options
-    this.createTargets(this.currentQ)
+    if (this.currentQ) this.createTargets(this.currentQ)
 
     // Controls
     this.cursors = this.input.keyboard?.createCursorKeys()
@@ -127,6 +125,16 @@ class MathArcherScene extends Phaser.Scene {
     this.input.on('pointerdown', () => this.shootArrow())
 
     this.events.on('updateHUD', () => this.updateHUD())
+  }
+
+  private createHUD() {
+    const w = this.scale.width
+    const level = this.state?.level ?? 1
+    const lives = this.state?.lives ?? 3
+    const score = this.state?.score ?? 0
+    this.hudLevel = this.add.text(20, 16, `Level: ${level}`, { fontSize: '18px', color: '#cbd5e1' })
+    this.hudLives = this.add.text(20, 40, `Lives: ${'❤️'.repeat(lives)}`, { fontSize: '18px', color: '#fca5a5' })
+    this.hudScore = this.add.text(w - 20, 16, `Score: ${score}`, { fontSize: '18px', color: '#cbd5e1' }).setOrigin(1, 0)
   }
 
   private createTargets(q: Question) {
