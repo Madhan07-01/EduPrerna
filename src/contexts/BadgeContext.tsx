@@ -40,7 +40,15 @@ export function BadgeProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const queueBadge = useCallback((b: QueuedBadge) => {
-    setQueue((q) => [...q, b])
+    // Avoid duplicate badges in the queue
+    setQueue((q) => {
+      // Check if this badge is already in the queue
+      const isDuplicate = q.some(badge => badge.id === b.id)
+      if (isDuplicate) return q
+      
+      return [...q, b]
+    })
+    
     if (!active) {
       // trigger immediately
       setTimeout(() => playNext(), 50)
@@ -79,7 +87,7 @@ function BadgePopup({ badge, onClose }: { badge: QueuedBadge; onClose: () => voi
     <div className="animate-fade-in rounded-2xl border-2 border-yellow-400 bg-gradient-to-br from-amber-50 to-yellow-100 shadow-2xl overflow-hidden">
       <div className="p-4">
         <div className="flex items-center gap-3">
-          <div className="text-4xl animate-bounce">🏅</div>
+          <div className="text-4xl animate-bounce">{badge.icon || '🏅'}</div>
           <div>
             <div className="text-xs uppercase tracking-wide text-amber-700">Badge Unlocked</div>
             <div className="text-xl font-extrabold text-amber-900">{badge.name}</div>

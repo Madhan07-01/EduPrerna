@@ -5,6 +5,8 @@ import { useAuth } from '../hooks/useAuth'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
 import { useLocation } from 'react-router-dom'
+import { BADGE_SECTIONS, getBadgeDefinition } from '../services/badges'
+import { subscribeGamification } from '../services/gamification'
 
 // Define badge types with their properties
 type Badge = {
@@ -21,174 +23,16 @@ type Badge = {
   unlockCondition: string
 }
 
-// Group badges by rarity level
-const badgeSections = [
-  { 
-    id: 'legendary', 
-    name: 'Legendary', 
-    icon: '🟪',
-    color: 'from-purple-600 to-indigo-700',
-    borderColor: 'border-purple-500'
-  },
-  { 
-    id: 'diamond', 
-    name: 'Diamond', 
-    icon: '💎',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-400'
-  },
-  { 
-    id: 'platinum', 
-    name: 'Platinum', 
-    icon: '🟦',
-    color: 'from-gray-300 to-gray-500',
-    borderColor: 'border-gray-400'
-  },
-  { 
-    id: 'gold', 
-    name: 'Gold', 
-    icon: '🥇',
-    color: 'from-yellow-500 to-amber-600',
-    borderColor: 'border-yellow-500'
-  },
-  { 
-    id: 'silver', 
-    name: 'Silver', 
-    icon: '🥈',
-    color: 'from-gray-400 to-gray-600',
-    borderColor: 'border-gray-500'
-  },
-  { 
-    id: 'bronze', 
-    name: 'Bronze', 
-    icon: '🥉',
-    color: 'from-amber-700 to-amber-900',
-    borderColor: 'border-amber-700'
-  },
-  { 
-    id: 'rookie', 
-    name: 'Rookie', 
-    icon: '🌱',
-    color: 'from-green-500 to-emerald-600',
-    borderColor: 'border-green-500'
-  }
-]
-
 export function AchievementsPage() {
   const { t } = useLanguage()
   const { currentUser } = useAuth()
   const location = useLocation()
-  const [badges, setBadges] = useState<Badge[]>([
-    {
-      id: 'first-steps',
-      name: 'First Steps',
-      icon: '👣',
-      rarity: 'rookie',
-      earned: true,
-      progress: 100,
-      description: 'Complete your first lesson',
-      color: 'from-green-500 to-emerald-600',
-      glow: 'shadow-green-500/50',
-      borderColor: 'border-green-500',
-      unlockCondition: 'Complete any lesson'
-    },
-    {
-      id: 'week-warrior',
-      name: 'Week Warrior',
-      icon: '⚔️',
-      rarity: 'bronze',
-      earned: true,
-      progress: 100,
-      description: 'Study for 7 consecutive days',
-      color: 'from-amber-700 to-amber-900',
-      glow: 'shadow-amber-500/50',
-      borderColor: 'border-amber-700',
-      unlockCondition: 'Maintain a 7-day streak'
-    },
-    {
-      id: 'math-master',
-      name: 'Math Master',
-      icon: '➗',
-      rarity: 'gold',
-      earned: false,
-      progress: 75,
-      description: 'Complete 10 math lessons',
-      color: 'from-yellow-500 to-amber-600',
-      glow: 'shadow-yellow-500/50',
-      borderColor: 'border-yellow-500',
-      unlockCondition: 'Complete 10 Math lessons'
-    },
-    {
-      id: 'physics-pro',
-      name: 'Physics Pro',
-      icon: '🔬',
-      rarity: 'gold',
-      earned: false,
-      progress: 40,
-      description: 'Complete 8 physics lessons',
-      color: 'from-yellow-500 to-amber-600',
-      glow: 'shadow-yellow-500/50',
-      borderColor: 'border-yellow-500',
-      unlockCondition: 'Complete 8 Physics lessons'
-    },
-    {
-      id: 'chemistry-champion',
-      name: 'Chemistry Champion',
-      icon: '⚗️',
-      rarity: 'diamond',
-      earned: false,
-      progress: 20,
-      description: 'Complete 12 chemistry lessons',
-      color: 'from-blue-400 to-cyan-500',
-      glow: 'shadow-blue-500/50',
-      borderColor: 'border-blue-400',
-      unlockCondition: 'Complete 12 Chemistry lessons'
-    },
-    {
-      id: 'biology-boss',
-      name: 'Biology Boss',
-      icon: '🧬',
-      rarity: 'diamond',
-      earned: false,
-      progress: 10,
-      description: 'Complete 10 biology lessons',
-      color: 'from-blue-400 to-cyan-500',
-      glow: 'shadow-blue-500/50',
-      borderColor: 'border-blue-400',
-      unlockCondition: 'Complete 10 Biology lessons'
-    },
-    {
-      id: 'quiz-champion',
-      name: 'Quiz Champion',
-      icon: '🏆',
-      rarity: 'legendary',
-      earned: false,
-      progress: 5,
-      description: 'Score 100% on 5 quizzes',
-      color: 'from-purple-600 to-indigo-700',
-      glow: 'shadow-purple-500/50',
-      borderColor: 'border-purple-500',
-      unlockCondition: 'Score 100% on 5 quizzes'
-    },
-    {
-      id: 'knowledge-seeker',
-      name: 'Knowledge Seeker',
-      icon: '📚',
-      rarity: 'silver',
-      earned: true,
-      progress: 100,
-      description: 'Complete 20 lessons across subjects',
-      color: 'from-gray-400 to-gray-600',
-      glow: 'shadow-gray-500/50',
-      borderColor: 'border-gray-500',
-      unlockCondition: 'Complete 20 lessons across all subjects'
-    }
-  ])
-
+  const [badges, setBadges] = useState<Badge[]>([])
   const [pinnedBadges, setPinnedBadges] = useState<string[]>([])
   const [showCelebration, setShowCelebration] = useState(false)
   const [activeTab, setActiveTab] = useState<'achievements' | 'leaderboard'>('achievements')
   const [hoveredBadge, setHoveredBadge] = useState<string | null>(null)
+  const [gamificationData, setGamificationData] = useState<any>(null)
 
   // Set active tab based on URL parameter
   useEffect(() => {
@@ -200,6 +44,95 @@ export function AchievementsPage() {
       setActiveTab('achievements')
     }
   }, [location.search])
+
+  // Load user gamification data
+  useEffect(() => {
+    if (!currentUser) return
+    
+    const unsubscribe = subscribeGamification(currentUser.uid, (data) => {
+      setGamificationData(data)
+      
+      // Convert gamification data to badge display format
+      const userBadges: Badge[] = []
+      
+      // Add all defined badges with earned status
+      BADGE_SECTIONS.forEach(section => {
+        const sectionBadges = []
+        // Get badges for this rarity level
+        const rarityBadges = [
+          // Rookie Badges
+          ...(section.id === 'rookie' ? [
+            'daily-starter', 'quiz-taker', 'explorer', 'first-friend'
+          ] : []),
+          // Bronze Badges
+          ...(section.id === 'bronze' ? [
+            'streak-starter', 'quiz-rookie', 'note-keeper', 'warm-up-champion'
+          ] : []),
+          // Silver Badges
+          ...(section.id === 'silver' ? [
+            'subject-explorer', 'quiz-challenger', 'persistence-pro', 'daily-xp-earner'
+          ] : []),
+          // Gold Badges
+          ...(section.id === 'gold' ? [
+            'math-magician', 'science-sleuth', 'quiz-master', 'team-player', 'speed-learner'
+          ] : []),
+          // Diamond Badges
+          ...(section.id === 'diamond' ? [
+            'subject-specialist', 'quiz-dominator', 'month-warrior', 'knowledge-collector', 'mini-game-pro'
+          ] : []),
+          // Legendary Badges
+          ...(section.id === 'legendary' ? [
+            'quiz-champion', 'ultimate-learner', 'year-warrior', 'knowledge-titan', 'speed-demon'
+          ] : [])
+        ]
+        
+        rarityBadges.forEach(badgeId => {
+          const badgeDef = getBadgeDefinition(badgeId)
+          if (badgeDef) {
+            userBadges.push({
+              id: badgeDef.id,
+              name: badgeDef.name,
+              icon: badgeDef.icon,
+              rarity: badgeDef.rarity,
+              earned: data.badges?.includes(badgeDef.id) || false,
+              progress: data.badges?.includes(badgeDef.id) ? 100 : calculateProgress(badgeDef.id, data),
+              description: badgeDef.description,
+              color: badgeDef.color,
+              glow: badgeDef.glow,
+              borderColor: badgeDef.borderColor,
+              unlockCondition: badgeDef.unlockCondition
+            })
+          }
+        })
+      })
+      
+      // Also include any existing badges that might not be in our definitions
+      if (data.badges) {
+        data.badges.forEach(badgeId => {
+          if (!userBadges.some(b => b.id === badgeId)) {
+            // This is an older badge, add it with default properties
+            userBadges.push({
+              id: badgeId,
+              name: badgeId.replace(/-/g, ' '),
+              icon: '🎖️',
+              rarity: 'rookie',
+              earned: true,
+              progress: 100,
+              description: 'Achievement unlocked',
+              color: 'from-green-500 to-emerald-600',
+              glow: 'shadow-green-500/50',
+              borderColor: 'border-green-500',
+              unlockCondition: 'Special achievement'
+            })
+          }
+        })
+      }
+      
+      setBadges(userBadges)
+    })
+    
+    return () => unsubscribe()
+  }, [currentUser])
 
   // Load pinned badges from Firebase
   useEffect(() => {
@@ -274,6 +207,71 @@ export function AchievementsPage() {
     }
   }, [])
 
+  // Function to calculate progress for a badge (simplified)
+  const calculateProgress = (badgeId: string, data: any): number => {
+    // This is a simplified progress calculation
+    // In a real implementation, this would be more sophisticated
+    switch (badgeId) {
+      // Rookie Badges
+      case 'daily-starter':
+        return data.lessonsCompleted ? Math.min(100, (data.lessonsCompleted / 1) * 100) : 0
+      case 'quiz-taker':
+        return data.quizzesAttempted ? Math.min(100, (data.quizzesAttempted / 1) * 100) : 0
+      case 'explorer':
+        return data.subjectsExplored ? Math.min(100, (data.subjectsExplored.length / 3) * 100) : 0
+      case 'first-friend':
+        return data.studyGroupsJoined ? Math.min(100, (data.studyGroupsJoined / 1) * 100) : 0
+        
+      // Bronze Badges
+      case 'streak-starter':
+        return Math.min(100, (data.streakDays / 3) * 100)
+      case 'quiz-rookie':
+        return data.quizzesPassed ? Math.min(100, (data.quizzesPassed / 3) * 100) : 0
+      case 'note-keeper':
+        return data.bookmarkedLessons ? Math.min(100, (data.bookmarkedLessons / 5) * 100) : 0
+      case 'warm-up-champion':
+        return data.miniGamesCompleted ? Math.min(100, (data.miniGamesCompleted / 3) * 100) : 0
+        
+      // Silver Badges
+      case 'subject-explorer':
+        const subjectsWithLessons = data.lessonsPerSubject ? Object.values(data.lessonsPerSubject).filter((count: number) => count > 0).length : 0
+        return Math.min(100, (subjectsWithLessons / 3) * 100)
+      case 'quiz-challenger':
+        return data.quizzesPassed ? Math.min(100, (data.quizzesPassed / 5) * 100) : 0
+      case 'persistence-pro':
+        return Math.min(100, (data.streakDays / 10) * 100)
+      case 'daily-xp-earner':
+        return data.consecutiveDaysXpEarned ? Math.min(100, (data.consecutiveDaysXpEarned / 7) * 100) : 0
+        
+      // Gold Badges
+      case 'math-magician':
+        return data.mathProblemsSolved ? Math.min(100, (data.mathProblemsSolved / 50) * 100) : 0
+      case 'science-sleuth':
+        return data.scienceLessonsCompleted ? Math.min(100, (data.scienceLessonsCompleted / 10) * 100) : 0
+      case 'quiz-master':
+        return data.quizzesPassed ? Math.min(100, (data.quizzesPassed / 10) * 100) : 0
+      case 'team-player':
+        return data.studyGroupsJoined ? Math.min(100, (data.studyGroupsJoined / 3) * 100) : 0
+        
+      // Diamond Badges
+      case 'quiz-dominator':
+        return data.quizzesPassed ? Math.min(100, (data.quizzesPassed / 20) * 100) : 0
+      case 'month-warrior':
+        return Math.min(100, (data.streakDays / 30) * 100)
+      case 'mini-game-pro':
+        return data.miniGamesCompleted ? Math.min(100, (data.miniGamesCompleted / 20) * 100) : 0
+        
+      // Legendary Badges
+      case 'quiz-champion':
+        return data.perfectQuizStreak ? Math.min(100, (data.perfectQuizStreak / 10) * 100) : 0
+      case 'year-warrior':
+        return Math.min(100, (data.streakDays / 365) * 100)
+        
+      default:
+        return 0
+    }
+  }
+
   // Function to pin/unpin a badge
   const togglePinBadge = async (badgeId: string) => {
     if (!currentUser) return
@@ -313,7 +311,7 @@ export function AchievementsPage() {
   const totalCount = badges.length
 
   // Group badges by rarity
-  const groupedBadges = badgeSections.map(section => {
+  const groupedBadges = BADGE_SECTIONS.map(section => {
     const sectionBadges = badges.filter(badge => badge.rarity === section.id)
     const earnedBadges = sectionBadges.filter(badge => badge.earned)
     return {
@@ -370,7 +368,7 @@ export function AchievementsPage() {
             <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
               <div 
                 className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" 
-                style={{ width: `${(earnedCount / totalCount) * 100}%` }}
+                style={{ width: `${totalCount > 0 ? (earnedCount / totalCount) * 100 : 0}%` }}
               ></div>
             </div>
           </div>

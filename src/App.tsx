@@ -29,6 +29,7 @@ import SignUp from './pages/SignUp'
 import RoleSelector from './pages/RoleSelector'
 import TeacherLogin from './pages/TeacherLogin'
 import TeacherSignUp from './pages/TeacherSignUp'
+import OneNightStudyLanding from './pages/OneNightStudy'
 
 function AppContent() {
   const { currentUser } = useAuth()
@@ -43,8 +44,11 @@ function AppContent() {
     if (pathname.startsWith('/module/') || pathname.startsWith('/mcq/') || pathname.startsWith('/materials/')) {
       return 'courses'
     }
+    if (pathname.startsWith('/eduprerna/one-night-study') || pathname.startsWith('/onestudy')) {
+      return 'one-night-study'
+    }
     const seg = pathname.split('/')[1] || 'dashboard'
-    const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','games','download','settings']
+    const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','games','download','settings','mini-games','one-night-study']
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
@@ -91,8 +95,11 @@ function AppContent() {
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
+              {/** mini-games routes removed due to missing module */}
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
+              <Route path="/eduprerna/one-night-study/*" element={<PrivateRoute><OneNightStudyLanding /></PrivateRoute>} />
+              <Route path="/onestudy/*" element={<PrivateRoute><OneNightStudyLanding /></PrivateRoute>} />
             </Routes>
           </main>
         </div>

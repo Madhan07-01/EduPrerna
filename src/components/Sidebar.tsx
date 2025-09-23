@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { useState, useEffect, useRef } from 'react'
 
-export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download'
+export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download' | 'mini-games' | 'one-night-study'
 
 type SidebarProps = {
   active: NavKey
@@ -13,15 +13,17 @@ type SidebarProps = {
   onToggle?: () => void
 }
 
-const navItems: Array<{ key: NavKey; labelKey: string; icon: string }> = [
+const navItems: Array<{ key: NavKey; labelKey: string; icon: string; to?: string }> = [
   { key: 'dashboard', labelKey: 'nav.dashboard', icon: '🏠' },
   { key: 'courses', labelKey: 'nav.courses', icon: '📚' },
   { key: 'achievements', labelKey: 'nav.achievements', icon: '🏆' },
   { key: 'profile', labelKey: 'nav.profile', icon: '👤' },
   { key: 'teacher', labelKey: 'nav.teacher', icon: '📊' },
+  { key: 'one-night-study', labelKey: 'nav.oneNightStudy', icon: '🌙', to: '/eduprerna/one-night-study' },
   { key: 'quiz', labelKey: 'nav.quiz', icon: '❓' },
   { key: 'challenge', labelKey: 'nav.challenge', icon: '🎯' },
   { key: 'games', labelKey: 'nav.games', icon: '🎮' },
+  { key: 'mini-games', labelKey: 'nav.miniGames', icon: '🕹️' },
   { key: 'download', labelKey: 'nav.download', icon: '📥' },
   { key: 'settings', labelKey: 'nav.settings', icon: '⚙️' },
 ]
@@ -142,7 +144,7 @@ export function Sidebar({ active, isCollapsed = true, onToggle }: SidebarProps) 
               return (
                 <div key={n.key}>
                   <button
-                    onClick={() => navigate(`/${n.key}`)}
+                    onClick={() => navigate(n.to ?? `/${n.key}`)}
                     className={`
                       w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors
                       ${active === n.key
@@ -188,7 +190,7 @@ export function Sidebar({ active, isCollapsed = true, onToggle }: SidebarProps) 
             return (
               <button
                 key={n.key}
-                onClick={() => navigate(`/${n.key}`)}
+                onClick={() => navigate(n.to ?? `/${n.key}`)}
                 className={`
                   w-full text-left px-3 py-2 rounded-md flex items-center gap-2 transition-colors
                   ${active === n.key

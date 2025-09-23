@@ -1,8 +1,8 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeApp, type FirebaseApp } from 'firebase/app'
+import { getAuth, type Auth } from 'firebase/auth'
+import { getFirestore, connectFirestoreEmulator, type Firestore, initializeFirestore } from 'firebase/firestore'
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics'
-import { getStorage } from 'firebase/storage'
+import { getStorage, type FirebaseStorage } from 'firebase/storage'
 
 // Use environment variables for Firebase config
 const firebaseConfig = {
@@ -15,11 +15,17 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 }
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+// Initialize Firebase with Firestore settings to avoid internal assertion errors
+const app: FirebaseApp = initializeApp(firebaseConfig)
+const db: Firestore = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+  cacheSizeBytes: 1048576, // 1MB cache size
+  ignoreUndefinedProperties: true
+})
+
+export { app, db }
+export const auth: Auth = getAuth(app)
+export const storage: FirebaseStorage = getStorage(app)
 
 export let analytics: Analytics | undefined
 if (typeof window !== 'undefined') {

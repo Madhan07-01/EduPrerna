@@ -5,6 +5,11 @@ service cloud.firestore {
     // Users: each user can read/write their own profile
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+      
+      // Mini-games progress: users can read/write their own progress
+      match /miniGamesProgress/{gameId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
     }
 
     // Students: XP, streaks, badges
@@ -14,6 +19,18 @@ service cloud.firestore {
 
     // Leaderboard: all students can read, but only self can write
     match /leaderboard/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Mini-games leaderboards: all students can read, users can write their own scores
+    match /leaderboards/miniGames/{gameId}/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Play challenges leaderboards: all students can read, users can write their own scores
+    match /leaderboards/playChallenges/{uid} {
       allow read: if request.auth != null;
       allow write: if request.auth != null && request.auth.uid == uid;
     }
@@ -28,6 +45,17 @@ service cloud.firestore {
     match /activity/{day}/{eventId} {
       allow create: if request.auth != null;
       allow read: if request.auth != null && request.auth.token.role in ['teacher','admin'];
+    }
+    
+    // Add explicit rules for mini-games progress collection
+    match /users/{uid}/miniGamesProgress/{gameId} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    
+    // Add explicit rules for leaderboards collection
+    match /leaderboards/{category}/{gameId}/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
     }
   }
 }
