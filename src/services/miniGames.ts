@@ -41,6 +41,7 @@ export async function saveGameResult(
   gameId: string, 
   score: number, 
   username: string = 'Anonymous',
+  bonusXP: number = 0,
   queueBadge?: (badge: Badge) => void,
   onComplete?: () => void
 ): Promise<{ success: boolean; xpAwarded?: number; badgesAwarded?: string[]; error?: any }> {
@@ -71,8 +72,9 @@ export async function saveGameResult(
     // Track mini-game completion for badges
     const earnedBadges = await trackMiniGameCompletion(userId)
     
-    // Award XP (10 XP for completing a game, plus bonus for high score)
-    const xpAwarded = 10 + Math.floor(score / 10)
+    // Award XP (10 XP for completing a game, plus bonus for high score) + optional external bonus
+    const baseXP = 10 + Math.floor(score / 10)
+    const xpAwarded = baseXP + Math.max(0, Math.floor(bonusXP))
     const awardResult = await awardXPAndStreak(userId, xpAwarded)
     
     // Combine all earned badges

@@ -16,6 +16,7 @@ import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
 import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
+import MiniGamesRoutes from './pages/mini-games'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -95,7 +96,7 @@ function AppContent() {
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
               <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
-              {/** mini-games routes removed due to missing module */}
+              <Route path="/mini-games/*" element={<PrivateRoute><MiniGamesRoutes /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
               <Route path="/eduprerna/one-night-study/*" element={<PrivateRoute><OneNightStudyLanding /></PrivateRoute>} />
