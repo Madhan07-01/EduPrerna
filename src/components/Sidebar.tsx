@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { useState, useEffect, useRef } from 'react'
 
-export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'games' | 'download' | 'mini-games' | 'one-night-study'
+export type NavKey = 'dashboard' | 'courses' | 'achievements' | 'profile' | 'teacher' | 'settings' | 'quiz' | 'challenge' | 'download' | 'mini-games' | 'one-night-study'
 
 type SidebarProps = {
   active: NavKey
@@ -22,7 +22,6 @@ const navItems: Array<{ key: NavKey; labelKey: string; icon: string; to?: string
   { key: 'one-night-study', labelKey: 'nav.oneNightStudy', icon: '🌙', to: '/eduprerna/one-night-study' },
   { key: 'quiz', labelKey: 'nav.quiz', icon: '❓' },
   { key: 'challenge', labelKey: 'nav.challenge', icon: '🎯' },
-  { key: 'games', labelKey: 'nav.games', icon: '🎮' },
   { key: 'mini-games', labelKey: 'nav.miniGames', icon: '🕹️' },
   { key: 'download', labelKey: 'nav.download', icon: '📥' },
   { key: 'settings', labelKey: 'nav.settings', icon: '⚙️' },

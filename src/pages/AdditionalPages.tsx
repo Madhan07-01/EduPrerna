@@ -53,34 +53,6 @@ export function DailyChallengePage() {
   )
 }
 
-export function MiniGamesPage() {
-  return (
-    <div className="space-y-4">
-      <div className="text-2xl font-semibold text-gray-900 dark:text-white">Mini-Games</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[
-          { name: 'Math Puzzle', description: 'Solve equations to advance', icon: '🧩' },
-          { name: 'Physics Simulator', description: 'Experiment with physics laws', icon: '⚡' },
-          { name: 'Chemistry Lab', description: 'Mix elements and compounds', icon: '🧪' },
-          { name: 'Biology Explorer', description: 'Discover cellular structures', icon: '🔬' },
-          { name: 'Code Breaker', description: 'Decode programming patterns', icon: '💻' },
-          { name: 'Memory Match', description: 'Match scientific terms', icon: '🧠' },
-        ].map((game) => (
-          <SectionCard key={game.name} title={game.name}>
-            <div className="space-y-2">
-              <div className="text-4xl">{game.icon}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">{game.description}</div>
-              <button className="w-full rounded-md bg-green-600 text-white px-4 py-2 text-sm hover:bg-green-700">
-                Play Game
-              </button>
-            </div>
-          </SectionCard>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function DownloadGradePage() {
   const { currentUser } = useAuth()
   const { queueBadge } = useBadgeQueue()

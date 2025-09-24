@@ -15,7 +15,7 @@ import SettingsPage from './pages/SettingsPage'
 import ModulePage from './pages/ModulePage'
 import MCQPage from './pages/MCQPage'
 import MaterialsPage from './pages/MaterialsPage'
-import { QuickQuizPage, DailyChallengePage, MiniGamesPage, DownloadGradePage } from './pages/AdditionalPages'
+import { QuickQuizPage, DailyChallengePage, DownloadGradePage } from './pages/AdditionalPages'
 import MiniGamesRoutes from './pages/mini-games'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
@@ -38,6 +38,7 @@ function AppContent() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
   
   const active: NavKey = useMemo(() => {
+    
     const pathname = location.pathname
     if (pathname.startsWith('/courses') || pathname.startsWith('/lessons') || pathname.startsWith('/lesson/')) {
       return 'courses'
@@ -49,7 +50,7 @@ function AppContent() {
       return 'one-night-study'
     }
     const seg = pathname.split('/')[1] || 'dashboard'
-    const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','games','download','settings','mini-games','one-night-study']
+    const known: Array<NavKey> = ['dashboard','courses','achievements','profile','teacher','quiz','challenge','download','settings','mini-games','one-night-study']
     return (known.includes(seg as NavKey) ? (seg as NavKey) : 'dashboard')
   }, [location.pathname])
 
@@ -95,7 +96,6 @@ function AppContent() {
               <Route path="/materials/:lessonId" element={<PrivateRoute><MaterialsPage /></PrivateRoute>} />
               <Route path="/quiz" element={<PrivateRoute><QuickQuizPage /></PrivateRoute>} />
               <Route path="/challenge" element={<PrivateRoute><DailyChallengePage /></PrivateRoute>} />
-              <Route path="/games" element={<PrivateRoute><MiniGamesPage /></PrivateRoute>} />
               <Route path="/mini-games/*" element={<PrivateRoute><MiniGamesRoutes /></PrivateRoute>} />
               <Route path="/download" element={<PrivateRoute><DownloadGradePage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
