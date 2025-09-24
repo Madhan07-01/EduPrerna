@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, serverTimestamp, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
-import { getBadgeDefinition, type BadgeDefinition } from './badges'
+import { getBadgeDefinition } from './badges'
 
 export type GamificationSnapshot = {
   xp: number
@@ -8,6 +8,8 @@ export type GamificationSnapshot = {
   streakDays: number
   lastActivityDate?: string // yyyy-mm-dd
   badges?: string[]
+  // Streak status for UI (e.g., frost day handling)
+  streakStatus?: 'active' | 'frozen' | 'reset'
   // New tracking fields for badges
   lessonsCompleted?: number
   quizzesAttempted?: number
@@ -54,6 +56,7 @@ export async function getGamification(uid: string): Promise<GamificationSnapshot
       level: d.level || levelForXP(d.xp || 0),
       streakDays: d.streakDays || 0,
       lastActivityDate: d.lastActivityDate,
+      streakStatus: d.streakStatus || 'active',
       badges: d.badges || [],
       lessonsCompleted: d.lessonsCompleted || 0,
       quizzesAttempted: d.quizzesAttempted || 0,
@@ -101,6 +104,7 @@ export function subscribeGamification(uid: string, cb: (g: GamificationSnapshot)
       level: d.level || levelForXP(d.xp || 0),
       streakDays: d.streakDays || 0,
       lastActivityDate: d.lastActivityDate,
+      streakStatus: d.streakStatus || 'active',
       badges: d.badges || [],
       lessonsCompleted: d.lessonsCompleted || 0,
       quizzesAttempted: d.quizzesAttempted || 0,
@@ -216,6 +220,7 @@ export async function awardXPAndStreak(uid: string, deltaXP: number): Promise<Aw
   let badges: string[] = []
   let currentLevel = 1
   let username = 'Anonymous'
+  let streakStatus: 'active' | 'frozen' | 'reset' = 'active'
   
   // Initialize tracking fields
   let lessonsCompleted = 0
@@ -239,6 +244,7 @@ export async function awardXPAndStreak(uid: string, deltaXP: number): Promise<Aw
     badges = d.badges || []
     currentLevel = d.level || levelForXP(d.xp || 0)
     username = d.name || d.username || 'Anonymous'
+    streakStatus = d.streakStatus || 'active'
     
     // Get tracking fields
     lessonsCompleted = d.lessonsCompleted || 0
@@ -257,16 +263,40 @@ export async function awardXPAndStreak(uid: string, deltaXP: number): Promise<Aw
     xp = deltaXP
   }
 
-  // streak calc
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
-  if (last === today) {
-    // same day, keep streak
-  } else if (last === yesterday) {
+  // streak calc with frost mechanic
+  const msInDay = 86400000
+  const todayDate = new Date(today + 'T00:00:00Z')
+  const lastDate = last ? new Date(last + 'T00:00:00Z') : null
+  const daysDiff = lastDate ? Math.floor((todayDate.getTime() - lastDate.getTime()) / msInDay) : Infinity
+
+  if (daysDiff === 0) {
+    // same day, keep streak as-is
+    streakStatus = 'active'
+  } else if (daysDiff === 1) {
+    // consecutive day: increment streak
     streak += 1
     consecutiveDaysXpEarned += 1
+    streakStatus = 'active'
+  } else if (daysDiff === 2) {
+    // missed exactly 1 day in between: freeze yesterday, but continue streak today
+    // increment by 1 (not 2), and show frozen status for UI
+    streak += 1
+    // keep consecutiveDaysXpEarned unchanged since there was a gap
+    streakStatus = 'frozen'
   } else {
+    // missed 2 or more consecutive days: reset
     streak = 1
     consecutiveDaysXpEarned = 1
+    streakStatus = 'reset'
+  }
+
+  // Revive bonus: if yesterday was frozen and today is consecutive (daysDiff===1), grant small XP bonus
+  if (snap.exists()) {
+    const d = snap.data() as any
+    if ((d.streakStatus || 'active') === 'frozen' && daysDiff === 1) {
+      const REVIVE_BONUS_XP = 2
+      xp += REVIVE_BONUS_XP
+    }
   }
 
   const newLevel = levelForXP(xp)
@@ -329,6 +359,7 @@ export async function awardXPAndStreak(uid: string, deltaXP: number): Promise<Aw
     streakDays: streak,
     streakCount: streak,
     lastActivityDate: today,
+    streakStatus,
     badges: updatedBadges,
     name: username,
     username,

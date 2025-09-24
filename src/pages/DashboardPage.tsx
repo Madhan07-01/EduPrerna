@@ -1,7 +1,7 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { useAuth } from '../hooks/useAuth'
 import { SectionCard } from '../components/SectionCard'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
@@ -25,6 +25,9 @@ export function DashboardPage() {
   const { currentUser, profile } = useAuth()
   const navigate = useNavigate()
   const [streakCount, setStreakCount] = useState(1)
+  const [streakStatus, setStreakStatus] = useState<'active'|'frozen'|'reset'>('active')
+  const prevStreakStatus = useRef<'active'|'frozen'|'reset'>('active')
+  const [crackAnim, setCrackAnim] = useState(false)
   const [streakLoading, setStreakLoading] = useState(false)
   const [streakError, setStreakError] = useState<string | null>(null)
 
@@ -50,8 +53,9 @@ export function DashboardPage() {
           const studentDoc = await getDoc(studentRef)
 
           if (studentDoc.exists()) {
-            const studentData = studentDoc.data()
+            const studentData = studentDoc.data() as any
             setStreakCount(studentData.streakCount || 1)
+            setStreakStatus(studentData.streakStatus || 'active')
           }
         } catch (error: any) {
           console.error('Error fetching streak:', error)
@@ -71,6 +75,16 @@ export function DashboardPage() {
     }
   }, [currentUser, profile])
 
+  // Detect transition from frozen -> active to trigger crack animation
+  useEffect(() => {
+    if (prevStreakStatus.current === 'frozen' && streakStatus === 'active') {
+      setCrackAnim(true)
+      const t = setTimeout(() => setCrackAnim(false), 900)
+      return () => clearTimeout(t)
+    }
+    prevStreakStatus.current = streakStatus
+  }, [streakStatus])
+
   // Only show leaderboard for students
   const showLeaderboard = currentUser && profile?.role === 'student'
 
@@ -83,9 +97,30 @@ export function DashboardPage() {
 
         {/* Personalized streak/XP summary badge */}
         <div className="mt-4 flex items-center gap-4">
-          <div className="bg-white/20 rounded-lg p-2 text-center min-w-[80px]">
-            <div className="text-2xl font-bold">{streakLoading ? '…' : streakCount}</div>
+          <div className="relative bg-white/20 rounded-lg p-2 text-center min-w-[140px] overflow-hidden">
+            <div className="flex items-center justify-center gap-2">
+              <div className="text-2xl font-bold">{streakLoading ? '…' : streakCount}</div>
+              {streakStatus === 'frozen' && (
+                <span title="You froze your streak for a day! Login tomorrow to continue." aria-label="Frozen streak" className="text-xl">❄️</span>
+              )}
+            </div>
             <div className="text-xs">Day Streak</div>
+            {/* Streak progress bar */}
+            <div className="mt-2 h-1.5 rounded-full overflow-hidden">
+              <div
+                className={
+                  streakStatus === 'active'
+                    ? 'h-full w-full bg-gradient-to-r from-orange-400 to-red-500'
+                    : streakStatus === 'frozen'
+                    ? 'h-full w-full bg-gradient-to-r from-sky-300 to-blue-500'
+                    : 'h-full w-full bg-gray-400'
+                }
+              />
+            </div>
+            {/* Frost crack animation overlay when thawing */}
+            {crackAnim && (
+              <div className="pointer-events-none absolute inset-0 thaw-crack"></div>
+            )}
           </div>
 
           <div className="bg-white/20 rounded-lg p-2 text-center min-w-[80px]">
@@ -114,14 +149,14 @@ export function DashboardPage() {
         <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-gray-900 dark:text-white font-semibold">Streak Leaderboard</div>
-            <div className="text-xs text-gray-500 dark:text-slate-400">Top 5 Students</div>
+            <div className="text-xs text-gray-500 dark:text-slate-400">Top 2 Students</div>
           </div>
           {streakError && (
             <div className="mb-3 text-sm text-amber-700 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded p-2">
               {streakError}
             </div>
           )}
-          <StreakLeaderboard maxEntries={5} compact={true} />
+          <StreakLeaderboard maxEntries={2} compact={true} showCurrentUser={false} />
         </div>
       )}
 
